@@ -6,6 +6,12 @@ const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
+// Validate .edu email specifically for webinar registrations
+const isValidEduEmail = (email) => {
+  const eduEmailRegex = /^[^\s@]+@[^\s@]+\.edu$/i;
+  return eduEmailRegex.test(email) && isValidEmail(email);
+};
+
 // Validate phone number format
 const isValidPhone = (phone) => {
   const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
@@ -76,6 +82,7 @@ const validateRequiredFields = (data, requiredFields) => {
 
 module.exports = {
   isValidEmail,
+  isValidEduEmail,
   isValidPhone,
   sanitizeString,
   generateRandomString,
