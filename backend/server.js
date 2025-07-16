@@ -9,6 +9,7 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 // Import routes
 const mentorRoutes = require('./routes/mentors');
+const webinarRoutes = require('./routes/webinars');
 
 // Initialize Express app
 const app = express();
@@ -44,9 +45,11 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/mentors', mentorRoutes);
+app.use('/api/webinars', webinarRoutes);
 
 // Apply strict rate limiting to sensitive endpoints
 app.use('/api/mentors/apply', strictLimiter);
+app.use('/api/webinars/register', strictLimiter);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -65,7 +68,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`
 🚀 Server running on port ${PORT}
 📊 Environment: ${process.env.NODE_ENV}
@@ -73,6 +76,14 @@ app.listen(PORT, () => {
 📡 API Base URL: http://localhost:${PORT}/api
 🏥 Health Check: http://localhost:${PORT}/health
   `);
+
+  // Test email service connection
+  try {
+    const { testEmailConnection } = require('./utils/emailService');
+    await testEmailConnection();
+  } catch (error) {
+    console.error('⚠️  Email service connection check failed - emails may not work');
+  }
 });
 
 // Handle uncaught exceptions
