@@ -1,5 +1,5 @@
 {
-  "name": "kimber-health-backend",
+  "name": "isac-backend",
   "version": "1.0.0",
   "description": "Backend API for ISAC (International Student Advocacy Committee) platform",
   "main": "server.js",

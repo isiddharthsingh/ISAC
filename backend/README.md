@@ -1,23 +1,26 @@
 # ISAC Backend API
 
-Backend API for the International Student Advocacy Committee (ISAC) platform.
+Backend API for the International Student Advocacy Committee (ISAC) platform, providing comprehensive mentor management and educational webinar registration services.
 
 ## Features
 
-- **Mentor Management**: Complete CRUD operations for mentors
+- **Mentor Management**: Complete CRUD operations for mentors with application system
+- **Webinar Registration**: Full registration system with .edu email validation
+- **Email Service**: Professional HTML emails via SMTP2GO integration
 - **Advanced Filtering**: Search by specialty, language, location, university
 - **Pagination**: Efficient data loading with pagination support
 - **Rate Limiting**: Protection against API abuse
 - **Error Handling**: Comprehensive error handling with proper HTTP status codes
-- **Security**: CORS, Helmet, and input validation
-- **Database**: PostgreSQL with connection pooling
+- **Security**: CORS, Helmet, input validation, and email domain verification
+- **Database**: PostgreSQL with connection pooling and transaction support
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- PostgreSQL
+- Node.js (v18 or higher)
+- PostgreSQL (v12 or higher)
+- SMTP2GO account for email delivery
 - npm or yarn
 
 ### Installation
@@ -32,11 +35,34 @@ Backend API for the International Student Advocacy Committee (ISAC) platform.
    ```bash
    cp .env.example .env
    ```
-   Edit `.env` with your database credentials and configuration.
+   Edit `.env` with your configuration:
+   ```env
+   # Database Configuration
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=isac_db
+   DB_USER=postgres
+   DB_PASSWORD=your_password
+
+   # SMTP Configuration (SMTP2GO)
+   SMTP2GO_USERNAME=your_smtp_username
+   SMTP2GO_PASSWORD=your_smtp_password
+   SMTP2GO_FROM_EMAIL=noreply@yourdomain.com
+
+   # Server Configuration
+   PORT=5001
+   NODE_ENV=development
+   FRONTEND_URL=http://localhost:3000
+
+   # Rate Limiting
+   RATE_LIMIT_WINDOW_MS=900000
+   RATE_LIMIT_MAX_REQUESTS=100
+   ```
 
 4. Set up the database:
    - Create a PostgreSQL database
-   - Run the SQL scripts to create tables and insert sample data
+   - Create required tables for mentors, webinars, and registrations
+   - Insert sample data as needed
 
 5. Start the server:
    ```bash
@@ -116,70 +142,14 @@ GET /api/mentors?specialty=International%20Student&language=English&page=1&limit
 GET /api/mentors/:id
 ```
 
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "id": 1,
-    "name": "Soham Moghe",
-    "specialty": "International Student",
-    // ... other mentor fields
-  }
-}
-```
-
 #### Get Mentor Statistics
 ```
 GET /api/mentors/stats
 ```
 
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "overview": {
-      "total_mentors": "6",
-      "total_specialties": "3",
-      "total_universities": "6",
-      "total_locations": "5",
-      "average_rating": "0.00"
-    },
-    "specialtyBreakdown": [
-      {
-        "specialty": "International Student",
-        "count": "3"
-      },
-      {
-        "specialty": "Professor",
-        "count": "2"
-      },
-      {
-        "specialty": "Alumni",
-        "count": "1"
-      }
-    ]
-  }
-}
-```
-
 #### Get Filter Options
 ```
 GET /api/mentors/filter-options
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "specialties": ["International Student", "Alumni", "Professor"],
-    "languages": ["English", "French", "Hindi", "Korean", "Marathi", "Spanish"],
-    "locations": ["California, USA", "New Haven, USA", "New York, USA", "Palo Alto, USA", "Toronto, Canada"],
-    "universities": ["New York University", "Stanford Business School", "UC San Diego", "University of Toronto", "Yale Law School"]
-  }
-}
 ```
 
 #### Submit Mentor Application
@@ -206,16 +176,198 @@ POST /api/mentors/apply
 }
 ```
 
+### Webinars
+
+#### Get All Webinars
+```
+GET /api/webinars
+```
+
+**Query Parameters:**
+- `status` - Filter by status (upcoming, live, past)
+- `presenter` - Filter by presenter name
+- `topic` - Search in title and description
+- `limit` - Items per page (default: 100)
+- `page` - Page number (default: 1)
+- `sortBy` - Sort field (date, title, presenter_name)
+- `sortOrder` - Sort order (ASC, DESC)
+
 **Response:**
 ```json
 {
   "success": true,
-  "message": "Mentor application submitted successfully",
   "data": {
-    "applicationId": 1,
-    "submittedAt": "2024-01-01T12:00:00.000Z"
+    "webinars": [
+      {
+        "id": 1,
+        "title": "Study Abroad: USA University Applications",
+        "description": "Learn everything about applying to US universities",
+        "presenter_name": "Dr. Sarah Johnson",
+        "presenter_bio": "Education consultant with 10+ years experience",
+        "date": "2024-12-20",
+        "time": "19:00",
+        "duration": "1 hour",
+        "max_attendees": 100,
+        "current_attendees": 45,
+        "poster": "/path/to/poster.jpg",
+        "status": "upcoming",
+        "created_at": "2024-01-01T12:00:00.000Z"
+      }
+    ],
+    "pagination": {
+      "currentPage": 1,
+      "totalPages": 1,
+      "totalItems": 5,
+      "itemsPerPage": 100,
+      "hasNext": false,
+      "hasPrev": false
+    }
   }
 }
+```
+
+#### Get Webinar by ID
+```
+GET /api/webinars/:id
+```
+
+#### Register for Webinar
+```
+POST /api/webinars/register
+```
+
+**Request Body:**
+```json
+{
+  "webinarId": 1,
+  "name": "John Doe",
+  "email": "john.doe@university.edu",
+  "phone": "+1-555-0123",
+  "currentEducation": "Bachelor's in Computer Science",
+  "interests": "Machine Learning, Web Development"
+}
+```
+
+**Requirements:**
+- Email must be from a `.edu` domain
+- Webinar must have available capacity
+- No duplicate registrations allowed
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Registration successful! Confirmation email sent.",
+  "data": {
+    "registrationId": 123,
+    "webinarTitle": "Study Abroad: USA University Applications",
+    "webinarDate": "2024-12-20",
+    "webinarTime": "19:00"
+  }
+}
+```
+
+#### Get Webinar Registrations (Admin)
+```
+GET /api/webinars/:id/registrations
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "webinar": {
+      "id": 1,
+      "title": "Study Abroad: USA University Applications",
+      "date": "2024-12-20",
+      "max_attendees": 100
+    },
+    "registrations": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john.doe@university.edu",
+        "phone": "+1-555-0123",
+        "current_education": "Bachelor's in Computer Science",
+        "interests": "Machine Learning, Web Development",
+        "registered_at": "2024-01-15T10:30:00.000Z",
+        "email_sent": true
+      }
+    ],
+    "stats": {
+      "total_registrations": 45,
+      "available_spots": 55,
+      "registration_rate": "45%"
+    }
+  }
+}
+```
+
+#### Get Webinar Statistics
+```
+GET /api/webinars/stats
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "overview": {
+      "total_webinars": 5,
+      "total_registrations": 234,
+      "upcoming_webinars": 2,
+      "average_attendance_rate": "78%"
+    },
+    "by_status": [
+      {
+        "status": "upcoming",
+        "count": 2,
+        "total_registrations": 89
+      },
+      {
+        "status": "past",
+        "count": 3,
+        "total_registrations": 145
+      }
+    ]
+  }
+}
+```
+
+## Email Service
+
+The backend includes a comprehensive email system for webinar registrations:
+
+### Features
+- **SMTP2GO Integration**: Professional email delivery service
+- **HTML Templates**: Responsive email design with ISAC branding
+- **Email Validation**: Strict .edu domain verification using regex
+- **Error Handling**: Comprehensive email delivery monitoring
+- **Template Variables**: Dynamic content insertion for personalization
+
+### Email Template
+The confirmation email includes:
+- ISAC logo and branding
+- Webinar details (title, date, time, presenter)
+- Registration confirmation message
+- Next steps information
+- Professional footer with ISAC team signature
+
+### Configuration
+Set up the following environment variables:
+```env
+SMTP2GO_USERNAME=your_username
+SMTP2GO_PASSWORD=your_password
+SMTP2GO_FROM_EMAIL=noreply@yourdomain.com
+```
+
+### Usage
+```javascript
+const { sendRegistrationConfirmation } = require('./utils/emailService');
+
+await sendRegistrationConfirmation(userDetails, webinarDetails);
 ```
 
 ## Error Handling
@@ -233,14 +385,22 @@ The API uses consistent error response format:
 **Common HTTP Status Codes:**
 - `200` - Success
 - `201` - Created
-- `400` - Bad Request
+- `400` - Bad Request (invalid input, duplicate registration)
 - `404` - Not Found
+- `409` - Conflict (webinar at capacity)
 - `429` - Too Many Requests
 - `500` - Internal Server Error
+
+**Webinar-Specific Error Responses:**
+- `400` - Invalid .edu email format
+- `409` - Already registered for this webinar
+- `409` - Webinar has reached maximum capacity
+- `404` - Webinar not found
 
 ## Rate Limiting
 
 - **General endpoints**: 100 requests per 15 minutes
+- **Registration endpoints**: 10 requests per 15 minutes (stricter for webinar registration)
 - **Application endpoints**: 10 requests per 15 minutes
 - **Authentication endpoints**: 5 requests per 15 minutes
 
@@ -249,8 +409,10 @@ The API uses consistent error response format:
 - **CORS**: Configured for frontend domain
 - **Helmet**: Security headers
 - **Input validation**: All inputs are validated and sanitized
-- **Rate limiting**: Prevents API abuse
+- **Email domain validation**: Only .edu emails accepted for webinar registration
+- **Rate limiting**: Prevents API abuse and spam registrations
 - **Error handling**: Sensitive information is not exposed in production
+- **SQL injection prevention**: Parameterized queries throughout
 
 ## Development
 
@@ -258,38 +420,87 @@ The API uses consistent error response format:
 
 - `npm run dev` - Start development server with nodemon
 - `npm start` - Start production server
-- `npm test` - Run tests (not implemented yet)
+- `npm test` - Run tests (future implementation)
 
-### Environment Variables
-
-```env
-# Database Configuration
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=postgres
-DB_USER=postgres
-DB_PASSWORD=your_password
-
-# Server Configuration
-PORT=5000
-NODE_ENV=development
-
-# CORS Configuration
-FRONTEND_URL=http://localhost:3000
-
-# Rate Limiting
-RATE_LIMIT_WINDOW_MS=900000
-RATE_LIMIT_MAX_REQUESTS=100
-```
-
-## Database Schema
+### Database Schema
 
 The API uses PostgreSQL with the following main tables:
 
-- `mentors` - Approved mentors
-- `mentor_applications` - Pending mentor applications
+#### Mentors Table
+```sql
+CREATE TABLE mentors (
+  id SERIAL PRIMARY KEY,
+  full_name VARCHAR(255) NOT NULL,
+  specialty VARCHAR(100) NOT NULL,
+  university VARCHAR(255) NOT NULL,
+  degree VARCHAR(255),
+  location VARCHAR(255),
+  languages TEXT[],
+  bio TEXT,
+  image_url VARCHAR(500),
+  social_links JSONB,
+  rating DECIMAL(3,2) DEFAULT 0.00,
+  total_reviews INTEGER DEFAULT 0,
+  experience_years INTEGER,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-See the database setup SQL files for complete schema details.
+#### Webinars Table
+```sql
+CREATE TABLE webinars (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  presenter_name VARCHAR(255) NOT NULL,
+  presenter_bio TEXT,
+  date DATE NOT NULL,
+  time TIME NOT NULL,
+  duration VARCHAR(50),
+  max_attendees INTEGER DEFAULT 100,
+  poster VARCHAR(500),
+  status VARCHAR(20) DEFAULT 'upcoming',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Webinar Registrations Table
+```sql
+CREATE TABLE webinar_registrations (
+  id SERIAL PRIMARY KEY,
+  webinar_id INTEGER REFERENCES webinars(id),
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
+  current_education TEXT,
+  interests TEXT,
+  registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  email_sent BOOLEAN DEFAULT FALSE,
+  UNIQUE(webinar_id, email)
+);
+```
+
+#### Mentor Applications Table
+```sql
+CREATE TABLE mentor_applications (
+  id SERIAL PRIMARY KEY,
+  full_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
+  current_university VARCHAR(255),
+  degree VARCHAR(255),
+  graduation_year VARCHAR(4),
+  specialization VARCHAR(255),
+  experience_years VARCHAR(50),
+  languages TEXT,
+  linkedin_url VARCHAR(500),
+  motivation TEXT,
+  availability TEXT,
+  sample_advice TEXT,
+  status VARCHAR(20) DEFAULT 'pending',
+  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
 ## Health Check
 
@@ -297,4 +508,54 @@ See the database setup SQL files for complete schema details.
 GET /health
 ```
 
-Returns server status and basic information. 
+Returns server status and database connectivity information.
+
+```json
+{
+  "status": "OK",
+  "timestamp": "2024-01-01T12:00:00.000Z",
+  "uptime": 3600,
+  "database": "connected",
+  "email_service": "configured"
+}
+```
+
+## Deployment
+
+### Environment Variables for Production
+
+```env
+NODE_ENV=production
+PORT=5001
+DB_HOST=your_db_host
+DB_PORT=5432
+DB_NAME=your_db_name
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+SMTP2GO_USERNAME=your_smtp_username
+SMTP2GO_PASSWORD=your_smtp_password
+SMTP2GO_FROM_EMAIL=noreply@yourdomain.com
+FRONTEND_URL=https://yourdomain.com
+```
+
+### Recommended Deployment Platforms
+
+- **Railway**: Easy PostgreSQL + Node.js deployment
+- **Heroku**: Heroku Postgres add-on support
+- **Render**: Database + web service combo
+- **AWS/DigitalOcean**: Full control with Docker containers
+
+## Future Enhancements
+
+- **Authentication**: JWT-based user authentication
+- **Admin Dashboard**: Web interface for managing webinars and registrations
+- **Video Integration**: Direct webinar hosting capabilities
+- **Advanced Analytics**: Registration patterns and user engagement metrics
+- **Notification System**: SMS and push notification integration
+- **Automated Testing**: Comprehensive test suite with Jest
+- **API Documentation**: Interactive Swagger/OpenAPI documentation
+- **Caching**: Redis integration for improved performance
+
+---
+
+**ISAC Backend API - Built for the International Student Community** 
