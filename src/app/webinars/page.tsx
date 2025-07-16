@@ -52,15 +52,12 @@ interface Webinar {
   time?: string
   startTime?: string
   duration: string
-  attendees?: number
   maxAttendees?: number
   category: string
   level: string
   language: string
   topics: string[]
   targetAudience: string
-  views?: number
-  rating?: number
   poster?: string
 }
 
@@ -111,7 +108,6 @@ export default function WebinarsPage() {
       date: dbWebinar.event_date,
       time: formatTime(dbWebinar.event_time),
       duration: dbWebinar.duration,
-      attendees: dbWebinar.current_registrations,
       maxAttendees: dbWebinar.max_attendees,
       category: dbWebinar.category,
       level: dbWebinar.level,
@@ -364,26 +360,7 @@ export default function WebinarsPage() {
             </div>
           </div>
           
-          {isPast && (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Users className="h-4 w-4 text-green-600" />
-                </div>
-                <span className="font-medium text-gray-700">
-                  {webinar.views || 0} views
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <Star className="h-4 w-4 text-orange-600" />
-                </div>
-                <span className="font-medium text-gray-700">
-                  {webinar.rating}/5 rating
-                </span>
-              </div>
-            </div>
-          )}
+
           {!isPast && (
             <div className="flex items-center justify-center">
               <div className="flex items-center space-x-2">
@@ -439,14 +416,12 @@ export default function WebinarsPage() {
                 : "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
           } text-white`}
           onClick={() => handleShowRegistrationForm(webinar, isPast)}
-          disabled={isPast ? false : (!isLive && webinar.maxAttendees !== undefined && (webinar.attendees || 0) >= webinar.maxAttendees)}
+          disabled={false}
         >
           {isLive ? (
             <>Join Live Session</>
           ) : isPast ? (
             <>Watch Recording</>
-          ) : webinar.maxAttendees !== undefined && (webinar.attendees || 0) >= webinar.maxAttendees ? (
-            <>Fully Booked</>
           ) : (
             <>Register Free</>
           )}
