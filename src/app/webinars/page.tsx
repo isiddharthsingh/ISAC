@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -19,6 +19,28 @@ interface WebinarPresenter {
   title: string
   experience?: string
   image: string
+}
+
+interface DatabaseWebinar {
+  id: number
+  title: string
+  description: string
+  presenter_name: string
+  presenter_title: string
+  presenter_image: string
+  event_date: string
+  event_time: string
+  duration: string
+  timezone: string
+  category: string
+  level: string
+  language: string
+  topics: string[]
+  target_audience: string
+  max_attendees: number
+  poster_image: string
+  status: string
+  current_registrations: number
 }
 
 interface Webinar {
@@ -42,157 +64,6 @@ interface Webinar {
   poster?: string
 }
 
-const upcomingWebinars = [
-  {
-    id: 1,
-    title: "IELTS Success: Strategies for High Scores",
-    description: "Comprehensive guide to achieving your target IELTS score with proven techniques, practice methods, and test-taking strategies.",
-    presenter: {
-      name: "Dr. Sarah Mitchell",
-      title: "IELTS Expert & Former Examiner",
-            
-      image: "/api/placeholder/80/80"
-    },
-    date: "2024-02-15",
-    time: "7:00 PM EST",
-    duration: "90 minutes",
-    category: "Test Preparation",
-    level: "All Levels",
-    language: "English",
-    topics: ["Speaking Techniques", "Writing Strategies", "Reading Comprehension", "Listening Tips"],
-    targetAudience: "Students preparing for IELTS exam"
-  },
-  {
-    id: 2,
-    title: "University Applications: From Dream to Acceptance",
-    description: "Navigate the complex world of university applications with expert guidance on essays, recommendations, and application strategies.",
-    presenter: {
-      name: "Prof. Michael Chen",
-      title: "Admissions Consultant",
-      image: "/api/placeholder/80/80"
-    },
-    date: "2024-02-20",
-    time: "8:00 PM EST",
-    duration: "120 minutes",
-    category: "University Applications",
-    level: "High School & Undergraduate",
-    language: "English",
-    topics: ["Personal Statement Writing", "Letter of Recommendation", "Application Timeline", "Interview Preparation"],
-    targetAudience: "High school students and undergraduates"
-  },
-  {
-    id: 3,
-    title: "Scholarship Hunting: Funding Your Education Dreams",
-    description: "Discover hidden scholarship opportunities and learn winning strategies to secure funding for your educational journey.",
-    presenter: {
-      name: "Dr. Emily Rodriguez",
-      title: "Scholarship Advisor",
-      image: "/api/placeholder/80/80"
-    },
-    date: "2024-02-25",
-    time: "6:30 PM EST",
-    duration: "75 minutes",
-    category: "Financial Aid",
-    level: "All Levels",
-    language: "English",
-    topics: ["Finding Scholarships", "Application Essays", "Merit vs Need-Based", "International Opportunities"],
-    targetAudience: "Students seeking financial assistance"
-  },
-  {
-    id: 4,
-    title: "Study Abroad Planning: Your Global Education Journey",
-    description: "Complete guide to studying abroad including program selection, application process, visa requirements, and cultural preparation.",
-    presenter: {
-      name: "Nik Isamatov",
-      title: "International Education Specialist",
-      image: "/api/placeholder/80/80"
-    },
-    date: "2024-03-05",
-    time: "7:30 PM EST",
-    duration: "100 minutes",
-    category: "Study Abroad",
-    level: "Undergraduate & Graduate",
-    language: "English",
-    topics: ["Program Selection", "Visa Process", "Cultural Adaptation", "Academic Preparation"],
-    targetAudience: "Students interested in international education",
-    poster: "/assets/posters/USC Poster.jpeg"
-  }
-]
-
-const liveWebinars = [
-  {
-    id: 5,
-    title: "Graduate School Applications: PhD & Masters Success",
-    description: "Expert insights into graduate school applications including research proposals, statement of purpose, and advisor selection.",
-    presenter: {
-      name: "Dr. Lisa Thompson",
-      title: "Graduate Admissions Expert",
-      image: "/api/placeholder/80/80"
-    },
-    startTime: "6:30 PM EST",
-    duration: "110 minutes",
-    category: "Graduate School",
-    level: "Undergraduate & Graduate",
-    language: "English",
-    topics: ["Research Proposals", "Statement of Purpose", "Finding Advisors", "Funding Opportunities"],
-    targetAudience: "Students pursuing advanced degrees"
-  }
-]
-
-const pastWebinars = [
-  {
-    id: 6,
-    title: "Career Transitions: From Student to Professional",
-    description: "Bridge the gap between academic life and professional career with networking strategies, resume building, and job search techniques.",
-    presenter: {
-      name: "Prof. Robert Kim",
-      title: "Career Development Specialist",
-      image: "/api/placeholder/80/80"
-    },
-    date: "2024-01-15",
-    duration: "85 minutes",
-    category: "Career Development",
-    level: "Final Year & Graduate",
-    language: "English",
-    topics: ["Resume Building", "Networking", "Interview Skills", "Industry Transitions"],
-    targetAudience: "Students transitioning to professional careers",
-  },
-  {
-    id: 7,
-    title: "MBA Applications: GMAT Success and Business School Strategy",
-    description: "Comprehensive guide to MBA applications, GMAT preparation, and choosing the right business school.",
-    presenter: {
-      name: "Prof. Sarah Johnson",
-      title: "MBA Admissions Consultant",
-      image: "/api/placeholder/80/80"
-    },
-    date: "2024-01-08",
-    duration: "95 minutes",
-    category: "Business School",
-    level: "Working Professionals",
-    language: "English",
-    topics: ["GMAT Strategy", "School Selection", "Essay Writing", "Interview Prep"],
-    targetAudience: "Working professionals seeking MBA",
-  },
-  {
-    id: 8,
-    title: "Study Skills Mastery: Time Management and Academic Success",
-    description: "Learn effective study techniques, time management strategies, and habits for academic excellence.",
-    presenter: {
-      name: "Dr. Michael Chang",
-      title: "Academic Success Coach",
-      image: "/api/placeholder/80/80"
-    },
-    date: "2023-12-20",
-    duration: "70 minutes",
-    category: "Study Skills",
-    level: "All Levels",
-    language: "English",
-    topics: ["Time Management", "Note Taking", "Exam Strategies", "Motivation"],
-    targetAudience: "All students",
-  }
-]
-
 export default function WebinarsPage() {
   const [selectedWebinar, setSelectedWebinar] = useState<Webinar | null>(null)
   const [showRegistrationForm, setShowRegistrationForm] = useState(false)
@@ -205,19 +76,168 @@ export default function WebinarsPage() {
     experience: "student"
   })
 
-  const handleRegistration = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [registrationSuccess, setRegistrationSuccess] = useState(false)
+
+  // Webinar data state
+  const [webinarsLoading, setWebinarsLoading] = useState(true)
+  const [webinarsError, setWebinarsError] = useState<string | null>(null)
+  const [upcomingWebinars, setUpcomingWebinars] = useState<Webinar[]>([])
+  const [liveWebinars, setLiveWebinars] = useState<Webinar[]>([])
+  const [pastWebinars, setPastWebinars] = useState<Webinar[]>([])
+
+  // Transform database webinar to frontend format
+  const transformWebinar = (dbWebinar: DatabaseWebinar): Webinar => {
+    // Format time from 24-hour to 12-hour format with EST
+    const formatTime = (timeStr: string) => {
+      if (!timeStr) return 'TBD'
+      const [hours, minutes] = timeStr.split(':')
+      const hour24 = parseInt(hours)
+      const hour12 = hour24 > 12 ? hour24 - 12 : hour24 === 0 ? 12 : hour24
+      const ampm = hour24 >= 12 ? 'PM' : 'AM'
+      return `${hour12}:${minutes} ${ampm} EST`
+    }
+
+    return {
+      id: dbWebinar.id,
+      title: dbWebinar.title,
+      description: dbWebinar.description,
+      presenter: {
+        name: dbWebinar.presenter_name,
+        title: dbWebinar.presenter_title,
+        image: dbWebinar.presenter_image || "/api/placeholder/80/80"
+      },
+      date: dbWebinar.event_date,
+      time: formatTime(dbWebinar.event_time),
+      duration: dbWebinar.duration,
+      attendees: dbWebinar.current_registrations,
+      maxAttendees: dbWebinar.max_attendees,
+      category: dbWebinar.category,
+      level: dbWebinar.level,
+      language: dbWebinar.language,
+      topics: Array.isArray(dbWebinar.topics) ? dbWebinar.topics : [],
+      targetAudience: dbWebinar.target_audience,
+      poster: dbWebinar.poster_image
+    }
+  }
+
+  // Fetch webinars from API
+  const fetchWebinars = async () => {
+    try {
+      setWebinarsLoading(true)
+      setWebinarsError(null)
+
+      // Fetch all webinars with a high limit to get all at once
+      const response = await fetch('http://localhost:5001/api/webinars?limit=100')
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch webinars')
+      }
+
+      const result = await response.json()
+      
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to fetch webinars')
+      }
+
+      const webinars = result.data.webinars.map(transformWebinar)
+      
+      // Group webinars by status
+      const upcoming = webinars.filter((w: Webinar) => 
+        result.data.webinars.find((dw: DatabaseWebinar) => dw.id === w.id)?.status === 'upcoming'
+      )
+      const live = webinars.filter((w: Webinar) => 
+        result.data.webinars.find((dw: DatabaseWebinar) => dw.id === w.id)?.status === 'live'
+      )
+      const past = webinars.filter((w: Webinar) => 
+        result.data.webinars.find((dw: DatabaseWebinar) => dw.id === w.id)?.status === 'completed'
+      )
+
+      setUpcomingWebinars(upcoming)
+      setLiveWebinars(live)
+      setPastWebinars(past)
+
+    } catch (err) {
+      console.error('Error fetching webinars:', err)
+      setWebinarsError(err instanceof Error ? err.message : 'Failed to load webinars')
+    } finally {
+      setWebinarsLoading(false)
+    }
+  }
+
+  // Fetch webinars on component mount
+  useEffect(() => {
+    fetchWebinars()
+  }, [])
+
+  const handleRegistration = async (e: React.FormEvent) => {
     e.preventDefault()
-    alert(`Registration successful for "${selectedWebinar?.title}"! You will receive a confirmation email with the webinar link.`)
-    setSelectedWebinar(null)
-    setShowRegistrationForm(false)
-    setRegistrationForm({
-      name: "",
-      email: "",
-      phone: "",
-      currentEducation: "",
-      interests: "",
-      experience: "student"
-    })
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      // Validate .edu email on frontend as well
+      if (!registrationForm.email.toLowerCase().endsWith('.edu')) {
+        throw new Error('Only .edu email addresses are accepted. Please use your educational institution email.')
+      }
+
+      // Basic form validation
+      if (!registrationForm.name.trim() || !registrationForm.email.trim() || !registrationForm.phone.trim()) {
+        throw new Error('Please fill in all required fields')
+      }
+
+      // Email format validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(registrationForm.email)) {
+        throw new Error('Please enter a valid email address')
+      }
+
+      const response = await fetch('http://localhost:5001/api/webinars/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          webinarId: selectedWebinar?.id,
+          name: registrationForm.name,
+          email: registrationForm.email,
+          phone: registrationForm.phone,
+          currentEducation: registrationForm.currentEducation,
+          interests: registrationForm.interests,
+          experience: registrationForm.experience
+        })
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed. Please try again.')
+      }
+
+      // Show success state
+      setRegistrationSuccess(true)
+      
+      // Auto-close after 4 seconds
+      setTimeout(() => {
+        setSelectedWebinar(null)
+        setShowRegistrationForm(false)
+        setRegistrationSuccess(false)
+        setRegistrationForm({
+          name: "",
+          email: "",
+          phone: "",
+          currentEducation: "",
+          interests: "",
+          experience: "student"
+        })
+      }, 4000)
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Registration failed. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleShowRegistrationForm = (webinar: Webinar, isPast: boolean = false) => {
@@ -227,7 +247,14 @@ export default function WebinarsPage() {
       alert(`Access recording for "${webinar.title}" - Feature coming soon!`)
     } else {
       setShowRegistrationForm(true)
+      setError(null) // Clear any previous errors
+      setRegistrationSuccess(false) // Reset success state
     }
+  }
+
+  const handleInputChange = (field: string, value: string) => {
+    setRegistrationForm(prev => ({ ...prev, [field]: value }))
+    if (error) setError(null) // Clear error when user starts typing
   }
 
   const renderWebinarCard = (webinar: Webinar, isLive = false, isPast = false) => (
@@ -486,13 +513,65 @@ export default function WebinarsPage() {
             </TabsList>
 
             <TabsContent value="upcoming" className="mt-8">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                {upcomingWebinars.map((webinar) => renderWebinarCard(webinar, false, false))}
-              </div>
+              {webinarsLoading ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="bg-gray-200 rounded-2xl h-96"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : webinarsError ? (
+                <div className="text-center py-16">
+                  <div className="w-24 h-24 bg-gradient-to-br from-red-200 to-red-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg className="h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-700 mb-3">Failed to Load Webinars</h3>
+                  <p className="text-gray-500 mb-6 max-w-md mx-auto">{webinarsError}</p>
+                  <Button onClick={fetchWebinars} className="bg-purple-600 hover:bg-purple-700">
+                    Try Again
+                  </Button>
+                </div>
+              ) : upcomingWebinars.length > 0 ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                  {upcomingWebinars.map((webinar) => renderWebinarCard(webinar, false, false))}
+                </div>
+              ) : (
+                <div className="text-center py-16">
+                  <div className="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Calendar className="h-12 w-12 text-gray-400" />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-700 mb-3">No Upcoming Webinars</h3>
+                  <p className="text-gray-500 mb-6 max-w-md mx-auto">No webinars are currently scheduled. Check back soon for new sessions!</p>
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="live" className="mt-8">
-              {liveWebinars.length > 0 ? (
+              {webinarsLoading ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="bg-gray-200 rounded-2xl h-96"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : webinarsError ? (
+                <div className="text-center py-16">
+                  <div className="w-24 h-24 bg-gradient-to-br from-red-200 to-red-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg className="h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-700 mb-3">Failed to Load Webinars</h3>
+                  <p className="text-gray-500 mb-6 max-w-md mx-auto">{webinarsError}</p>
+                  <Button onClick={fetchWebinars} className="bg-purple-600 hover:bg-purple-700">
+                    Try Again
+                  </Button>
+                </div>
+              ) : liveWebinars.length > 0 ? (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                   {liveWebinars.map((webinar) => renderWebinarCard(webinar, true, false))}
                 </div>
@@ -508,9 +587,40 @@ export default function WebinarsPage() {
             </TabsContent>
 
             <TabsContent value="past" className="mt-8">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                {pastWebinars.map((webinar) => renderWebinarCard(webinar, false, true))}
-              </div>
+              {webinarsLoading ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                  {[...Array(6)].map((_, i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="bg-gray-200 rounded-2xl h-96"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : webinarsError ? (
+                <div className="text-center py-16">
+                  <div className="w-24 h-24 bg-gradient-to-br from-red-200 to-red-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg className="h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-700 mb-3">Failed to Load Webinars</h3>
+                  <p className="text-gray-500 mb-6 max-w-md mx-auto">{webinarsError}</p>
+                  <Button onClick={fetchWebinars} className="bg-purple-600 hover:bg-purple-700">
+                    Try Again
+                  </Button>
+                </div>
+              ) : pastWebinars.length > 0 ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                  {pastWebinars.map((webinar) => renderWebinarCard(webinar, false, true))}
+                </div>
+              ) : (
+                <div className="text-center py-16">
+                  <div className="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Play className="h-12 w-12 text-gray-400" />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-700 mb-3">No Past Webinars</h3>
+                  <p className="text-gray-500 mb-6 max-w-md mx-auto">No recorded webinars available yet. Check back after attending some live sessions!</p>
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>
@@ -593,28 +703,65 @@ export default function WebinarsPage() {
 
       {/* Custom Registration Form Overlay */}
       {showRegistrationForm && selectedWebinar && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center p-4 pt-24" onClick={() => setShowRegistrationForm(false)}>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center p-4 pt-24" onClick={() => !isLoading && setShowRegistrationForm(false)}>
           <div className="bg-white/95 backdrop-blur-sm rounded-2xl max-w-xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="p-4 lg:p-6">
-              {/* Header */}
-              <div className="relative mb-6">
-                <button
-                  onClick={() => setShowRegistrationForm(false)}
-                  className="absolute right-0 top-0 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
-                >
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  <span className="sr-only">Close</span>
-                </button>
-                
-                <div className="pr-12">
-                  <h2 className="text-2xl font-bold text-gray-900">Register for &ldquo;{selectedWebinar.title}&rdquo;</h2>
-                  <p className="text-gray-600 mt-1">
-                    Fill out the form below to register for this free webinar
+              {/* Success State */}
+              {registrationSuccess ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Registration Successful! 🎉</h2>
+                  <p className="text-gray-600 mb-4">
+                    You&apos;re all set for &ldquo;{selectedWebinar.title}&rdquo;
                   </p>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-700">
+                    <p><strong>What&apos;s next?</strong></p>
+                    <ul className="mt-2 space-y-1 text-left">
+                      <li>• Check your email for confirmation details</li>
+                      <li>• Add the webinar to your calendar</li>
+                      <li>• We&apos;ll send you a reminder 24 hours before</li>
+                      <li>• Join link will be sent 30 minutes before start time</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <>
+                  {/* Header */}
+                  <div className="relative mb-6">
+                    <button
+                      onClick={() => !isLoading && setShowRegistrationForm(false)}
+                      disabled={isLoading}
+                      className="absolute right-0 top-0 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      <span className="sr-only">Close</span>
+                    </button>
+                    
+                    <div className="pr-12">
+                      <h2 className="text-2xl font-bold text-gray-900">Register for &ldquo;{selectedWebinar.title}&rdquo;</h2>
+                      <p className="text-gray-600 mt-1">
+                        Fill out the form below to register for this free webinar. <span className="text-purple-600 font-medium">Only .edu emails accepted.</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Error Message */}
+                  {error && (
+                    <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                      <div className="flex items-center">
+                        <svg className="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p className="text-red-700 text-sm font-medium">{error}</p>
+                      </div>
+                    </div>
+                  )}
 
               <form onSubmit={handleRegistration} className="space-y-8">
                 {/* Personal Information Section */}
@@ -630,9 +777,10 @@ export default function WebinarsPage() {
                         id="name"
                         placeholder="Enter your full name"
                         value={registrationForm.name}
-                        onChange={(e) => setRegistrationForm({...registrationForm, name: e.target.value})}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
                         className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20 transition-colors"
                         required
+                        disabled={isLoading}
                       />
                     </div>
                     <div className="space-y-2">
@@ -642,11 +790,12 @@ export default function WebinarsPage() {
                       <Input
                         id="email"
                         type="email"
-                        placeholder="your.email@example.com"
+                        placeholder="student@university.edu"
                         value={registrationForm.email}
-                        onChange={(e) => setRegistrationForm({...registrationForm, email: e.target.value})}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
                         className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20 transition-colors"
                         required
+                        disabled={isLoading}
                       />
                     </div>
                   </div>
@@ -660,9 +809,10 @@ export default function WebinarsPage() {
                       type="tel"
                       placeholder="+1 (555) 123-4567"
                       value={registrationForm.phone}
-                      onChange={(e) => setRegistrationForm({...registrationForm, phone: e.target.value})}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
                       className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20 transition-colors"
                       required
+                      disabled={isLoading}
                     />
                   </div>
                 </div>
@@ -679,9 +829,10 @@ export default function WebinarsPage() {
                       id="education"
                       placeholder="e.g., High School Senior, University Student..."
                       value={registrationForm.currentEducation}
-                      onChange={(e) => setRegistrationForm({...registrationForm, currentEducation: e.target.value})}
+                      onChange={(e) => handleInputChange('currentEducation', e.target.value)}
                       className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20 transition-colors"
                       required
+                      disabled={isLoading}
                     />
                   </div>
 
@@ -693,10 +844,11 @@ export default function WebinarsPage() {
                       id="interests"
                       placeholder="What do you hope to learn from this webinar? Any specific questions?"
                       value={registrationForm.interests}
-                      onChange={(e) => setRegistrationForm({...registrationForm, interests: e.target.value})}
+                      onChange={(e) => handleInputChange('interests', e.target.value)}
                       className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20 transition-colors min-h-[100px]"
                       rows={4}
                       required
+                      disabled={isLoading}
                     />
                   </div>
                 </div>
@@ -725,11 +877,24 @@ export default function WebinarsPage() {
 
                 <Button 
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
-                  Complete Registration
+                  {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Registering...
+                    </div>
+                  ) : (
+                    "Complete Registration"
+                  )}
                 </Button>
               </form>
+              </>
+            )}
             </div>
           </div>
         </div>
