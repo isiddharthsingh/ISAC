@@ -39,6 +39,7 @@ interface Webinar {
   targetAudience: string
   views?: number
   rating?: number
+  poster?: string
 }
 
 const upcomingWebinars = [
@@ -102,7 +103,7 @@ const upcomingWebinars = [
     title: "Study Abroad Planning: Your Global Education Journey",
     description: "Complete guide to studying abroad including program selection, application process, visa requirements, and cultural preparation.",
     presenter: {
-      name: "Prof. James Wilson",
+      name: "Nik Isamatov",
       title: "International Education Specialist",
       image: "/api/placeholder/80/80"
     },
@@ -113,7 +114,8 @@ const upcomingWebinars = [
     level: "Undergraduate & Graduate",
     language: "English",
     topics: ["Program Selection", "Visa Process", "Cultural Adaptation", "Academic Preparation"],
-    targetAudience: "Students interested in international education"
+    targetAudience: "Students interested in international education",
+    poster: "/assets/posters/USC Poster.jpeg"
   }
 ]
 
@@ -230,6 +232,22 @@ export default function WebinarsPage() {
 
   const renderWebinarCard = (webinar: Webinar, isLive = false, isPast = false) => (
     <Card key={webinar.id} className="group hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] bg-white/90 backdrop-blur-sm border-gray-200 overflow-hidden">
+      {/* Poster Section */}
+      {webinar.poster && (
+        <div className="relative overflow-hidden">
+          <img 
+            src={webinar.poster} 
+            alt={`${webinar.title} Poster`}
+            className="w-full h-50 sm:h-60 object-cover group-hover:scale-105 transition-transform duration-500"
+            onError={(e) => {
+              // Fallback if image doesn't load
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      )}
+      
       <CardHeader className="pb-4 relative">
         {/* Card background pattern */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300">
