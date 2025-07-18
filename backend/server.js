@@ -10,6 +10,7 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 // Import routes
 const mentorRoutes = require('./routes/mentors');
 const webinarRoutes = require('./routes/webinars');
+const testimonialRoutes = require('./routes/testimonials');
 
 // Initialize Express app
 const app = express();
@@ -46,10 +47,12 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/mentors', mentorRoutes);
 app.use('/api/webinars', webinarRoutes);
+app.use('/api/testimonials', testimonialRoutes);
 
 // Apply strict rate limiting to sensitive endpoints
 app.use('/api/mentors/apply', strictLimiter);
 app.use('/api/webinars/register', strictLimiter);
+app.use('/api/testimonials/submit', strictLimiter);
 
 // Root endpoint
 app.get('/', (req, res) => {
