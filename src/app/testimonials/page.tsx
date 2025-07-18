@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -20,74 +20,18 @@ interface Testimonial {
   location: string
   review: string
   image?: string
+  status?: string
+  created_at?: string
+  approved_at?: string
 }
 
-const initialTestimonials: Testimonial[] = [
-  {
-    id: 1,
-    name: "Sarah Chen",
-    age: 22,
-    university: "Johns Hopkins University",
-    program: "Medical School",
-    location: "Toronto, Canada",
-    review: "The guidance I received was transformative. From preparation to application writing, every step was carefully planned. I couldn't have achieved my dream without this incredible support system.",
-    image: "/api/placeholder/150/150"
-  },
-  {
-    id: 2,
-    name: "Marcus Johnson",
-    age: 24,
-    university: "Wharton Business School",
-    program: "MBA Program",
-    location: "Atlanta, USA",
-    review: "The mentoring program helped me identify my unique story and present it compellingly. The application strategy was a game-changer for my admission to Wharton.",
-    image: "/api/placeholder/150/150"
-  },
-  {
-    id: 3,
-    name: "Priya Patel",
-    age: 20,
-    university: "MIT",
-    program: "PhD in Computer Science",
-    location: "Mumbai, India",
-    review: "Coming from India, I wasn't sure how to navigate the US graduate school system. My mentor helped me understand the research culture and craft compelling applications.",
-    image: "/api/placeholder/150/150"
-  },
-  {
-    id: 4,
-    name: "Emma Thompson",
-    age: 21,
-    university: "Harvard Law School",
-    program: "Law School",
-    location: "London, UK",
-    review: "The comprehensive support I received was extraordinary. From strategy to personal statement crafting, every aspect was covered. Having choices between Harvard and Yale Law is beyond what I imagined possible.",
-    image: "/api/placeholder/150/150"
-  },
-  {
-    id: 5,
-    name: "Ahmed Al-Rashid",
-    age: 23,
-    university: "INSEAD",
-    program: "MBA",
-    location: "Dubai, UAE",
-    review: "As someone from the Middle East, I needed guidance on global business schools. The mentorship helped me craft applications that highlighted my unique background and career goals.",
-    image: "/api/placeholder/150/150"
-  },
-  {
-    id: 6,
-    name: "Sofia Gonzalez",
-    age: 19,
-    university: "Princeton University",
-    program: "Undergraduate",
-    location: "Mexico City, Mexico",
-    review: "Starting the application process felt overwhelming, but my mentor broke everything down into manageable steps. The essay writing workshops and interview preparation were invaluable.",
-    image: "/api/placeholder/150/150"
-  }
-]
-
 export default function TestimonialsPage() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials)
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
   const [showForm, setShowForm] = useState(false)
+  const [submissionSuccess, setSubmissionSuccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingTestimonials, setIsLoadingTestimonials] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -97,25 +41,79 @@ export default function TestimonialsPage() {
     review: ""
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Fetch approved testimonials from database
+  useEffect(() => {
+    fetchTestimonials()
+  }, [])
+
+  const fetchTestimonials = async () => {
+    try {
+      setIsLoadingTestimonials(true)
+      const response = await fetch('http://localhost:5001/api/testimonials?status=approved')
+      if (!response.ok) {
+        throw new Error('Failed to fetch testimonials')
+      }
+      const data = await response.json()
+      
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to fetch testimonials')
+      }
+      
+      setTestimonials(data.data.testimonials || [])
+    } catch (error) {
+      console.error('Error fetching testimonials:', error)
+      setError('Unable to load testimonials. Please try again later.')
+    } finally {
+      setIsLoadingTestimonials(false)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!formData.name || !formData.age || !formData.university || !formData.program || !formData.location || !formData.review) {
-      alert("Please fill in all fields")
+      setError("Please fill in all fields")
       return
     }
 
-    const newTestimonial: Testimonial = {
-      id: testimonials.length + 1,
-      name: formData.name,
-      age: parseInt(formData.age),
-      university: formData.university,
-      program: formData.program,
-      location: formData.location,
-      review: formData.review
-    }
+    setIsLoading(true)
+    setError(null)
 
-    setTestimonials([newTestimonial, ...testimonials])
+    try {
+      const response = await fetch('http://localhost:5001/api/testimonials/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          age: parseInt(formData.age),
+          university: formData.university,
+          program: formData.program,
+          location: formData.location,
+          review: formData.review
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Failed to submit testimonial')
+      }
+
+      setSubmissionSuccess(true)
+    } catch (error) {
+      console.error('Error submitting testimonial:', error)
+      setError(error instanceof Error ? error.message : 'Failed to submit testimonial')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleCloseModal = () => {
+    setShowForm(false)
+    setSubmissionSuccess(false)
+    setError(null)
     setFormData({
       name: "",
       age: "",
@@ -124,7 +122,6 @@ export default function TestimonialsPage() {
       location: "",
       review: ""
     })
-    setShowForm(false)
   }
 
   const stats = [
@@ -217,8 +214,6 @@ export default function TestimonialsPage() {
         </div>
       </section>
 
-      
-
       {/* Testimonials Grid */}
       <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
         <div className="max-w-7xl mx-auto px-4">
@@ -229,62 +224,118 @@ export default function TestimonialsPage() {
             <p className="text-gray-600">Real experiences from students who achieved their dreams</p>
           </div>
           
-                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-             {testimonials.map((testimonial) => (
-               <Card key={testimonial.id} className="hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-white border-gray-200 overflow-hidden">
-                 <CardHeader className="pb-3">
-                   <div className="flex items-center space-x-3">
-                     <Avatar className="h-14 w-14 ring-2 ring-green-100">
-                       <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                       <AvatarFallback className="text-base bg-gradient-to-br from-green-500 to-blue-500 text-white font-semibold">
-                         {testimonial.name.split(' ').map(n => n[0]).join('')}
-                       </AvatarFallback>
-                     </Avatar>
-                     <div className="flex-1 min-w-0">
-                       <CardTitle className="text-lg font-bold text-gray-900 leading-tight">
-                         {testimonial.name}
-                       </CardTitle>
-                       <p className="text-sm text-gray-600">{testimonial.age} years old</p>
-                       <div className="text-sm text-gray-500 flex items-center mt-0.5">
-                         <Globe className="h-3 w-3 mr-1 flex-shrink-0" />
-                         <span className="truncate">{testimonial.location}</span>
-                       </div>
-                     </div>
-                   </div>
-                 </CardHeader>
-                 
-                 <CardContent className="space-y-3 pt-0">
-                   <div className="space-y-3">
-                     <div className="flex items-center space-x-2 p-2 bg-green-50 rounded-lg border border-green-100">
-                       <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                         <School className="h-4 w-4 text-green-600" />
-                       </div>
-                       <div className="min-w-0 flex-1">
-                         <p className="text-xs font-medium text-green-700 uppercase tracking-wide">University</p>
-                         <p className="text-sm font-semibold text-gray-800 leading-tight">{testimonial.university}</p>
-                       </div>
-                     </div>
-                     
-                     <div className="flex items-center space-x-2 p-2 bg-blue-50 rounded-lg border border-blue-100">
-                       <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                         <BookOpen className="h-4 w-4 text-blue-600" />
-                       </div>
-                       <div className="min-w-0 flex-1">
-                         <p className="text-xs font-medium text-blue-700 uppercase tracking-wide">Program</p>
-                         <p className="text-sm font-semibold text-gray-800 leading-tight">{testimonial.program}</p>
-                       </div>
-                     </div>
-                   </div>
-                   
+          {/* Loading State */}
+          {isLoadingTestimonials && (
+            <div className="flex justify-center items-center py-20">
+              <div className="flex flex-col items-center space-y-4">
+                <div className="w-12 h-12 border-4 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
+                <p className="text-gray-600">Loading testimonials...</p>
+              </div>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && !isLoadingTestimonials && (
+            <div className="flex justify-center items-center py-20">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Unable to Load Testimonials</h3>
+                <p className="text-gray-600 mb-4">{error}</p>
+                <Button 
+                  onClick={fetchTestimonials}
+                  className="bg-gradient-to-r from-green-600 to-blue-600 text-white"
+                >
+                  Try Again
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!isLoadingTestimonials && !error && testimonials.length === 0 && (
+            <div className="flex justify-center items-center py-20">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-8 h-8 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Be the First to Share!</h3>
+                <p className="text-gray-600 mb-4">
+                  No testimonials yet. Help inspire future students by sharing your success story.
+                </p>
+                <Button 
+                  onClick={() => setShowForm(true)}
+                  className="bg-gradient-to-r from-green-600 to-blue-600 text-white"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Share Your Story
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Testimonials Grid */}
+          {!isLoadingTestimonials && !error && testimonials.length > 0 && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {testimonials.map((testimonial) => (
+                <Card key={testimonial.id} className="hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-white border-gray-200 overflow-hidden">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center space-x-3">
+                      <Avatar className="h-14 w-14 ring-2 ring-green-100">
+                        <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                        <AvatarFallback className="text-base bg-gradient-to-br from-green-500 to-blue-500 text-white font-semibold">
+                          {testimonial.name.split(' ').map(n => n[0]).join('')}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <CardTitle className="text-lg font-bold text-gray-900 leading-tight">
+                          {testimonial.name}
+                        </CardTitle>
+                        <p className="text-sm text-gray-600">{testimonial.age} years old</p>
+                        <div className="text-sm text-gray-500 flex items-center mt-0.5">
+                          <Globe className="h-3 w-3 mr-1 flex-shrink-0" />
+                          <span className="truncate">{testimonial.location}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent className="space-y-3 pt-0">
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2 p-2 bg-green-50 rounded-lg border border-green-100">
+                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <School className="h-4 w-4 text-green-600" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs font-medium text-green-700 uppercase tracking-wide">University</p>
+                          <p className="text-sm font-semibold text-gray-800 leading-tight">{testimonial.university}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2 p-2 bg-blue-50 rounded-lg border border-blue-100">
+                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <BookOpen className="h-4 w-4 text-blue-600" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs font-medium text-blue-700 uppercase tracking-wide">Program</p>
+                          <p className="text-sm font-semibold text-gray-800 leading-tight">{testimonial.program}</p>
+                        </div>
+                      </div>
+                    </div>
+                    
                     <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
                       <p className="text-sm text-gray-700 leading-relaxed italic">
                         &ldquo;{testimonial.review}&rdquo;
                       </p>
                     </div>
-                 </CardContent>
-               </Card>
-             ))}
-          </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -304,142 +355,204 @@ export default function TestimonialsPage() {
       </button>
 
       {/* Review Form Modal */}
-       {showForm && (
-         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center p-4 pt-24" onClick={() => setShowForm(false)}>
-           <div className="bg-white/95 backdrop-blur-sm rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-             <div className="p-4 lg:p-6">
-               {/* Header */}
-               <div className="relative mb-6">
-                 <button
-                   onClick={() => setShowForm(false)}
-                   className="absolute right-0 top-0 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200"
-                 >
-                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                   </svg>
-                   <span className="sr-only">Close</span>
-                 </button>
-                 
-                 <div className="pr-12">
-                   <h2 className="text-2xl font-bold text-gray-900">Share Your Success Story</h2>
-                   <p className="text-gray-600 mt-1">
-                     Tell us about your academic journey and inspire other students!
-                   </p>
-                 </div>
-               </div>
+      {showForm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center p-4 pt-24" onClick={handleCloseModal}>
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="p-4 lg:p-6">
+              {/* Success State */}
+              {submissionSuccess ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Thank You for Sharing! 🎉</h2>
+                  <p className="text-gray-600 mb-4">
+                    Your success story has been submitted and will inspire other students on their academic journey.
+                  </p>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-700 mb-6">
+                    <p><strong>Your story matters!</strong></p>
+                    <ul className="mt-2 space-y-1 text-left">
+                      <li>• Your testimonial will be live on our website after approval</li>
+                      <li>• It will help inspire future students</li>
+                      <li>• Thank you for being part of our community</li>
+                      <li>• Keep achieving great things!</li>
+                    </ul>
+                  </div>
+                  <Button 
+                    onClick={handleCloseModal}
+                    className="bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold px-8"
+                  >
+                    Close
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {/* Header */}
+                  <div className="relative mb-6">
+                    <button
+                      onClick={handleCloseModal}
+                      disabled={isLoading}
+                      className="absolute right-0 top-0 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      <span className="sr-only">Close</span>
+                    </button>
+                    
+                    <div className="pr-12">
+                      <h2 className="text-2xl font-bold text-gray-900">Share Your Success Story</h2>
+                      <p className="text-gray-600 mt-1">
+                        Tell us about your academic journey and inspire other students!
+                      </p>
+                    </div>
+                  </div>
 
-               {/* Form */}
-               <form onSubmit={handleSubmit} className="space-y-6">
-                 <div className="grid md:grid-cols-2 gap-4">
-                   <div>
-                     <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
-                       Full Name <span className="text-red-500">*</span>
-                     </Label>
-                     <Input
-                       id="name"
-                       value={formData.name}
-                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                       placeholder="Your full name"
-                       required
-                       className="mt-1"
-                     />
-                   </div>
-                   <div>
-                     <Label htmlFor="age" className="text-sm font-semibold text-gray-700">
-                       Age <span className="text-red-500">*</span>
-                     </Label>
-                     <Input
-                       id="age"
-                       type="number"
-                       value={formData.age}
-                       onChange={(e) => setFormData({...formData, age: e.target.value})}
-                       placeholder="Your age"
-                       required
-                       className="mt-1"
-                     />
-                   </div>
-                 </div>
-                 
-                 <div className="grid md:grid-cols-2 gap-4">
-                   <div>
-                     <Label htmlFor="university" className="text-sm font-semibold text-gray-700">
-                       University <span className="text-red-500">*</span>
-                     </Label>
-                     <Input
-                       id="university"
-                       value={formData.university}
-                       onChange={(e) => setFormData({...formData, university: e.target.value})}
-                       placeholder="University name"
-                       required
-                       className="mt-1"
-                     />
-                   </div>
-                   <div>
-                     <Label htmlFor="program" className="text-sm font-semibold text-gray-700">
-                       Program <span className="text-red-500">*</span>
-                     </Label>
-                     <Input
-                       id="program"
-                       value={formData.program}
-                       onChange={(e) => setFormData({...formData, program: e.target.value})}
-                       placeholder="Program/Course"
-                       required
-                       className="mt-1"
-                     />
-                   </div>
-                 </div>
-                 
-                 <div>
-                   <Label htmlFor="location" className="text-sm font-semibold text-gray-700">
-                     Location <span className="text-red-500">*</span>
-                   </Label>
-                   <Input
-                     id="location"
-                     value={formData.location}
-                     onChange={(e) => setFormData({...formData, location: e.target.value})}
-                     placeholder="City, Country"
-                     required
-                     className="mt-1"
-                   />
-                 </div>
-                 
-                 <div>
-                   <Label htmlFor="review" className="text-sm font-semibold text-gray-700">
-                     Your Review <span className="text-red-500">*</span>
-                   </Label>
-                   <Textarea
-                     id="review"
-                     value={formData.review}
-                     onChange={(e) => setFormData({...formData, review: e.target.value})}
-                     placeholder="Share your experience with ISAC... Tell us how we helped you achieve your academic goals."
-                     rows={4}
-                     required
-                     className="mt-1"
-                   />
-                 </div>
-                 
-                 <div className="flex gap-3">
-                   <Button 
-                     type="button"
-                     variant="outline"
-                     onClick={() => setShowForm(false)}
-                     className="flex-1"
-                   >
-                     Cancel
-                   </Button>
-                   <Button 
-                     type="submit" 
-                     className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold hover:shadow-lg"
-                   >
-                     <Send className="h-4 w-4 mr-2" />
-                     Submit Review
-                   </Button>
-                 </div>
-               </form>
-             </div>
-           </div>
-         </div>
-       )}
+                  {/* Error Message */}
+                  {error && (
+                    <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                      <div className="flex items-center">
+                        <svg className="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p className="text-red-700 text-sm font-medium">{error}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Form */}
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
+                          Full Name <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="name"
+                          value={formData.name}
+                          onChange={(e) => setFormData({...formData, name: e.target.value})}
+                          placeholder="Your full name"
+                          required
+                          disabled={isLoading}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="age" className="text-sm font-semibold text-gray-700">
+                          Age <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="age"
+                          type="number"
+                          value={formData.age}
+                          onChange={(e) => setFormData({...formData, age: e.target.value})}
+                          placeholder="Your age"
+                          required
+                          disabled={isLoading}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="university" className="text-sm font-semibold text-gray-700">
+                          University <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="university"
+                          value={formData.university}
+                          onChange={(e) => setFormData({...formData, university: e.target.value})}
+                          placeholder="University name"
+                          required
+                          disabled={isLoading}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="program" className="text-sm font-semibold text-gray-700">
+                          Program <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="program"
+                          value={formData.program}
+                          onChange={(e) => setFormData({...formData, program: e.target.value})}
+                          placeholder="Program/Course"
+                          required
+                          disabled={isLoading}
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="location" className="text-sm font-semibold text-gray-700">
+                        Location <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="location"
+                        value={formData.location}
+                        onChange={(e) => setFormData({...formData, location: e.target.value})}
+                        placeholder="City, Country"
+                        required
+                        disabled={isLoading}
+                        className="mt-1"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="review" className="text-sm font-semibold text-gray-700">
+                        Your Review <span className="text-red-500">*</span>
+                      </Label>
+                      <Textarea
+                        id="review"
+                        value={formData.review}
+                        onChange={(e) => setFormData({...formData, review: e.target.value})}
+                        placeholder="Share your experience with ISAC... Tell us how we helped you achieve your academic goals."
+                        rows={4}
+                        required
+                        disabled={isLoading}
+                        className="mt-1"
+                      />
+                    </div>
+                    
+                    <div className="flex gap-3">
+                      <Button 
+                        type="button"
+                        variant="outline"
+                        onClick={handleCloseModal}
+                        disabled={isLoading}
+                        className="flex-1"
+                      >
+                        Cancel
+                      </Button>
+                      <Button 
+                        type="submit" 
+                        disabled={isLoading}
+                        className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold hover:shadow-lg disabled:opacity-50"
+                      >
+                        {isLoading ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                            Submitting...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="h-4 w-4 mr-2" />
+                            Submit Review
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </form>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 } 
