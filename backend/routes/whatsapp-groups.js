@@ -9,8 +9,11 @@ router.get('/universities', generalLimiter, whatsappGroupsController.getUniversi
 // Get WhatsApp groups for a specific university
 router.get('/universities/:universityId/groups', generalLimiter, whatsappGroupsController.getUniversityGroups);
 
-// Start verification process
+// Start verification process (email-based)
 router.post('/verify/start', strictLimiter, whatsappGroupsController.startVerification);
+
+// Upload document for verification (admit letter/I-20)
+router.post('/verify/upload', strictLimiter, whatsappGroupsController.uploadDocumentVerification);
 
 // Confirm email verification
 router.get('/verify/confirm/:token', generalLimiter, whatsappGroupsController.confirmVerification);
