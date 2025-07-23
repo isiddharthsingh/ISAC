@@ -9,6 +9,7 @@ import { StepIndicator } from './components/step-indicator'
 import { UniversitySelection } from './components/university-selection'
 import { IdentityVerification } from './components/identity-verification'
 import { VerificationPending } from './components/verification-pending'
+import { DocumentReviewPending } from './components/document-review-pending'
 import { VerificationApproved } from './components/verification-approved'
 import { WhatsAppGroupsList } from './components/whatsapp-groups-list'
 
@@ -18,9 +19,9 @@ export default function WhatsAppGroupsPage() {
   const [email, setEmail] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [hasStudentEmail, setHasStudentEmail] = useState<boolean | null>(null)
-  const [admitLetter, setAdmitLetter] = useState<File | null>(null)
   const [additionalInfo, setAdditionalInfo] = useState('')
   const [universities, setUniversities] = useState<University[]>([])
+  const [verificationMethod, setVerificationMethod] = useState<'email' | 'document' | null>(null)
 
   useEffect(() => {
     fetchUniversities()
@@ -93,10 +94,9 @@ export default function WhatsAppGroupsPage() {
     }
   }
 
-  const handleVerificationSubmit = () => {
+  const handleVerificationSubmit = (method: 'email' | 'document') => {
+    setVerificationMethod(method)
     setCurrentStep('pending')
-    // Note: The real verification now happens via email
-    // User will click email link to verify, then they can come back to access groups
   }
 
   const handleJoinGroups = () => {
@@ -109,8 +109,8 @@ export default function WhatsAppGroupsPage() {
     setEmail('')
     setPhoneNumber('')
     setHasStudentEmail(null)
-    setAdmitLetter(null)
     setAdditionalInfo('')
+    setVerificationMethod(null)
   }
 
   return (
@@ -172,18 +172,25 @@ export default function WhatsAppGroupsPage() {
                 setPhoneNumber={setPhoneNumber}
                 hasStudentEmail={hasStudentEmail}
                 setHasStudentEmail={setHasStudentEmail}
-                admitLetter={admitLetter}
-                setAdmitLetter={setAdmitLetter}
                 additionalInfo={additionalInfo}
                 setAdditionalInfo={setAdditionalInfo}
                 onSubmit={handleVerificationSubmit}
               />
             )}
 
-            {/* Step 3: Pending Verification */}
-            {currentStep === 'pending' && selectedUniversity && (
+            {/* Step 3: Pending Verification - Email */}
+            {currentStep === 'pending' && selectedUniversity && verificationMethod === 'email' && (
               <VerificationPending 
                 hasStudentEmail={hasStudentEmail}
+                email={email}
+                universityId={selectedUniversity.id}
+                onVerificationComplete={() => setCurrentStep('approved')}
+              />
+            )}
+
+            {/* Step 3: Pending Verification - Document Review */}
+            {currentStep === 'pending' && selectedUniversity && verificationMethod === 'document' && (
+              <DocumentReviewPending 
                 email={email}
                 universityId={selectedUniversity.id}
                 onVerificationComplete={() => setCurrentStep('approved')}
