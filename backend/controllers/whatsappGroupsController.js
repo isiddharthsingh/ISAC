@@ -1,6 +1,25 @@
 const pool = require('../config/database');
 const { sendVerificationEmail } = require('../utils/emailService');
+const { uploadFileToS3, validateFile } = require('../utils/s3Service');
+const { processDocument } = require('../utils/documentProcessor');
 const crypto = require('crypto');
+const multer = require('multer');
+
+// Configure multer for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only PDF, JPG, and PNG files are allowed.'), false);
+    }
+  }
+}).single('document');
 
 // Get all universities with their WhatsApp groups
 const getUniversities = async (req, res) => {
@@ -390,10 +409,246 @@ const resendVerification = async (req, res) => {
   }
 };
 
+// Upload document for verification
+const uploadDocumentVerification = async (req, res) => {
+  // Handle file upload with multer
+  upload(req, res, async (err) => {
+    if (err) {
+      console.error('File upload error:', err);
+      return res.status(400).json({
+        success: false,
+        message: err.message
+      });
+    }
+
+    try {
+      const { universityId, email, phoneNumber } = req.body;
+      const file = req.file;
+
+      // Validate required fields
+      if (!universityId || !email || !phoneNumber || !file) {
+        return res.status(400).json({
+          success: false,
+          message: 'University ID, email, phone number, and document are required'
+        });
+      }
+
+      // Check if university exists
+      const universityResult = await pool.query(
+        'SELECT * FROM universities WHERE id = $1',
+        [universityId]
+      );
+
+      if (universityResult.rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: 'University not found'
+        });
+      }
+
+      const university = universityResult.rows[0];
+
+      // Check if email already has any verification record for this university
+      const existingVerification = await pool.query(
+        'SELECT * FROM whatsapp_verifications WHERE email = $1 AND university_id = $2 ORDER BY created_at DESC LIMIT 1',
+        [email, universityId]
+      );
+
+      if (existingVerification.rows.length > 0) {
+        const existingRecord = existingVerification.rows[0];
+        
+        // Check if phone number matches the one used during verification
+        if (existingRecord.phone_number !== phoneNumber) {
+          // Phone number doesn't match - security error
+          return res.status(403).json({
+            success: false,
+            message: 'This email is already associated with a different phone number. Please use the same phone number you used during verification, or contact support if you need to update your phone number.'
+          });
+        }
+
+        // Handle different existing statuses
+        if (existingRecord.status === 'verified') {
+          // Already verified - allow direct access
+          return res.json({
+            success: true,
+            alreadyVerified: true,
+            message: 'Email already verified! Redirecting to WhatsApp groups.',
+            data: {
+              university: university.name,
+              universityShortName: university.short_name,
+              universityId: university.id,
+              verifiedAt: existingRecord.verified_at
+            }
+          });
+        } else if (existingRecord.status === 'pending' && existingRecord.verification_method === 'admit_letter') {
+          // Already has a pending document verification - return status
+          return res.json({
+            success: true,
+            manualReview: true,
+            message: 'Document already uploaded and is under review. You will be notified within 24-48 hours.',
+            data: {
+              verificationId: existingRecord.id,
+              decision: 'manual_review',
+              reason: 'Document previously uploaded and currently under review',
+              reviewEstimate: '24-48 hours'
+            }
+          });
+        } else if (existingRecord.status === 'rejected') {
+          // Previous verification was rejected - delete old record and allow new upload
+          console.log('Deleting rejected verification record to allow new upload');
+          await pool.query(
+            'DELETE FROM whatsapp_verifications WHERE id = $1',
+            [existingRecord.id]
+          );
+        } else if (existingRecord.status === 'expired') {
+          // Previous verification expired - delete old record and allow new upload
+          console.log('Deleting expired verification record to allow new upload');
+          await pool.query(
+            'DELETE FROM whatsapp_verifications WHERE id = $1',
+            [existingRecord.id]
+          );
+        }
+        // For other statuses or if we deleted a record, continue with new verification
+      }
+
+      // Check if phone number is already used
+      const phoneExists = await pool.query(
+        'SELECT * FROM whatsapp_verifications WHERE phone_number = $1 AND status = $2',
+        [phoneNumber, 'verified']
+      );
+
+      if (phoneExists.rows.length > 0) {
+        return res.status(409).json({
+          success: false,
+          message: 'This phone number is already registered'
+        });
+      }
+
+      console.log('Processing uploaded file:', file.originalname, 'Size:', file.size);
+
+      // Upload file to S3
+      const s3Result = await uploadFileToS3(file.buffer, file.originalname, universityId);
+      
+      if (!s3Result.success) {
+        throw new Error('Failed to upload file to S3');
+      }
+
+      console.log('File uploaded to S3:', s3Result.fileKey);
+
+      // Download file for processing (since OCR needs local file)
+      const { downloadFileFromS3 } = require('../utils/s3Service');
+      const downloadResult = await downloadFileFromS3(s3Result.fileKey);
+      
+      if (!downloadResult.success) {
+        throw new Error('Failed to download file for processing');
+      }
+
+      // Process document with OCR and classification
+      console.log('Starting document processing...');
+      const processingResult = await processDocument(downloadResult.buffer, universityId);
+      
+      console.log('Document processing result:', processingResult.decision, processingResult.reason);
+
+      // Generate verification token
+      const verificationToken = crypto.randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+
+      // Determine initial status based on processing result
+      let initialStatus = 'pending'; // Default to existing status
+      if (processingResult.decision === 'approved') {
+        initialStatus = 'verified';
+      } else if (processingResult.decision === 'rejected') {
+        initialStatus = 'rejected';
+      } else {
+        initialStatus = 'pending'; // Manual review goes to pending for now
+      }
+
+      // Save verification record to database
+      const insertResult = await pool.query(`
+        INSERT INTO whatsapp_verifications (
+          university_id, email, phone_number, verification_method,
+          file_path, original_filename, extracted_text, 
+          classification_result, verification_token, expires_at, status
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        RETURNING id
+      `, [
+        universityId,
+        email,
+        phoneNumber,
+        'admit_letter',
+        s3Result.fileKey,
+        file.originalname,
+        processingResult.extractedText || '',
+        JSON.stringify({
+          classification: processingResult.classification,
+          autoProcessed: processingResult.autoProcessed,
+          processedAt: processingResult.processedAt
+        }),
+        verificationToken,
+        expiresAt,
+        initialStatus
+      ]);
+
+      // Return response based on processing result
+      if (processingResult.decision === 'approved') {
+        res.json({
+          success: true,
+          autoApproved: true,
+          message: processingResult.reason,
+          data: {
+            verificationId: insertResult.rows[0].id,
+            university: university.name,
+            universityShortName: university.short_name,
+            universityId: university.id,
+            decision: processingResult.decision,
+            confidence: processingResult.classification?.confidence,
+            documentType: processingResult.classification?.type
+          }
+        });
+      } else if (processingResult.decision === 'rejected') {
+        res.status(400).json({
+          success: false,
+          autoRejected: true,
+          message: processingResult.reason,
+          data: {
+            verificationId: insertResult.rows[0].id,
+            decision: processingResult.decision,
+            confidence: processingResult.classification?.confidence,
+            documentType: processingResult.classification?.type
+          }
+        });
+      } else {
+        // Manual review required
+        res.json({
+          success: true,
+          manualReview: true,
+          message: 'Document uploaded successfully and is under review. You will be notified within 24-48 hours.',
+          data: {
+            verificationId: insertResult.rows[0].id,
+            decision: processingResult.decision,
+            reason: processingResult.reason,
+            confidence: processingResult.classification?.confidence,
+            documentType: processingResult.classification?.type,
+            reviewEstimate: '24-48 hours'
+          }
+        });
+      }
+
+    } catch (error) {
+      console.error('Document upload verification error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to process document verification: ' + error.message
+      });
+    }
+  });
+};
+
 module.exports = {
   getUniversities,
   getUniversityGroups,
   startVerification,
+  uploadDocumentVerification,
   confirmVerification,
   getVerificationStatus,
   resendVerification
