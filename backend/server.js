@@ -11,6 +11,7 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const mentorRoutes = require('./routes/mentors');
 const webinarRoutes = require('./routes/webinars');
 const testimonialRoutes = require('./routes/testimonials');
+const whatsappGroupsRoutes = require('./routes/whatsapp-groups');
 
 // Initialize Express app
 const app = express();
@@ -48,11 +49,14 @@ app.get('/health', (req, res) => {
 app.use('/api/mentors', mentorRoutes);
 app.use('/api/webinars', webinarRoutes);
 app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/whatsapp-groups', whatsappGroupsRoutes);
 
 // Apply strict rate limiting to sensitive endpoints
 app.use('/api/mentors/apply', strictLimiter);
 app.use('/api/webinars/register', strictLimiter);
 app.use('/api/testimonials/submit', strictLimiter);
+app.use('/api/whatsapp-groups/verify/start', strictLimiter);
+app.use('/api/whatsapp-groups/verify/resend', strictLimiter);
 
 // Root endpoint
 app.get('/', (req, res) => {
