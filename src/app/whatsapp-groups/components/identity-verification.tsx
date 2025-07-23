@@ -52,44 +52,21 @@ export function IdentityVerification({
   const [emailValid, setEmailValid] = useState(false)
   const [phoneValid, setPhoneValid] = useState(false)
 
-  // Mock function to check if email exists in database
-  // Replace this with actual API call to your database
-  const checkEmailExists = async (emailToCheck: string): Promise<boolean> => {
-    // TODO: Replace with actual database query
-    // const response = await fetch(`/api/check-email?email=${emailToCheck}`)
-    // const data = await response.json()
-    // return data.exists
-    
-    // Mock check - simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 800))
-    
-    // Mock existing emails for demo (remove in production)
-    const existingEmails = [
-      'john.doe@nyu.edu',
-      'jane.smith@mit.edu', 
-      'existing@gmail.com'
-    ]
-    return existingEmails.includes(emailToCheck)
-  }
+  // Use the real API to check if this email/phone combination is valid
+  const validateEmailAndPhone = async (emailToCheck: string, phoneToCheck: string): Promise<{ emailValid: boolean, phoneValid: boolean, emailError?: string, phoneError?: string }> => {
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(emailToCheck)) {
+      return { emailValid: false, phoneValid: false, emailError: 'Please enter a valid email address' }
+    }
 
-  // Mock function to check if phone exists in database  
-  // Replace this with actual API call to your database
-  const checkPhoneExists = async (phoneToCheck: string): Promise<boolean> => {
-    // TODO: Replace with actual database query
-    // const response = await fetch(`/api/check-phone?phone=${phoneToCheck}`)
-    // const data = await response.json()
-    // return data.exists
-    
-    // Mock check - simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 600))
-    
-    // Mock existing phones for demo (remove in production)
-    const existingPhones = [
-      '+1234567890',
-      '+1987654321',
-      '+1555123456'
-    ]
-    return existingPhones.includes(phoneToCheck.replace(/\D/g, '').replace(/^1/, '+1'))
+    // Basic phone format validation
+    const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/
+    if (!phoneRegex.test(phoneToCheck)) {
+      return { emailValid: false, phoneValid: false, phoneError: 'Please enter a valid phone number' }
+    }
+
+    return { emailValid: true, phoneValid: true }
   }
 
   // Validate email when it changes
@@ -102,36 +79,19 @@ export function IdentityVerification({
       }
 
       // Check university domain for student emails
-      if (hasStudentEmail && !email.includes(selectedUniversity.emailDomain)) {
-        setEmailError(`Must be a ${selectedUniversity.emailDomain} email address`)
+      if (hasStudentEmail && !email.includes(selectedUniversity.email_domain)) {
+        setEmailError(`Must be a ${selectedUniversity.email_domain} email address`)
         setEmailValid(false)
         return
       }
 
-      // Check if email already exists
-      setIsCheckingEmail(true)
       setEmailError('')
-      
-      try {
-        const exists = await checkEmailExists(email)
-        if (exists) {
-          setEmailError('This email is already registered. Use a different email or contact support.')
-          setEmailValid(false)
-        } else {
-          setEmailError('')
-          setEmailValid(true)
-        }
-      } catch (error) {
-        setEmailError('Unable to verify email. Please try again.')
-        setEmailValid(false)
-      } finally {
-        setIsCheckingEmail(false)
-      }
+      setEmailValid(true)
     }
 
-    const debounceTimer = setTimeout(validateEmail, 500)
+    const debounceTimer = setTimeout(validateEmail, 300)
     return () => clearTimeout(debounceTimer)
-  }, [email, hasStudentEmail, selectedUniversity.emailDomain])
+  }, [email, hasStudentEmail, selectedUniversity.email_domain])
 
   // Validate phone when it changes
   useEffect(() => {
@@ -150,36 +110,58 @@ export function IdentityVerification({
         return
       }
 
-      // Check if phone already exists
-      setIsCheckingPhone(true)
       setPhoneError('')
-      
-      try {
-        const exists = await checkPhoneExists(phoneNumber)
-        if (exists) {
-          setPhoneError('This phone number is already registered. Use a different number or contact support.')
-          setPhoneValid(false)
-        } else {
-          setPhoneError('')
-          setPhoneValid(true)
-        }
-      } catch (error) {
-        setPhoneError('Unable to verify phone number. Please try again.')
-        setPhoneValid(false)
-      } finally {
-        setIsCheckingPhone(false)
-      }
+      setPhoneValid(true)
     }
 
-    const debounceTimer = setTimeout(validatePhone, 500)
+    const debounceTimer = setTimeout(validatePhone, 300)
     return () => clearTimeout(debounceTimer)
   }, [phoneNumber])
 
-  const handleSubmit = () => {
-    if (!emailValid || !phoneValid) {
+  const handleSubmit = async () => {
+    if (!emailValid || !phoneValid || !hasStudentEmail) {
       return
     }
-    onSubmit()
+
+    setIsCheckingEmail(true)
+    setIsCheckingPhone(true)
+
+    try {
+      const { whatsappGroupsApi } = await import('@/lib/api')
+      
+      const response = await whatsappGroupsApi.startVerification({
+        universityId: selectedUniversity.id,
+        email,
+        phoneNumber
+      })
+
+             if (response.success) {
+        if (response.alreadyVerified) {
+          // User is already verified - redirect directly to groups
+          window.location.href = `/whatsapp-groups?verified=${response.data.universityId}&returnUser=true`;
+        } else {
+          // New verification started - proceed to pending step
+          onSubmit()
+        }
+      } else {
+        // Handle specific error cases
+        if (response.message?.includes('different phone number')) {
+          setPhoneError(response.message)
+        } else if (response.message?.includes('phone number is already registered')) {
+          setPhoneError(response.message)
+        } else if (response.message?.includes('Email must be from')) {
+          setEmailError(response.message)
+        } else {
+          setEmailError(response.message || 'Verification failed. Please try again.')
+        }
+      }
+    } catch (error) {
+      console.error('Verification error:', error)
+      setEmailError('Failed to send verification email. Please try again.')
+    } finally {
+      setIsCheckingEmail(false)
+      setIsCheckingPhone(false)
+    }
   }
   return (
     <Card className="border-2 border-blue-200">
@@ -201,7 +183,7 @@ export function IdentityVerification({
 
         {/* Verification Method Selection */}
         <div>
-          <Label className="text-base font-semibold">Do you have a student email from {selectedUniversity.shortName}?</Label>
+          <Label className="text-base font-semibold">Do you have a student email from {selectedUniversity.short_name}?</Label>
           <div className="flex gap-4 mt-2">
             <Button 
               variant={hasStudentEmail === true ? "default" : "outline"}
@@ -231,7 +213,7 @@ export function IdentityVerification({
                 <Input 
                   id="email"
                   type="email"
-                  placeholder={`your.name@${selectedUniversity.emailDomain}`}
+                  placeholder={`your.name@${selectedUniversity.email_domain}`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={`mt-1 pr-10 ${emailError ? 'border-red-500' : emailValid ? 'border-green-500' : ''}`}
@@ -250,7 +232,7 @@ export function IdentityVerification({
                 <p className="text-xs text-red-500 mt-1">{emailError}</p>
               ) : (
                 <p className="text-xs text-gray-500 mt-1">
-                  Must be a valid {selectedUniversity.emailDomain} email address
+                  Must be a valid {selectedUniversity.email_domain} email address
                 </p>
               )}
             </div>

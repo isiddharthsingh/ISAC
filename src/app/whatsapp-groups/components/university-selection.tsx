@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -16,10 +16,13 @@ import {
   Search,
   Filter,
   X,
-  SortAsc
+  SortAsc,
+  Loader2,
+  XCircle
 } from "lucide-react"
 
-import { universities } from '../universities-data'
+import { whatsappGroupsApi } from '@/lib/api'
+import { University } from '../types'
 
 interface UniversitySelectionProps {
   onUniversitySelect: (universityId: string) => void
@@ -29,6 +32,30 @@ export function UniversitySelection({ onUniversitySelect }: UniversitySelectionP
   const [searchQuery, setSearchQuery] = useState('')
   const [locationFilter, setLocationFilter] = useState<string>('all')
   const [sortBy, setSortBy] = useState<string>('name')
+  const [universities, setUniversities] = useState<University[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    fetchUniversities()
+  }, [])
+
+  const fetchUniversities = async () => {
+    try {
+      setLoading(true)
+      const response = await whatsappGroupsApi.getUniversities()
+      if (response.success) {
+        setUniversities(response.data)
+      } else {
+        setError('Failed to load universities')
+      }
+    } catch (err) {
+      console.error('Error fetching universities:', err)
+      setError('Failed to load universities')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   // Get unique locations for filter dropdown
   const getUniqueLocations = () => {
@@ -44,7 +71,7 @@ export function UniversitySelection({ onUniversitySelect }: UniversitySelectionP
     if (searchQuery.trim()) {
       filtered = filtered.filter(uni =>
         uni.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        uni.shortName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        uni.short_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         uni.location.toLowerCase().includes(searchQuery.toLowerCase())
       )
     }
@@ -61,10 +88,6 @@ export function UniversitySelection({ onUniversitySelect }: UniversitySelectionP
           return a.name.localeCompare(b.name)
         case 'location':
           return a.location.localeCompare(b.location)
-        case 'students-high':
-          return b.studentCount - a.studentCount
-        case 'students-low':
-          return a.studentCount - b.studentCount
         default:
           return 0
       }
@@ -148,8 +171,6 @@ export function UniversitySelection({ onUniversitySelect }: UniversitySelectionP
                 <SelectContent>
                   <SelectItem value="name">University Name</SelectItem>
                   <SelectItem value="location">Location</SelectItem>
-                  <SelectItem value="students-high">Students (High to Low)</SelectItem>
-                  <SelectItem value="students-low">Students (Low to High)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -205,7 +226,21 @@ export function UniversitySelection({ onUniversitySelect }: UniversitySelectionP
 
         {/* Universities List */}
         <div className="space-y-3 max-h-96 overflow-y-auto">
-          {getFilteredUniversities().length > 0 ? (
+          {loading ? (
+            <div className="text-center py-8">
+              <Loader2 className="w-8 h-8 text-blue-600 mx-auto mb-4 animate-spin" />
+              <p className="text-gray-600">Loading universities...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-8">
+              <XCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to load universities</h3>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <Button variant="outline" onClick={fetchUniversities} size="sm">
+                Try Again
+              </Button>
+            </div>
+          ) : getFilteredUniversities().length > 0 ? (
             getFilteredUniversities().map((university) => (
               <div 
                 key={university.id}
@@ -217,17 +252,13 @@ export function UniversitySelection({ onUniversitySelect }: UniversitySelectionP
                     <div className="font-semibold text-gray-900 group-hover:text-blue-700">
                       {university.name}
                       <span className="ml-2 text-sm text-blue-600 font-medium">
-                        ({university.shortName})
+                        ({university.short_name})
                       </span>
                     </div>
-                    <div className="text-sm text-gray-600 flex items-center gap-4 mt-1">
+                    <div className="text-sm text-gray-600 flex items-center gap-2 mt-1">
                       <span className="flex items-center gap-1">
                         <Globe className="w-4 h-4" />
                         {university.location}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        {university.studentCount} students
                       </span>
                     </div>
                   </div>
