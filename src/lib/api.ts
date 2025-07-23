@@ -178,3 +178,84 @@ export async function healthCheck(): Promise<{
     cache: 'no-store' 
   });
 } 
+
+// WhatsApp Groups API
+export const whatsappGroupsApi = {
+  // Get all universities
+  getUniversities: async () => {
+    const response = await fetch('/api/whatsapp-groups/universities')
+    if (!response.ok) {
+      throw new Error('Failed to fetch universities')
+    }
+    return response.json()
+  },
+
+  // Get WhatsApp groups for a specific university
+  getUniversityGroups: async (universityId: string) => {
+    const response = await fetch(`/api/whatsapp-groups/universities/${universityId}/groups`)
+    if (!response.ok) {
+      throw new Error('Failed to fetch university groups')
+    }
+    return response.json()
+  },
+
+  // Start verification process
+  startVerification: async (data: {
+    universityId: string
+    email: string
+    phoneNumber: string
+  }) => {
+    const response = await fetch('/api/whatsapp-groups/verify/start', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    return response.json()
+  },
+
+  // Get verification status
+  getVerificationStatus: async (data: {
+    email: string
+    universityId: string
+  }) => {
+    const response = await fetch('/api/whatsapp-groups/verify/status', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    return response.json()
+  },
+
+  // Resend verification email
+  resendVerification: async (data: {
+    email: string
+    universityId: string
+  }) => {
+    const response = await fetch('/api/whatsapp-groups/verify/resend', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    return response.json()
+  },
+
+  // Check if email exists (for validation)
+  checkEmailExists: async (email: string): Promise<boolean> => {
+    // This will be handled by the startVerification endpoint
+    // Return false for now since the backend handles the actual check
+    return false
+  },
+
+  // Check if phone exists (for validation)  
+  checkPhoneExists: async (phone: string): Promise<boolean> => {
+    // This will be handled by the startVerification endpoint
+    // Return false for now since the backend handles the actual check
+    return false
+  }
+} 
