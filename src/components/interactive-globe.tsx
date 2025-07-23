@@ -11,18 +11,19 @@ interface StudentLocation {
 }
 
 const studentLocations: StudentLocation[] = [
-  { country: "United States", students: 8500, lat: 39.8283, lng: -98.5795, color: "#3b82f6" },
-  { country: "United Kingdom", students: 3200, lat: 55.3781, lng: -3.4360, color: "#ef4444" },
-  { country: "Canada", students: 2800, lat: 56.1304, lng: -106.3468, color: "#10b981" },
-  { country: "Australia", students: 2400, lat: -25.2744, lng: 133.7751, color: "#f59e0b" },
-  { country: "Germany", students: 1900, lat: 51.1657, lng: 10.4515, color: "#8b5cf6" },
-  { country: "France", students: 1600, lat: 46.2276, lng: 2.2137, color: "#ec4899" },
-  { country: "Netherlands", students: 1200, lat: 52.1326, lng: 5.2913, color: "#06b6d4" },
-  { country: "Sweden", students: 950, lat: 60.1282, lng: 18.6435, color: "#84cc16" },
-  { country: "Singapore", students: 800, lat: 1.3521, lng: 103.8198, color: "#f97316" },
-  { country: "Switzerland", students: 750, lat: 46.8182, lng: 8.2275, color: "#6366f1" },
-  { country: "Japan", students: 650, lat: 36.2048, lng: 138.2529, color: "#14b8a6" },
-  { country: "South Korea", students: 580, lat: 35.9078, lng: 127.7669, color: "#f43f5e" }
+  { country: "India", students: 15000, lat: 28.6139, lng: 77.2090, color: "#ff6b6b" }, // New Delhi coordinates, bright red
+  { country: "United States", students: 8500, lat: 39.8283, lng: -98.5795, color: "#4ecdc4" },
+  { country: "United Kingdom", students: 3200, lat: 55.3781, lng: -3.4360, color: "#45b7d1" },
+  { country: "Canada", students: 2800, lat: 56.1304, lng: -106.3468, color: "#96ceb4" },
+  { country: "Australia", students: 2400, lat: -25.2744, lng: 133.7751, color: "#feca57" },
+  { country: "Germany", students: 1900, lat: 51.1657, lng: 10.4515, color: "#ff9ff3" },
+  { country: "France", students: 1600, lat: 46.2276, lng: 2.2137, color: "#54a0ff" },
+  { country: "Netherlands", students: 1200, lat: 52.1326, lng: 5.2913, color: "#5f27cd" },
+  { country: "Sweden", students: 950, lat: 60.1282, lng: 18.6435, color: "#00d2d3" },
+  { country: "Singapore", students: 800, lat: 1.3521, lng: 103.8198, color: "#ff6348" },
+  { country: "Switzerland", students: 750, lat: 46.8182, lng: 8.2275, color: "#dda0dd" },
+  { country: "Japan", students: 650, lat: 36.2048, lng: 138.2529, color: "#98d8c8" },
+  { country: "South Korea", students: 580, lat: 35.9078, lng: 127.7669, color: "#f7b731" }
 ]
 
 export function InteractiveGlobe() {
@@ -47,11 +48,16 @@ export function InteractiveGlobe() {
         .globeImageUrl('/assets/globe/earth-night.jpg')
         .bumpImageUrl('/assets/globe/earth-topology.png')
         .pointsData(studentLocations)
-        .pointAltitude(0.1)
-        .pointRadius(1.2)
+        .onPointClick((point) => console.log('Clicked point:', point)) // Debug logging
+        .pointAltitude(0.15)
+        .pointRadius((d: any) => {
+          if (d.country === "Pakistan" || d.country === "India") return 4; // Extra large for testing
+          return Math.max(1.5, Math.min(3, d.students / 3000));
+        }) // Dynamic size based on student count
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .pointColor((d: any) => d.color)
         .pointsMerge(true)
+        .pointsTransitionDuration(1000)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .pointLabel((d: any) => `
           <div style="background: rgba(0,0,0,0.9); padding: 10px 12px; border-radius: 8px; color: white; font-size: 13px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 12px rgba(0,0,0,0.3);">

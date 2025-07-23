@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
+import { useDropzone } from 'react-dropzone'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,7 +13,9 @@ import {
   FileText,
   XCircle,
   CheckCircle,
-  Loader2
+  Loader2,
+  File,
+  X
 } from "lucide-react"
 import { University } from '../types'
 
@@ -23,12 +26,10 @@ interface IdentityVerificationProps {
   phoneNumber: string
   setPhoneNumber: (phone: string) => void
   hasStudentEmail: boolean | null
-  setHasStudentEmail: (hasEmail: boolean) => void
-  admitLetter: File | null
-  setAdmitLetter: (file: File | null) => void
+  setHasStudentEmail: (hasEmail: boolean | null) => void
   additionalInfo: string
   setAdditionalInfo: (info: string) => void
-  onSubmit: () => void
+  onSubmit: (method: 'email' | 'document') => void
 }
 
 export function IdentityVerification({
@@ -39,8 +40,6 @@ export function IdentityVerification({
   setPhoneNumber,
   hasStudentEmail,
   setHasStudentEmail,
-  admitLetter,
-  setAdmitLetter,
   additionalInfo,
   setAdditionalInfo,
   onSubmit
@@ -51,6 +50,9 @@ export function IdentityVerification({
   const [phoneError, setPhoneError] = useState('')
   const [emailValid, setEmailValid] = useState(false)
   const [phoneValid, setPhoneValid] = useState(false)
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
 
 
 
@@ -103,7 +105,45 @@ export function IdentityVerification({
     return () => clearTimeout(debounceTimer)
   }, [phoneNumber])
 
-  const handleSubmit = async () => {
+  // File upload handling
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0]
+      
+      // Validate file type
+      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png']
+      if (!allowedTypes.includes(file.type)) {
+        setEmailError('Please upload only PDF, JPG, or PNG files')
+        return
+      }
+      
+      // Validate file size (10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        setEmailError('File size must be less than 10MB')
+        return
+      }
+      
+      setUploadedFile(file)
+      setEmailError('')
+    }
+  }, [])
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'application/pdf': ['.pdf'],
+      'image/jpeg': ['.jpg', '.jpeg'],
+      'image/png': ['.png']
+    },
+    multiple: false,
+    maxSize: 10 * 1024 * 1024 // 10MB
+  })
+
+  const removeFile = () => {
+    setUploadedFile(null)
+  }
+
+  const handleEmailSubmit = async () => {
     if (!emailValid || !phoneValid || !hasStudentEmail) {
       return
     }
@@ -120,14 +160,14 @@ export function IdentityVerification({
         phoneNumber
       })
 
-             if (response.success) {
+      if (response.success) {
         if (response.alreadyVerified) {
-          // User is already verified - redirect directly to groups with timestamp
+          // User is already verified - redirect directly to groups
           const timestamp = Date.now()
           window.location.href = `/whatsapp-groups?verified=${response.data.universityId}&returnUser=true&t=${timestamp}`;
         } else {
-          // New verification started - proceed to pending step
-          onSubmit()
+          // New verification started - proceed to email pending step
+          onSubmit('email')
         }
       } else {
         // Handle specific error cases
@@ -147,6 +187,64 @@ export function IdentityVerification({
     } finally {
       setIsCheckingEmail(false)
       setIsCheckingPhone(false)
+    }
+  }
+
+  const handleDocumentSubmit = async () => {
+    if (!emailValid || !phoneValid || !uploadedFile) {
+      return
+    }
+
+    setUploading(true)
+    setUploadProgress(0)
+
+    try {
+      const { whatsappGroupsApi } = await import('@/lib/api')
+      
+      const response = await whatsappGroupsApi.uploadDocument({
+        universityId: selectedUniversity.id,
+        email,
+        phoneNumber,
+        document: uploadedFile
+      })
+
+      setUploadProgress(100)
+
+      if (response.success) {
+        if (response.alreadyVerified) {
+          // User is already verified - redirect directly to groups
+          const timestamp = Date.now()
+          window.location.href = `/whatsapp-groups?verified=${response.data.universityId}&returnUser=true&t=${timestamp}`;
+        } else if (response.autoApproved) {
+          // Document was auto-approved - redirect directly to groups
+          const timestamp = Date.now()
+          window.location.href = `/whatsapp-groups?verified=${response.data.universityId}&returnUser=true&t=${timestamp}`;
+        } else if (response.manualReview) {
+          // Document needs manual review - proceed to document review pending step
+          onSubmit('document')
+        }
+      } else {
+        // Handle rejection or errors
+        if (response.autoRejected) {
+          setEmailError(`Document rejected: ${response.message}`)
+        } else {
+          setEmailError(response.message || 'Document upload failed. Please try again.')
+        }
+      }
+    } catch (error) {
+      console.error('Document upload error:', error)
+      setEmailError('Failed to upload document. Please try again.')
+    } finally {
+      setUploading(false)
+      setUploadProgress(0)
+    }
+  }
+
+  const handleSubmit = async () => {
+    if (hasStudentEmail) {
+      await handleEmailSubmit()
+    } else {
+      await handleDocumentSubmit()
     }
   }
   return (
@@ -333,30 +431,69 @@ export function IdentityVerification({
             </div>
 
             <div>
-              <Label htmlFor="admit-letter">Upload Admit Letter</Label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors">
+              <Label htmlFor="document-upload">Upload Document (I-20 or Admit Letter)</Label>
+              <div 
+                {...getRootProps()} 
+                className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg transition-colors cursor-pointer ${
+                  isDragActive 
+                    ? 'border-blue-400 bg-blue-50' 
+                    : uploadedFile 
+                      ? 'border-green-400 bg-green-50' 
+                      : 'border-gray-300 hover:border-blue-400'
+                }`}
+              >
+                <input {...getInputProps()} />
                 <div className="space-y-1 text-center">
-                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                  <div className="flex text-sm text-gray-600">
-                    <label htmlFor="admit-letter" className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
-                      <span>Upload a file</span>
-                      <input 
-                        id="admit-letter" 
-                        type="file" 
-                        className="sr-only" 
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        onChange={(e) => setAdmitLetter(e.target.files?.[0] || null)}
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs text-gray-500">PDF, PNG, JPG up to 10MB</p>
+                  {uploadedFile ? (
+                    <>
+                      <File className="mx-auto h-12 w-12 text-green-500" />
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="text-sm text-green-700 font-medium">
+                          {uploadedFile.name}
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            removeFile()
+                          }}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <p className="text-xs text-green-600">
+                        File ready for upload ({(uploadedFile.size / 1024 / 1024).toFixed(2)} MB)
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                      <div className="flex text-sm text-gray-600">
+                        <span className="font-medium text-blue-600">Upload a file</span>
+                        <span className="pl-1">or drag and drop</span>
+                      </div>
+                      <p className="text-xs text-gray-500">PDF, PNG, JPG up to 10MB</p>
+                      <p className="text-xs text-blue-600 font-medium">
+                        Accepted: I-20, Admission Letters
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
-              {admitLetter && (
-                <p className="text-sm text-green-600 mt-2">
-                  ✓ {admitLetter.name} uploaded
-                </p>
+              
+              {uploading && (
+                <div className="mt-3">
+                  <div className="flex justify-between text-xs text-gray-600 mb-1">
+                    <span>Uploading and processing...</span>
+                    <span>{uploadProgress}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                </div>
               )}
             </div>
 
@@ -373,17 +510,22 @@ export function IdentityVerification({
 
             <Button 
               onClick={handleSubmit}
-              disabled={!emailValid || !phoneValid || !admitLetter || isCheckingEmail || isCheckingPhone}
+              disabled={!emailValid || !phoneValid || !uploadedFile || isCheckingEmail || isCheckingPhone || uploading}
               className="w-full"
             >
-              {isCheckingEmail || isCheckingPhone ? (
+              {uploading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Processing Document...
+                </>
+              ) : isCheckingEmail || isCheckingPhone ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Verifying...
                 </>
               ) : (
                 <>
-                  Submit for Review
+                  Upload & Verify Document
                   <Upload className="w-4 h-4 ml-2" />
                 </>
               )}

@@ -244,4 +244,24 @@ export const whatsappGroupsApi = {
     })
     return response.json()
   },
+
+  // Upload document for verification
+  uploadDocument: async (data: {
+    universityId: string
+    email: string
+    phoneNumber: string
+    document: File
+  }) => {
+    const formData = new FormData()
+    formData.append('universityId', data.universityId)
+    formData.append('email', data.email)
+    formData.append('phoneNumber', data.phoneNumber)
+    formData.append('document', data.document)
+
+    const response = await fetch('/api/whatsapp-groups/verify/upload', {
+      method: 'POST',
+      body: formData
+    })
+    return response.json()
+  },
 } 
