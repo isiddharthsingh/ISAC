@@ -21,20 +21,3 @@ export interface WhatsAppGroup {
 }
 
 export type VerificationStep = 'select' | 'verify' | 'pending' | 'approved' | 'groups'
-
-export interface VerificationState {
-  currentStep: VerificationStep
-  selectedUniversity: University | null
-  email: string
-  phoneNumber: string
-  hasStudentEmail: boolean | null
-  admitLetter: File | null
-  additionalInfo: string
-  verificationCode: string
-}
-
-export interface SearchFilterState {
-  searchQuery: string
-  locationFilter: string
-  sortBy: string
-} 

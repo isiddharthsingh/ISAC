@@ -244,18 +244,4 @@ export const whatsappGroupsApi = {
     })
     return response.json()
   },
-
-  // Check if email exists (for validation)
-  checkEmailExists: async (email: string): Promise<boolean> => {
-    // This will be handled by the startVerification endpoint
-    // Return false for now since the backend handles the actual check
-    return false
-  },
-
-  // Check if phone exists (for validation)  
-  checkPhoneExists: async (phone: string): Promise<boolean> => {
-    // This will be handled by the startVerification endpoint
-    // Return false for now since the backend handles the actual check
-    return false
-  }
 } 

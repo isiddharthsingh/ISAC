@@ -52,22 +52,7 @@ export function IdentityVerification({
   const [emailValid, setEmailValid] = useState(false)
   const [phoneValid, setPhoneValid] = useState(false)
 
-  // Use the real API to check if this email/phone combination is valid
-  const validateEmailAndPhone = async (emailToCheck: string, phoneToCheck: string): Promise<{ emailValid: boolean, phoneValid: boolean, emailError?: string, phoneError?: string }> => {
-    // Basic email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(emailToCheck)) {
-      return { emailValid: false, phoneValid: false, emailError: 'Please enter a valid email address' }
-    }
 
-    // Basic phone format validation
-    const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/
-    if (!phoneRegex.test(phoneToCheck)) {
-      return { emailValid: false, phoneValid: false, phoneError: 'Please enter a valid phone number' }
-    }
-
-    return { emailValid: true, phoneValid: true }
-  }
 
   // Validate email when it changes
   useEffect(() => {
@@ -137,8 +122,9 @@ export function IdentityVerification({
 
              if (response.success) {
         if (response.alreadyVerified) {
-          // User is already verified - redirect directly to groups
-          window.location.href = `/whatsapp-groups?verified=${response.data.universityId}&returnUser=true`;
+          // User is already verified - redirect directly to groups with timestamp
+          const timestamp = Date.now()
+          window.location.href = `/whatsapp-groups?verified=${response.data.universityId}&returnUser=true&t=${timestamp}`;
         } else {
           // New verification started - proceed to pending step
           onSubmit()
@@ -262,7 +248,7 @@ export function IdentityVerification({
                 <p className="text-xs text-red-500 mt-1">{phoneError}</p>
               ) : (
                 <p className="text-xs text-gray-500 mt-1">
-                  This number will be used to verify your WhatsApp group access
+                  This number will be used to verify your WhatsApp group access, use country codes.
                 </p>
               )}
             </div>
@@ -341,7 +327,7 @@ export function IdentityVerification({
                 <p className="text-xs text-red-500 mt-1">{phoneError}</p>
               ) : (
                 <p className="text-xs text-gray-500 mt-1">
-                  This number will be used to verify your WhatsApp group access
+                  This number will be used to verify your WhatsApp group access, use country codes.
                 </p>
               )}
             </div>

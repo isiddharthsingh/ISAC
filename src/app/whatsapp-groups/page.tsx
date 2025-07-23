@@ -45,23 +45,36 @@ export default function WhatsAppGroupsPage() {
     const isReturnUser = urlParams.get('returnUser')
     
     if (verifiedUniversityId && isReturnUser) {
-      // Find the university and skip directly to groups
-      const findUniversityAndShowGroups = async () => {
-        try {
-          const response = await whatsappGroupsApi.getUniversities()
-          if (response.success) {
-            setUniversities(response.data)
-            const university = response.data.find((u: University) => u.id === verifiedUniversityId)
-            if (university) {
-              setSelectedUniversity(university)
-              setCurrentStep('groups')
+      // Security: Only allow direct access if user came from our verification process
+      // Check if this is a legitimate redirect by looking for a recent timestamp
+      const redirectTimestamp = urlParams.get('t')
+      const currentTime = Date.now()
+      
+      // Only allow redirect within 30 seconds of verification completion
+      if (redirectTimestamp && (currentTime - parseInt(redirectTimestamp)) < 30000) {
+        // Find the university and skip directly to groups
+        const findUniversityAndShowGroups = async () => {
+          try {
+            const response = await whatsappGroupsApi.getUniversities()
+            if (response.success) {
+              setUniversities(response.data)
+              const university = response.data.find((u: University) => u.id === verifiedUniversityId)
+              if (university) {
+                setSelectedUniversity(university)
+                setCurrentStep('groups')
+                // Clean up URL parameters after successful redirect
+                window.history.replaceState({}, '', '/whatsapp-groups')
+              }
             }
+          } catch (error) {
+            console.error('Error during direct access:', error)
           }
-        } catch (error) {
-          console.error('Error during direct access:', error)
         }
+        findUniversityAndShowGroups()
+      } else {
+        // Invalid or expired redirect - clear URL and start fresh
+        window.history.replaceState({}, '', '/whatsapp-groups')
       }
-      findUniversityAndShowGroups()
     }
   }
 

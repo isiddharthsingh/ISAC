@@ -94,12 +94,12 @@ export function WhatsAppGroupsList({ selectedUniversity, onReset }: WhatsAppGrou
               </p>
             </div>
           )}
-          
+
           {loading ? (
             <div className="text-center py-8">
               <Loader2 className="w-8 h-8 text-blue-600 mx-auto mb-4 animate-spin" />
               <p className="text-gray-600">Loading WhatsApp groups...</p>
-            </div>
+                </div>
           ) : error ? (
             <div className="text-center py-8">
               <MessageCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
@@ -112,13 +112,13 @@ export function WhatsAppGroupsList({ selectedUniversity, onReset }: WhatsAppGrou
           ) : groups.length > 0 ? (
             groups.map((group) => (
               <div key={group.id} className={`border rounded-lg p-4 ${getGroupTypeColor(group.group_type)}`}>
-                <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       {getGroupIcon(group.group_type)}
                       <h4 className="font-semibold">
                         {group.group_name}
-                      </h4>
+                </h4>
                       {group.intake_year && (
                         <span className="text-xs px-2 py-1 bg-white bg-opacity-50 rounded-full">
                           {group.intake_semester} {group.intake_year}
@@ -127,23 +127,23 @@ export function WhatsAppGroupsList({ selectedUniversity, onReset }: WhatsAppGrou
                     </div>
                     <p className="text-sm mb-2">
                       {group.description}
-                    </p>
+                </p>
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4" />
                       <span className="text-sm">{group.member_count} members</span>
-                    </div>
-                  </div>
+                </div>
+              </div>
                   <Button 
                     size="sm" 
                     className={group.group_type === 'main' ? "bg-green-600 hover:bg-green-700 text-white" : ""}
                     variant={group.group_type === 'main' ? "default" : "outline"}
                     onClick={() => window.open(group.whatsapp_link, '_blank')}
                   >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Join
-                  </Button>
-                </div>
-              </div>
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Join
+              </Button>
+            </div>
+          </div>
             ))
           ) : (
             <div className="text-center py-8">

@@ -4,10 +4,10 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5001'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { universityId: string } }
+  { params }: { params: Promise<{ universityId: string }> }
 ) {
   try {
-    const universityId = params.universityId
+    const { universityId } = await params
     
     const response = await fetch(`${BACKEND_URL}/api/whatsapp-groups/universities/${universityId}/groups`, {
       method: 'GET',

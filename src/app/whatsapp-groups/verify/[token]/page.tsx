@@ -68,7 +68,8 @@ export default function VerifyEmailPage() {
 
   const handleJoinWhatsApp = () => {
     if (result?.data?.universityId) {
-      router.push(`/whatsapp-groups?verified=${result.data.universityId}`)
+      const timestamp = Date.now()
+      router.push(`/whatsapp-groups?verified=${result.data.universityId}&returnUser=true&t=${timestamp}`)
     }
   }
 

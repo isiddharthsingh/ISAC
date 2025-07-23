@@ -4,10 +4,10 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5001'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { token: string } }
+  { params }: { params: Promise<{ token: string }> }
 ) {
   try {
-    const token = params.token
+    const { token } = await params
     
     const response = await fetch(`${BACKEND_URL}/api/whatsapp-groups/verify/confirm/${token}`, {
       method: 'GET',
