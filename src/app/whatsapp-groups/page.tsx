@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Badge } from "@/components/ui/badge"
 import { MessageCircle } from "lucide-react"
 import { VerificationStep, University } from './types'
-import { universities } from './universities-data'
+import { whatsappGroupsApi } from '@/lib/api'
 import { StepIndicator } from './components/step-indicator'
 import { UniversitySelection } from './components/university-selection'
 import { IdentityVerification } from './components/identity-verification'
@@ -20,20 +20,70 @@ export default function WhatsAppGroupsPage() {
   const [hasStudentEmail, setHasStudentEmail] = useState<boolean | null>(null)
   const [admitLetter, setAdmitLetter] = useState<File | null>(null)
   const [additionalInfo, setAdditionalInfo] = useState('')
+  const [universities, setUniversities] = useState<University[]>([])
+
+  useEffect(() => {
+    fetchUniversities()
+    checkDirectAccess()
+  }, [])
+
+  const fetchUniversities = async () => {
+    try {
+      const response = await whatsappGroupsApi.getUniversities()
+      if (response.success) {
+        setUniversities(response.data)
+      }
+    } catch (error) {
+      console.error('Error fetching universities:', error)
+    }
+  }
+
+  const checkDirectAccess = () => {
+    // Check if user was redirected from verification with verified status
+    const urlParams = new URLSearchParams(window.location.search)
+    const verifiedUniversityId = urlParams.get('verified')
+    const isReturnUser = urlParams.get('returnUser')
+    
+    if (verifiedUniversityId && isReturnUser) {
+      // Find the university and skip directly to groups
+      const findUniversityAndShowGroups = async () => {
+        try {
+          const response = await whatsappGroupsApi.getUniversities()
+          if (response.success) {
+            setUniversities(response.data)
+            const university = response.data.find((u: University) => u.id === verifiedUniversityId)
+            if (university) {
+              setSelectedUniversity(university)
+              setCurrentStep('groups')
+            }
+          }
+        } catch (error) {
+          console.error('Error during direct access:', error)
+        }
+      }
+      findUniversityAndShowGroups()
+    }
+  }
 
 
-  const handleUniversitySelect = (universityId: string) => {
-    const university = universities.find(u => u.id === universityId)
-    setSelectedUniversity(university || null)
-    setCurrentStep('verify')
+  const handleUniversitySelect = async (universityId: string) => {
+    try {
+      // Fetch fresh university data from API
+      const response = await whatsappGroupsApi.getUniversities()
+      if (response.success) {
+        const university = response.data.find((u: University) => u.id === universityId)
+        setSelectedUniversity(university || null)
+        setCurrentStep('verify')
+      }
+    } catch (error) {
+      console.error('Error selecting university:', error)
+    }
   }
 
   const handleVerificationSubmit = () => {
     setCurrentStep('pending')
-    // Simulate verification process
-    setTimeout(() => {
-      setCurrentStep('approved')
-    }, 2000)
+    // Note: The real verification now happens via email
+    // User will click email link to verify, then they can come back to access groups
   }
 
   const handleJoinGroups = () => {
@@ -72,18 +122,12 @@ export default function WhatsAppGroupsPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12 max-w-3xl mx-auto">
             <div className="text-center">
               <div className="text-2xl sm:text-3xl font-bold text-gray-900">
                 {universities.length}
               </div>
               <div className="text-sm text-gray-600">Universities</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-gray-900">
-                {universities.reduce((sum, uni) => sum + uni.studentCount, 0)}+
-              </div>
-              <div className="text-sm text-gray-600">Students</div>
             </div>
             <div className="text-center">
               <div className="text-2xl sm:text-3xl font-bold text-gray-900">24/7</div>
@@ -124,8 +168,13 @@ export default function WhatsAppGroupsPage() {
             )}
 
             {/* Step 3: Pending Verification */}
-            {currentStep === 'pending' && (
-              <VerificationPending hasStudentEmail={hasStudentEmail} />
+            {currentStep === 'pending' && selectedUniversity && (
+              <VerificationPending 
+                hasStudentEmail={hasStudentEmail}
+                email={email}
+                universityId={selectedUniversity.id}
+                onVerificationComplete={() => setCurrentStep('approved')}
+              />
             )}
 
             {/* Step 4: Approved */}
