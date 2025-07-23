@@ -184,7 +184,163 @@ const testEmailConnection = async () => {
   }
 };
 
+// Send WhatsApp group verification email
+const sendVerificationEmail = async ({ email, university, verificationToken, universityShortName }) => {
+  try {
+    const transporter = createTransporter();
+
+    const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/whatsapp-groups/verify/${verificationToken}`;
+
+    const emailTemplate = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your University Email</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f8fafc; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+        .header { background: linear-gradient(135deg, #16a34a 0%, #059669 100%); color: white; padding: 40px 30px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: bold; }
+        .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 16px; }
+        .content { padding: 40px 30px; }
+        .university-card { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 12px; padding: 24px; margin: 24px 0; border-left: 4px solid #16a34a; }
+        .university-title { font-size: 22px; font-weight: bold; color: #15803d; margin-bottom: 8px; }
+        .university-details { font-size: 16px; color: #166534; line-height: 1.6; }
+        .verify-button { background-color: #16a34a; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; margin: 24px 0; }
+        .verify-button:hover { background-color: #15803d; }
+        .warning { background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 16px; margin: 24px 0; }
+        .warning h3 { color: #b45309; margin: 0 0 12px 0; }
+        .warning p { color: #92400e; margin: 0; }
+        .footer { background-color: #f8fafc; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0; }
+        .footer p { margin: 0; color: #64748b; font-size: 14px; line-height: 1.6; }
+        .logo { margin-bottom: 16px; }
+        .backup-link { background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px; font-family: monospace; word-break: break-all; font-size: 12px; margin-top: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo" style="display: flex; align-items: center; justify-content: center;">
+                <img src="https://raw.githubusercontent.com/isiddharthsingh/ISAC/main/public/isac_logo.png" 
+                     alt="ISAC Logo" 
+                     style="height: 40px; width: auto;">
+            </div>
+            <h1>Verify Your University Email 📧</h1>
+            <p>Join your ${universityShortName} WhatsApp community</p>
+        </div>
+        
+        <div class="content">
+            <p style="font-size: 18px; color: #374151; margin-bottom: 24px;">
+                Hello!
+            </p>
+            
+            <p style="color: #64748b; line-height: 1.6; margin-bottom: 24px;">
+                Thank you for joining the ${university} WhatsApp community! To complete your registration and gain access to your university's WhatsApp groups, please verify your email address.
+            </p>
+
+            <div class="university-card">
+                <div class="university-title">${university}</div>
+                <div class="university-details">
+                    🎓 Join verified students from your university<br>
+                    💬 Connect with fellow students and alumni<br>
+                    🤝 Get academic help and share resources<br>
+                    🏠 Find housing and roommate opportunities
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 32px 0;">
+                <a href="${verificationUrl}" class="verify-button">
+                    ✅ Verify My Email Address
+                </a>
+            </div>
+
+            <div class="warning">
+                <h3>⏰ Important!</h3>
+                <p>This verification link will expire in 24 hours. If you didn't request this verification, you can safely ignore this email.</p>
+            </div>
+
+            <p style="color: #64748b; line-height: 1.6; margin-top: 32px;">
+                If the button above doesn't work, you can copy and paste this link into your browser:
+            </p>
+            
+            <div class="backup-link">
+                ${verificationUrl}
+            </div>
+
+            <p style="color: #64748b; line-height: 1.6; margin-top: 32px;">
+                Having trouble? Reply to this email and our support team will help you out.
+            </p>
+
+            <p style="color: #64748b; line-height: 1.6; margin-top: 24px;">
+                Best regards,<br>
+                <strong>The ISAC Team</strong><br>
+                International Student Advocacy Committee
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>
+                <strong>ISAC - International Student Advocacy Committee</strong><br>
+                Connecting students worldwide<br><br>
+                This email was sent to ${email}<br>
+                If you have any questions, please contact us at support@isac.org
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+    `;
+
+    const mailOptions = {
+      from: {
+        name: 'ISAC - WhatsApp Groups',
+        address: process.env.SMTP2GO_FROM_EMAIL || 'noreply@isac.org'
+      },
+      to: email,
+      subject: `🎓 Verify your ${universityShortName} email to join WhatsApp groups`,
+      html: emailTemplate,
+      text: `
+Hello!
+
+Thank you for joining the ${university} WhatsApp community! To complete your registration and gain access to your university's WhatsApp groups, please verify your email address.
+
+Click this link to verify your email:
+${verificationUrl}
+
+University: ${university}
+Benefits:
+- Join verified students from your university
+- Connect with fellow students and alumni  
+- Get academic help and share resources
+- Find housing and roommate opportunities
+
+IMPORTANT: This verification link will expire in 24 hours. If you didn't request this verification, you can safely ignore this email.
+
+Having trouble? Reply to this email and our support team will help you out.
+
+Best regards,
+The ISAC Team
+International Student Advocacy Committee
+
+This email was sent to ${email}
+If you have any questions, please contact us at support@isac.org
+      `
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('WhatsApp verification email sent:', info.messageId);
+    return { success: true, messageId: info.messageId };
+
+  } catch (error) {
+    console.error('Error sending WhatsApp verification email:', error);
+    throw new Error('Failed to send verification email');
+  }
+};
+
 module.exports = {
   sendWebinarConfirmationEmail,
+  sendVerificationEmail,
   testEmailConnection
 }; 
