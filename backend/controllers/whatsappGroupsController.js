@@ -1,5 +1,5 @@
 const pool = require('../config/database');
-const { sendVerificationEmail } = require('../utils/emailService');
+const { sendVerificationEmail, sendWhatsAppApprovalEmail } = require('../utils/emailService');
 const { uploadFileToS3, validateFile } = require('../utils/s3Service');
 const { processDocument } = require('../utils/documentProcessor');
 const crypto = require('crypto');
@@ -644,6 +644,51 @@ const uploadDocumentVerification = async (req, res) => {
   });
 };
 
+// Approve a pending manual document verification (admin action)
+const approveManualVerification = async (req, res) => {
+  try {
+    const { verificationId } = req.body;
+    if (!verificationId) {
+      return res.status(400).json({ success: false, message: 'verificationId is required' });
+    }
+
+    // Fetch the verification record
+    const result = await pool.query(
+      `SELECT wv.*, u.name as university_name, u.short_name
+       FROM whatsapp_verifications wv
+       JOIN universities u ON wv.university_id = u.id
+       WHERE wv.id = $1`,
+      [verificationId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Verification record not found' });
+    }
+    const verification = result.rows[0];
+    if (verification.status !== 'pending') {
+      return res.status(400).json({ success: false, message: 'Verification is not pending' });
+    }
+
+    // Update status to verified
+    await pool.query(
+      'UPDATE whatsapp_verifications SET status = $1, verified_at = CURRENT_TIMESTAMP WHERE id = $2',
+      ['verified', verificationId]
+    );
+
+    // Send approval email
+    await sendWhatsAppApprovalEmail({
+      email: verification.email,
+      university: verification.university_name,
+      universityShortName: verification.short_name,
+      phoneNumber: verification.phone_number
+    });
+
+    res.json({ success: true, message: 'Verification approved and user notified.' });
+  } catch (error) {
+    console.error('Error approving manual verification:', error);
+    res.status(500).json({ success: false, message: 'Failed to approve verification' });
+  }
+};
+
 module.exports = {
   getUniversities,
   getUniversityGroups,
@@ -651,5 +696,6 @@ module.exports = {
   uploadDocumentVerification,
   confirmVerification,
   getVerificationStatus,
-  resendVerification
+  resendVerification,
+  approveManualVerification
 }; 
