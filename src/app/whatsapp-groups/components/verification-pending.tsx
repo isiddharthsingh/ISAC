@@ -11,7 +11,7 @@ interface VerificationPendingProps {
   onVerificationComplete: () => void
 }
 
-export function VerificationPending({ hasStudentEmail, email, universityId, onVerificationComplete }: VerificationPendingProps) {
+export function VerificationPending({ email, universityId, onVerificationComplete }: VerificationPendingProps) {
   const [isResending, setIsResending] = useState(false)
   const [resendMessage, setResendMessage] = useState('')
   const [isCheckingStatus, setIsCheckingStatus] = useState(false)
@@ -79,7 +79,7 @@ export function VerificationPending({ hasStudentEmail, email, universityId, onVe
             📧 Check Your Email
           </h3>
           <p className="text-amber-700 mb-4">
-            We've sent a verification link to <strong>{email}</strong>
+            We&apos;ve sent a verification link to <strong>{email}</strong>
           </p>
           <p className="text-sm text-amber-600">
             Click the link in the email to verify your account and access WhatsApp groups.
@@ -142,7 +142,7 @@ export function VerificationPending({ hasStudentEmail, email, universityId, onVe
           <ul className="text-sm text-blue-700 space-y-1 text-left">
             <li>1. Check your email inbox (including spam folder)</li>
             <li>2. Click the verification link in the email</li>
-            <li>3. Return here to access your university's WhatsApp groups</li>
+            <li>3. Return here to access your university&apos;s WhatsApp groups</li>
           </ul>
         </div>
 

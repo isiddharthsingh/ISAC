@@ -13,8 +13,7 @@ import {
   BookOpen,
   Target,
   Lightbulb,
-  HandHeart,
-  MessageCircle
+  HandHeart
 } from "lucide-react"
 
 export default function AboutPage() {

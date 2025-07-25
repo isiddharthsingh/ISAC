@@ -50,8 +50,9 @@ export function InteractiveGlobe() {
         .pointsData(studentLocations)
         .onPointClick((point) => console.log('Clicked point:', point)) // Debug logging
         .pointAltitude(0.15)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .pointRadius((d: any) => {
-          if (d.country === "Pakistan" || d.country === "India") return 4; // Extra large for testing
+          
           return Math.max(1.5, Math.min(3, d.students / 3000));
         }) // Dynamic size based on student count
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

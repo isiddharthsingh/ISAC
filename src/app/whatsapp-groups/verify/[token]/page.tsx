@@ -42,6 +42,7 @@ export default function VerifyEmailPage() {
     }
 
     verifyEmail()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token])
 
   const verifyEmail = async () => {
@@ -130,7 +131,7 @@ export default function VerifyEmailPage() {
               </Button>
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 className="font-semibold text-blue-900 mb-2">What's Next?</h4>
+                <h4 className="font-semibold text-blue-900 mb-2">What&apos;s Next?</h4>
                 <ul className="text-sm text-blue-700 space-y-1">
                   <li>• Connect with fellow students from your university</li>
                   <li>• Share academic resources and get help</li>
