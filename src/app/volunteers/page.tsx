@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { PhoneInput } from "@/components/ui/phone-input"
 import { Heart, Users, Award, Search, SlidersHorizontal, X, GraduationCap, Globe, Loader2 } from "lucide-react"
 
 // Import API functions
@@ -814,13 +815,12 @@ export default function VolunteersPage() {
 
                         <div>
                           <Label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number *</Label>
-                          <Input
+                          <PhoneInput
                             id="phone"
-                            type="tel"
                             value={mentorApplicationForm.phone}
-                            onChange={(e) => setMentorApplicationForm({...mentorApplicationForm, phone: e.target.value})}
+                            onChange={(value) => setMentorApplicationForm({...mentorApplicationForm, phone: value})}
                             className="mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
-                            placeholder="+1 (555) 123-4567"
+                            placeholder="Enter phone number"
                             required
                           />
                         </div>

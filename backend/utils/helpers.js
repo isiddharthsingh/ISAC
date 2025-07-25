@@ -12,9 +12,10 @@ const isValidEduEmail = (email) => {
   return eduEmailRegex.test(email) && isValidEmail(email);
 };
 
-// Validate phone number format
+// Validate phone number format (country code + 10 digits)
 const isValidPhone = (phone) => {
-  const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
+  // Expected format: +[country code][10 digits] (e.g., +19876543210)
+  const phoneRegex = /^\+\d{1,4}\d{10}$/;
   return phoneRegex.test(phone);
 };
 

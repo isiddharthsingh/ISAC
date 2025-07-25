@@ -24,4 +24,7 @@ router.post('/verify/status', generalLimiter, whatsappGroupsController.getVerifi
 // Resend verification email
 router.post('/verify/resend', strictLimiter, whatsappGroupsController.resendVerification);
 
+// Admin approve manual verification
+router.post('/verify/admin/approve', strictLimiter, whatsappGroupsController.approveManualVerification);
+
 module.exports = router; 

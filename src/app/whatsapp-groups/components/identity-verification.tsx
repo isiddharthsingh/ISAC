@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { PhoneInput } from "@/components/ui/phone-input"
 import { 
   Shield, 
   Upload,
@@ -24,12 +25,13 @@ interface IdentityVerificationProps {
   email: string
   setEmail: (email: string) => void
   phoneNumber: string
-  setPhoneNumber: (phone: string) => void
+  setPhoneNumber: (phoneNumber: string) => void
   hasStudentEmail: boolean | null
-  setHasStudentEmail: (hasEmail: boolean | null) => void
+  setHasStudentEmail: (hasStudentEmail: boolean | null) => void
   additionalInfo: string
-  setAdditionalInfo: (info: string) => void
+  setAdditionalInfo: (additionalInfo: string) => void
   onSubmit: (method: 'email' | 'document') => void
+  onRejection: (reason: string) => void
 }
 
 export function IdentityVerification({
@@ -42,7 +44,8 @@ export function IdentityVerification({
   setHasStudentEmail,
   additionalInfo,
   setAdditionalInfo,
-  onSubmit
+  onSubmit,
+  onRejection
 }: IdentityVerificationProps) {
   const [isCheckingEmail, setIsCheckingEmail] = useState(false)
   const [isCheckingPhone, setIsCheckingPhone] = useState(false)
@@ -89,10 +92,10 @@ export function IdentityVerification({
         return
       }
 
-      // Basic phone format validation
-      const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/
+      // Phone format validation (country code + 10 digits)
+      const phoneRegex = /^\+\d{1,4}\d{10}$/
       if (!phoneRegex.test(phoneNumber)) {
-        setPhoneError('Please enter a valid phone number')
+        setPhoneError('Please enter a valid phone number with country code')
         setPhoneValid(false)
         return
       }
@@ -226,7 +229,7 @@ export function IdentityVerification({
       } else {
         // Handle rejection or errors
         if (response.autoRejected) {
-          setEmailError(`Document rejected: ${response.message}`)
+          onRejection(response.message)
         } else {
           setEmailError(response.message || 'Document upload failed. Please try again.')
         }
@@ -324,13 +327,12 @@ export function IdentityVerification({
             <div>
               <Label htmlFor="phone">WhatsApp Phone Number *</Label>
               <div className="relative">
-                <Input 
+                <PhoneInput 
                   id="phone"
-                  type="tel"
-                  placeholder="+1 (555) 123-4567"
+                  placeholder="Enter phone number"
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className={`mt-1 pr-10 ${phoneError ? 'border-red-500' : phoneValid ? 'border-green-500' : ''}`}
+                  onChange={(value) => setPhoneNumber(value)}
+                  className={`mt-1 ${phoneError ? 'border-red-500' : phoneValid ? 'border-green-500' : ''}`}
                 />
                 {isCheckingPhone && (
                   <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 animate-spin text-gray-400" />
@@ -346,7 +348,7 @@ export function IdentityVerification({
                 <p className="text-xs text-red-500 mt-1">{phoneError}</p>
               ) : (
                 <p className="text-xs text-gray-500 mt-1">
-                  This number will be used to verify your WhatsApp group access, use country codes.
+                  This number will be used to verify your WhatsApp group access.
                 </p>
               )}
             </div>
@@ -403,13 +405,12 @@ export function IdentityVerification({
             <div>
               <Label htmlFor="phone">WhatsApp Phone Number *</Label>
               <div className="relative">
-                <Input 
+                <PhoneInput 
                   id="phone"
-                  type="tel"
-                  placeholder="+1 (555) 123-4567"
+                  placeholder="Enter phone number"
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className={`mt-1 pr-10 ${phoneError ? 'border-red-500' : phoneValid ? 'border-green-500' : ''}`}
+                  onChange={(value) => setPhoneNumber(value)}
+                  className={`mt-1 ${phoneError ? 'border-red-500' : phoneValid ? 'border-green-500' : ''}`}
                 />
                 {isCheckingPhone && (
                   <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 animate-spin text-gray-400" />
@@ -425,7 +426,7 @@ export function IdentityVerification({
                 <p className="text-xs text-red-500 mt-1">{phoneError}</p>
               ) : (
                 <p className="text-xs text-gray-500 mt-1">
-                  This number will be used to verify your WhatsApp group access, use country codes.
+                  This number will be used to verify your WhatsApp group access.
                 </p>
               )}
             </div>

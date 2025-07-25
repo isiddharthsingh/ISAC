@@ -339,8 +339,137 @@ If you have any questions, please contact us at support@isac.org
   }
 };
 
+// Send WhatsApp document manual approval email
+const sendWhatsAppApprovalEmail = async ({ email, university, universityShortName, phoneNumber }) => {
+  try {
+    const transporter = createTransporter();
+
+    const emailTemplate = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Group Access Approved</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f8fafc; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+        .header { background: linear-gradient(135deg, #16a34a 0%, #059669 100%); color: white; padding: 40px 30px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: bold; }
+        .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 16px; }
+        .content { padding: 40px 30px; }
+        .university-card { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 12px; padding: 24px; margin: 24px 0; border-left: 4px solid #16a34a; }
+        .university-title { font-size: 22px; font-weight: bold; color: #15803d; margin-bottom: 8px; }
+        .university-details { font-size: 16px; color: #166534; line-height: 1.6; }
+        .success { background-color: #d1fae5; border: 1px solid #10b981; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center; }
+        .footer { background-color: #f8fafc; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0; }
+        .footer p { margin: 0; color: #64748b; font-size: 14px; line-height: 1.6; }
+        .logo { margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo" style="display: flex; align-items: center; justify-content: center;">
+                <img src="https://raw.githubusercontent.com/isiddharthsingh/ISAC/main/public/isac_logo.png" 
+                     alt="ISAC Logo" 
+                     style="height: 40px; width: auto;">
+            </div>
+            <h1>WhatsApp Group Access Approved ✅</h1>
+            <p>Welcome to the ${universityShortName} WhatsApp community</p>
+        </div>
+        <div class="content">
+            <div class="success">
+                <h2 style="color: #15803d; margin-bottom: 12px;">Congratulations!</h2>
+                <p style="color: #166534; font-size: 18px;">Your document has been manually reviewed and your verification is <strong>approved</strong>.</p>
+            </div>
+            <div class="university-card">
+                <div class="university-title">${university}</div>
+                <div class="university-details">
+                    🎓 You can now access exclusive WhatsApp groups for your university.<br>
+                    💬 Connect with fellow students and alumni<br>
+                    🤝 Get academic help and share resources<br>
+                    🏠 Find housing and roommate opportunities
+                </div>
+            </div>
+            <p style="color: #374151; font-size: 16px; margin-top: 24px;">
+                <strong>How to access WhatsApp groups:</strong>
+            </p>
+            <ul style="color: #166534; font-size: 15px; margin-bottom: 24px;">
+                <li>Go to the WhatsApp Groups portal</li>
+                <li>Use the <strong>same email</strong> (<span style="color:#2563eb">${email}</span>) and <strong>phone number</strong> (<span style="color:#2563eb">${phoneNumber}</span>) you used for verification</li>
+                <li>If prompted, upload the same document again</li>
+                <li>You will be granted access instantly</li>
+            </ul>
+            <p style="color: #64748b; line-height: 1.6; margin-top: 24px;">
+                If you have any trouble accessing the groups, reply to this email or contact our support team at <a href="mailto:support@isac.org" style="color:#2563eb;">support@isac.org</a>.
+            </p>
+            <p style="color: #64748b; line-height: 1.6; margin-top: 24px;">
+                Best regards,<br>
+                <strong>The ISAC Team</strong><br>
+                International Student Advocacy Committee
+            </p>
+        </div>
+        <div class="footer">
+            <p>
+                <strong>ISAC - International Student Advocacy Committee</strong><br>
+                Connecting students worldwide<br><br>
+                This email was sent to ${email}<br>
+                If you have any questions, please contact us at support@isac.org
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+    `;
+
+    const mailOptions = {
+      from: {
+        name: 'ISAC - WhatsApp Groups',
+        address: process.env.SMTP2GO_FROM_EMAIL || 'noreply@isac.org'
+      },
+      to: email,
+      subject: `✅ WhatsApp Group Access Approved`,
+      html: emailTemplate,
+      text: `
+Congratulations!
+
+Your document has been manually reviewed and your verification is approved.
+
+University: ${university}
+Email: ${email}
+Phone: ${phoneNumber}
+
+How to access WhatsApp groups:
+- Go to the WhatsApp Groups portal
+- Use the same email and phone number you used for verification
+- If prompted, upload the same document again
+- You will be granted access instantly
+
+If you have any trouble accessing the groups, reply to this email or contact our support team at support@isac.org.
+
+Best regards,
+The ISAC Team
+International Student Advocacy Committee
+
+This email was sent to ${email}
+If you have any questions, please contact us at support@isac.org
+      `
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('WhatsApp manual approval email sent:', info.messageId);
+    return { success: true, messageId: info.messageId };
+
+  } catch (error) {
+    console.error('Error sending WhatsApp manual approval email:', error);
+    throw new Error('Failed to send WhatsApp manual approval email');
+  }
+};
+
 module.exports = {
   sendWebinarConfirmationEmail,
   sendVerificationEmail,
-  testEmailConnection
+  testEmailConnection,
+  sendWhatsAppApprovalEmail
 }; 

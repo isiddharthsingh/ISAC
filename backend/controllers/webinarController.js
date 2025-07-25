@@ -1,5 +1,5 @@
 const pool = require('../config/database');
-const { isValidEduEmail, validateRequiredFields, sanitizeString } = require('../utils/helpers');
+const { isValidEduEmail, isValidPhone, validateRequiredFields, sanitizeString } = require('../utils/helpers');
 const { sendWebinarConfirmationEmail } = require('../utils/emailService');
 
 // Register for a webinar
@@ -31,6 +31,14 @@ const registerForWebinar = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Only .edu email addresses are accepted for webinar registrations. Please use your educational institution email.'
+      });
+    }
+
+    // Validate phone number
+    if (!isValidPhone(phone)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter a valid phone number with country code (e.g., +19876543210).'
       });
     }
 

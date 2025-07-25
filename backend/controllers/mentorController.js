@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { isValidPhone } = require('../utils/helpers');
 
 // Get all mentors with filtering and sorting
 const getAllMentors = async (req, res) => {
@@ -265,6 +266,14 @@ const submitMentorApplication = async (req, res) => {
           message: `Missing required field: ${field}`
         });
       }
+    }
+
+    // Validate phone number
+    if (!isValidPhone(phone)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter a valid phone number with country code (e.g., +19876543210).'
+      });
     }
 
     // Check if email already exists in applications or mentors

@@ -10,6 +10,7 @@ import { UniversitySelection } from './components/university-selection'
 import { IdentityVerification } from './components/identity-verification'
 import { VerificationPending } from './components/verification-pending'
 import { DocumentReviewPending } from './components/document-review-pending'
+import { DocumentRejected } from './components/document-rejected'
 import { VerificationApproved } from './components/verification-approved'
 import { WhatsAppGroupsList } from './components/whatsapp-groups-list'
 
@@ -22,6 +23,7 @@ export default function WhatsAppGroupsPage() {
   const [additionalInfo, setAdditionalInfo] = useState('')
   const [universities, setUniversities] = useState<University[]>([])
   const [verificationMethod, setVerificationMethod] = useState<'email' | 'document' | null>(null)
+  const [rejectionReason, setRejectionReason] = useState('')
 
   useEffect(() => {
     fetchUniversities()
@@ -97,6 +99,29 @@ export default function WhatsAppGroupsPage() {
   const handleVerificationSubmit = (method: 'email' | 'document') => {
     setVerificationMethod(method)
     setCurrentStep('pending')
+  }
+
+  const handleRejection = (reason: string) => {
+    setRejectionReason(reason)
+    setCurrentStep('rejected')
+  }
+
+  const handleTryAgain = () => {
+    setCurrentStep('verify')
+    setRejectionReason('')
+    // Reset form state to allow re-upload
+    setHasStudentEmail(null)
+  }
+
+  const handleGoBackToUniversities = () => {
+    setCurrentStep('select')
+    setSelectedUniversity(null)
+    setEmail('')
+    setPhoneNumber('')
+    setHasStudentEmail(null)
+    setAdditionalInfo('')
+    setVerificationMethod(null)
+    setRejectionReason('')
   }
 
   const handleJoinGroups = () => {
@@ -175,6 +200,7 @@ export default function WhatsAppGroupsPage() {
                 additionalInfo={additionalInfo}
                 setAdditionalInfo={setAdditionalInfo}
                 onSubmit={handleVerificationSubmit}
+                onRejection={handleRejection}
               />
             )}
 
@@ -194,6 +220,15 @@ export default function WhatsAppGroupsPage() {
                 email={email}
                 universityId={selectedUniversity.id}
                 onVerificationComplete={() => setCurrentStep('approved')}
+              />
+            )}
+
+            {/* Step 3: Document Rejected */}
+            {currentStep === 'rejected' && selectedUniversity && (
+              <DocumentRejected 
+                rejectionReason={rejectionReason}
+                onTryAgain={handleTryAgain}
+                onGoBack={handleGoBackToUniversities}
               />
             )}
 
