@@ -25,12 +25,13 @@ interface IdentityVerificationProps {
   email: string
   setEmail: (email: string) => void
   phoneNumber: string
-  setPhoneNumber: (phone: string) => void
+  setPhoneNumber: (phoneNumber: string) => void
   hasStudentEmail: boolean | null
-  setHasStudentEmail: (hasEmail: boolean | null) => void
+  setHasStudentEmail: (hasStudentEmail: boolean | null) => void
   additionalInfo: string
-  setAdditionalInfo: (info: string) => void
+  setAdditionalInfo: (additionalInfo: string) => void
   onSubmit: (method: 'email' | 'document') => void
+  onRejection: (reason: string) => void
 }
 
 export function IdentityVerification({
@@ -43,7 +44,8 @@ export function IdentityVerification({
   setHasStudentEmail,
   additionalInfo,
   setAdditionalInfo,
-  onSubmit
+  onSubmit,
+  onRejection
 }: IdentityVerificationProps) {
   const [isCheckingEmail, setIsCheckingEmail] = useState(false)
   const [isCheckingPhone, setIsCheckingPhone] = useState(false)
@@ -227,7 +229,7 @@ export function IdentityVerification({
       } else {
         // Handle rejection or errors
         if (response.autoRejected) {
-          setEmailError(`Document rejected: ${response.message}`)
+          onRejection(response.message)
         } else {
           setEmailError(response.message || 'Document upload failed. Please try again.')
         }

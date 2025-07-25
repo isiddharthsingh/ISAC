@@ -20,4 +20,4 @@ export interface WhatsAppGroup {
   member_count: number
 }
 
-export type VerificationStep = 'select' | 'verify' | 'pending' | 'approved' | 'groups'
+export type VerificationStep = 'select' | 'verify' | 'pending' | 'approved' | 'groups' | 'rejected'

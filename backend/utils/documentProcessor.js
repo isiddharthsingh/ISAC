@@ -321,7 +321,7 @@ function makeDecision(classification, universityId) {
   if (type === 'resume' && confidence > 20) {
     return { 
       decision: 'rejected', 
-      reason: `Resume documents are not accepted for verification (${confidence}% confidence detected)`,
+      reason: `Other documents are not accepted for verification, please upload a valid I-20 or admission letter.`,
       autoProcessed: true
     };
   }
