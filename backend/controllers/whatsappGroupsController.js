@@ -2,6 +2,7 @@ const pool = require('../config/database');
 const { sendVerificationEmail, sendWhatsAppApprovalEmail } = require('../utils/emailService');
 const { uploadFileToS3, validateFile } = require('../utils/s3Service');
 const { processDocument } = require('../utils/documentProcessor');
+const { isValidPhone } = require('../utils/helpers');
 const crypto = require('crypto');
 const multer = require('multer');
 
@@ -92,6 +93,14 @@ const startVerification = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'University ID, email, and phone number are required'
+      });
+    }
+
+    // Validate phone number format
+    if (!isValidPhone(phoneNumber)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter a valid phone number with country code (e.g., +19876543210).'
       });
     }
 
@@ -430,6 +439,14 @@ const uploadDocumentVerification = async (req, res) => {
         return res.status(400).json({
           success: false,
           message: 'University ID, email, phone number, and document are required'
+        });
+      }
+
+      // Validate phone number format
+      if (!isValidPhone(phoneNumber)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Please enter a valid phone number with country code (e.g., +19876543210).'
         });
       }
 

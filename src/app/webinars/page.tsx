@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { PhoneInput } from "@/components/ui/phone-input"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calendar, Clock, Users, Play, Globe, BookOpen, ChevronRight, Video, Star, GraduationCap, Target, Zap } from "lucide-react"
@@ -779,12 +780,11 @@ export default function WebinarsPage() {
                     <Label htmlFor="phone" className="text-sm font-semibold text-gray-700">
                       Phone Number <span className="text-red-500">*</span>
                     </Label>
-                    <Input
+                    <PhoneInput
                       id="phone"
-                      type="tel"
-                      placeholder="+1 (555) 123-4567"
+                      placeholder="Enter phone number"
                       value={registrationForm.phone}
-                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      onChange={(value) => handleInputChange('phone', value)}
                       className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20 transition-colors"
                       required
                       disabled={isLoading}
