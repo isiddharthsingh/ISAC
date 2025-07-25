@@ -30,7 +30,7 @@ export function DocumentReviewPending({ email, universityId, onVerificationCompl
         } else if (response.data.status === 'rejected') {
           setStatusMessage('Your document was rejected. Please try uploading a different document.')
         } else {
-          setStatusMessage('Your document is still under review. We\'ll notify you once it\'s processed.')
+          setStatusMessage('Your document is still under review. We&apos;ll notify you once it&apos;s processed.')
         }
       } else {
         setStatusMessage('Failed to check verification status. Please try again.')
@@ -109,8 +109,8 @@ export function DocumentReviewPending({ email, universityId, onVerificationCompl
               <ul className="space-y-1 text-left">
                 <li>• Our team manually verifies all uploaded documents</li>
                 <li>• We check for authenticity and university affiliation</li>
-                <li>• You'll receive an email notification once complete</li>
-                <li>• If approved, you'll gain immediate access to WhatsApp groups</li>
+                <li>• You&apos;ll receive an email notification once complete</li>
+                <li>• If approved, you&apos;ll gain immediate access to WhatsApp groups</li>
               </ul>
             </div>
           </div>

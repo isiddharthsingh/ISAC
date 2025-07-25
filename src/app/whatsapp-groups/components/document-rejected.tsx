@@ -1,4 +1,4 @@
-import { useState } from 'react'
+// useState removed as it's not used in this component
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { XCircle, Upload, Mail, AlertTriangle, ArrowLeft } from 'lucide-react'
@@ -54,11 +54,11 @@ export function DocumentRejected({ rejectionReason, onTryAgain, onGoBack }: Docu
             <div className="text-sm text-amber-700">
               <h4 className="font-semibold mb-2">🤔 Think this was a mistake?</h4>
               <p>
-                If you believe your document was incorrectly rejected, please contact our support team at{' '}
+                                  If you believe your document was incorrectly rejected, please contact our support team at{' '}
                 <a href="mailto:support@isac.org" className="text-blue-600 hover:underline font-medium">
                   support@isac.org
                 </a>{' '}
-                with your document attached. We'll review it manually within 24-48 hours.
+                with your document attached. We&apos;ll review it manually within 24-48 hours.
               </p>
             </div>
           </div>

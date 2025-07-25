@@ -41,9 +41,9 @@ function formatMentorForComponent(mentor: Mentor) {
 
 export default function VolunteersPage() {
   // API data state
-  const [mentors, setMentors] = useState<any[]>([])
+  const [mentors, setMentors] = useState<ReturnType<typeof formatMentorForComponent>[]>([])
   const [filterOptions, setFilterOptions] = useState<FilterOptionsResponse['data'] | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [submittingApplication, setSubmittingApplication] = useState(false)
 

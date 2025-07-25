@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -120,7 +120,7 @@ export default function WebinarsPage() {
   }
 
   // Fetch webinars from API
-  const fetchWebinars = async () => {
+  const fetchWebinars = useCallback(async () => {
     try {
       setWebinarsLoading(true)
       setWebinarsError(null)
@@ -161,12 +161,12 @@ export default function WebinarsPage() {
     } finally {
       setWebinarsLoading(false)
     }
-  }
+  }, [])
 
   // Fetch webinars on component mount
   useEffect(() => {
     fetchWebinars()
-  }, [])
+  }, [fetchWebinars])
 
   const handleRegistration = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -259,11 +259,12 @@ export default function WebinarsPage() {
       {/* Poster Section */}
       {webinar.poster && (
         <div className="relative overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
             src={webinar.poster} 
             alt={`${webinar.title} Poster`}
             className="w-full h-50 sm:h-60 object-cover group-hover:scale-105 transition-transform duration-500"
-            onError={(e) => {
+            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
               // Fallback if image doesn't load
               e.currentTarget.style.display = 'none';
             }}

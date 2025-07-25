@@ -19,6 +19,7 @@ export function WhatsAppGroupsList({ selectedUniversity, onReset }: WhatsAppGrou
   useEffect(() => {
     fetchGroups()
     checkReturnUser()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedUniversity.id])
 
   const checkReturnUser = () => {
