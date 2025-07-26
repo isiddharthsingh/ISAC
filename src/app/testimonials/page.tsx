@@ -11,19 +11,13 @@ import { Textarea } from "@/components/ui/textarea"
 
 import { Users, Award, Globe, GraduationCap, Heart, Plus, Send, BookOpen, School, Edit3 } from "lucide-react"
 
-interface Testimonial {
-  id: number
-  name: string
-  age: number
-  university: string
-  program: string
-  location: string
-  review: string
-  image?: string
-  status?: string
-  created_at?: string
-  approved_at?: string
-}
+// Import API functions
+import { 
+  getTestimonials, 
+  submitTestimonial,
+  type Testimonial,
+  type TestimonialSubmissionData
+} from "@/lib/api"
 
 export default function TestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
@@ -49,11 +43,7 @@ export default function TestimonialsPage() {
   const fetchTestimonials = async () => {
     try {
       setIsLoadingTestimonials(true)
-      const response = await fetch('http://localhost:5001/api/testimonials?status=approved')
-      if (!response.ok) {
-        throw new Error('Failed to fetch testimonials')
-      }
-      const data = await response.json()
+      const data = await getTestimonials({ status: 'approved' })
       
       if (!data.success) {
         throw new Error(data.message || 'Failed to fetch testimonials')
@@ -80,24 +70,18 @@ export default function TestimonialsPage() {
     setError(null)
 
     try {
-      const response = await fetch('http://localhost:5001/api/testimonials/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          age: parseInt(formData.age),
-          university: formData.university,
-          program: formData.program,
-          location: formData.location,
-          review: formData.review
-        }),
-      })
+      const testimonialData: TestimonialSubmissionData = {
+        name: formData.name,
+        age: parseInt(formData.age),
+        university: formData.university,
+        program: formData.program,
+        location: formData.location,
+        review: formData.review
+      }
 
-      const result = await response.json()
+      const result = await submitTestimonial(testimonialData)
 
-      if (!response.ok || !result.success) {
+      if (!result.success) {
         throw new Error(result.message || 'Failed to submit testimonial')
       }
 
