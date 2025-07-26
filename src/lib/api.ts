@@ -265,3 +265,158 @@ export const whatsappGroupsApi = {
     return response.json()
   },
 } 
+
+// Webinar Types
+export interface DatabaseWebinar {
+  id: number;
+  title: string;
+  description: string;
+  presenter_name: string;
+  presenter_title: string;
+  presenter_image: string;
+  event_date: string;
+  event_time: string;
+  duration: string;
+  timezone: string;
+  category: string;
+  level: string;
+  language: string;
+  topics: string[];
+  target_audience: string;
+  max_attendees: number;
+  poster_image: string;
+  status: string;
+  current_registrations: number;
+}
+
+export interface WebinarRegistrationData {
+  webinarId: number;
+  name: string;
+  email: string;
+  phone: string;
+  currentEducation: string;
+  interests: string;
+  experience: string;
+}
+
+export interface WebinarsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    webinars: DatabaseWebinar[];
+    total: number;
+    page: number;
+    limit: number;
+  };
+}
+
+export interface WebinarRegistrationResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    id: number;
+    webinarId: number;
+    registrationId: string;
+  };
+}
+
+// Webinar API Functions
+export async function getWebinars(params: {
+  status?: string;
+  category?: string;
+  level?: string;
+  language?: string;
+  page?: number;
+  limit?: number;
+} = {}): Promise<WebinarsResponse> {
+  const searchParams = new URLSearchParams();
+  
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      searchParams.append(key, value.toString());
+    }
+  });
+
+  const queryString = searchParams.toString();
+  const endpoint = `/webinars${queryString ? `?${queryString}` : ''}`;
+  
+  return apiRequest<WebinarsResponse>(endpoint);
+}
+
+export async function registerForWebinar(data: WebinarRegistrationData): Promise<WebinarRegistrationResponse> {
+  return apiRequest<WebinarRegistrationResponse>('/webinars/register', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  });
+}
+
+// Testimonial Types
+export interface Testimonial {
+  id: number;
+  name: string;
+  age: number;
+  university: string;
+  program: string;
+  location: string;
+  review: string;
+  image?: string;
+  status?: string;
+  created_at?: string;
+  approved_at?: string;
+}
+
+export interface TestimonialSubmissionData {
+  name: string;
+  age: number;
+  university: string;
+  program: string;
+  location: string;
+  review: string;
+}
+
+export interface TestimonialsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    testimonials: Testimonial[];
+    total: number;
+    page: number;
+    limit: number;
+  };
+}
+
+export interface TestimonialSubmissionResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    id: number;
+    status: string;
+  };
+}
+
+// Testimonial API Functions
+export async function getTestimonials(params: {
+  status?: string;
+  page?: number;
+  limit?: number;
+} = {}): Promise<TestimonialsResponse> {
+  const searchParams = new URLSearchParams();
+  
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      searchParams.append(key, value.toString());
+    }
+  });
+
+  const queryString = searchParams.toString();
+  const endpoint = `/testimonials${queryString ? `?${queryString}` : ''}`;
+  
+  return apiRequest<TestimonialsResponse>(endpoint);
+}
+
+export async function submitTestimonial(data: TestimonialSubmissionData): Promise<TestimonialSubmissionResponse> {
+  return apiRequest<TestimonialSubmissionResponse>('/testimonials/submit', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  });
+} 
