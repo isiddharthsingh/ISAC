@@ -14,34 +14,20 @@ import { PhoneInput } from "@/components/ui/phone-input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calendar, Clock, Users, Play, Globe, BookOpen, ChevronRight, Video, Star, GraduationCap, Target, Zap } from "lucide-react"
 
+// Import API functions
+import { 
+  getWebinars, 
+  registerForWebinar,
+  type DatabaseWebinar,
+  type WebinarRegistrationData
+} from "@/lib/api"
+
 // Webinar type definition
 interface WebinarPresenter {
   name: string
   title: string
   experience?: string
   image: string
-}
-
-interface DatabaseWebinar {
-  id: number
-  title: string
-  description: string
-  presenter_name: string
-  presenter_title: string
-  presenter_image: string
-  event_date: string
-  event_time: string
-  duration: string
-  timezone: string
-  category: string
-  level: string
-  language: string
-  topics: string[]
-  target_audience: string
-  max_attendees: number
-  poster_image: string
-  status: string
-  current_registrations: number
 }
 
 interface Webinar {
@@ -126,13 +112,7 @@ export default function WebinarsPage() {
       setWebinarsError(null)
 
       // Fetch all webinars with a high limit to get all at once
-      const response = await fetch('http://localhost:5001/api/webinars?limit=100')
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch webinars')
-      }
-
-      const result = await response.json()
+      const result = await getWebinars({ limit: 100 })
       
       if (!result.success) {
         throw new Error(result.message || 'Failed to fetch webinars')
@@ -190,25 +170,23 @@ export default function WebinarsPage() {
         throw new Error('Please enter a valid email address')
       }
 
-      const response = await fetch('http://localhost:5001/api/webinars/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          webinarId: selectedWebinar?.id,
-          name: registrationForm.name,
-          email: registrationForm.email,
-          phone: registrationForm.phone,
-          currentEducation: registrationForm.currentEducation,
-          interests: registrationForm.interests,
-          experience: registrationForm.experience
-        })
-      })
+      if (!selectedWebinar?.id) {
+        throw new Error('No webinar selected for registration')
+      }
 
-      const data = await response.json()
+      const registrationData: WebinarRegistrationData = {
+        webinarId: selectedWebinar.id,
+        name: registrationForm.name,
+        email: registrationForm.email,
+        phone: registrationForm.phone,
+        currentEducation: registrationForm.currentEducation,
+        interests: registrationForm.interests,
+        experience: registrationForm.experience
+      }
 
-      if (!response.ok) {
+      const data = await registerForWebinar(registrationData)
+
+      if (!data.success) {
         throw new Error(data.message || 'Registration failed. Please try again.')
       }
 
