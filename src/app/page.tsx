@@ -356,35 +356,35 @@ export default function HomePage() {
                 </div>
                 
                 {/* Content */}
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">Expert Mentorship</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">WhatsApp Community</h3>
                 <p className="text-gray-600 mb-4 lg:mb-6 leading-relaxed text-sm sm:text-base">
-                  Connect with experienced professionals who&apos;ve been through the same journey
+                  Join university-specific WhatsApp groups with mentors and fellow students
                 </p>
                 
                 {/* Features List */}
                 <ul className="space-y-2 lg:space-y-3 mb-6 lg:mb-8">
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
-                    1-on-1 guidance sessions
+                    University-specific groups
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
-                    University selection advice
+                    Peer support network
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
-                    Application strategy
+                    Real-time guidance
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
-                    Career planning support
+                    Free community access
                   </li>
                 </ul>
                 
                 {/* CTA Button */}
-                <Link href="/volunteers">
-                  <Button className="w-full group-hover:bg-blue-700 transition-colors duration-300 text-sm sm:text-base">
-                    Find Mentors
+                <Link href="/whatsapp-groups">
+                  <Button className="w-full bg-blue-600 hover:bg-green-600 transition-all duration-300 text-sm sm:text-base transform hover:scale-105">
+                    Join Groups
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
@@ -409,34 +409,34 @@ export default function HomePage() {
                 </div>
                 
                 {/* Content */}
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">Live Webinars</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">Educational Webinars</h3>
                 <p className="text-gray-600 mb-4 lg:mb-6 leading-relaxed text-sm sm:text-base">
-                  Join interactive sessions on test prep, applications, and more
+                  Access expert-led sessions on international education topics
                 </p>
                 
                 {/* Features List */}
                 <ul className="space-y-2 lg:space-y-3 mb-6 lg:mb-8">
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 flex-shrink-0"></div>
-                    IELTS/TOEFL preparation
+                    Insurance guidance
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 flex-shrink-0"></div>
-                    University application guides
+                    Housing assistance
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 flex-shrink-0"></div>
-                    Scholarship opportunities
+                    City guides & local tips
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 flex-shrink-0"></div>
-                    Visa process walkthrough
+                    Practical student life support
                   </li>
                 </ul>
                 
                 {/* CTA Button */}
                 <Link href="/webinars">
-                  <Button className="w-full bg-purple-600 hover:bg-purple-700 group-hover:bg-purple-700 transition-colors duration-300 text-sm sm:text-base">
+                  <Button className="w-full bg-purple-600 hover:bg-orange-600 transition-all duration-300 text-sm sm:text-base transform hover:scale-105">
                     View Webinars
                     <Video className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
@@ -462,34 +462,34 @@ export default function HomePage() {
                 </div>
                 
                 {/* Content */}
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">Success Stories</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">Student Testimonials</h3>
                 <p className="text-gray-600 mb-4 lg:mb-6 leading-relaxed text-sm sm:text-base">
-                  Get inspired by real student journeys and achievements
+                  Read inspiring stories from international students who achieved their dreams
                 </p>
                 
                 {/* Features List */}
                 <ul className="space-y-2 lg:space-y-3 mb-6 lg:mb-8">
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
-                    Student testimonials
+                    Real student experiences
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
-                    University admissions
+                    University admission stories
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
-                    Scholarship successes
+                    Scholarship success stories
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
-                    Career achievements
+                    International student journeys
                   </li>
                 </ul>
                 
                 {/* CTA Button */}
                 <Link href="/testimonials">
-                  <Button className="w-full bg-green-600 hover:bg-green-700 group-hover:bg-green-700 transition-colors duration-300 text-sm sm:text-base">
+                  <Button className="w-full bg-green-600 hover:bg-pink-600 transition-all duration-300 text-sm sm:text-base transform hover:scale-105">
                     Read Stories
                     <Heart className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
