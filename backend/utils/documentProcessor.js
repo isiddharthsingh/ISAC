@@ -2,6 +2,7 @@ const Tesseract = require('tesseract.js');
 const sharp = require('sharp');
 const pdf2pic = require('pdf2pic');
 const pdfParse = require('pdf-parse');
+const pool = require('../config/database');
 
 // Document classification signatures
 const documentSignatures = {
@@ -50,6 +51,66 @@ const documentSignatures = {
     ]
   }
 };
+
+// University name variations and common abbreviations
+const universityAliases = {
+  'nyu': ['New York University', 'NYU', 'N.Y.U.', 'NYU Tandon', 'Tandon School'],
+  'mit': ['Massachusetts Institute of Technology', 'MIT', 'M.I.T.'],
+  'stanford': ['Stanford University', 'Stanford', 'Stanford University School'],
+  'harvard': ['Harvard University', 'Harvard', 'Harvard College'],
+  'columbia': ['Columbia University', 'Columbia', 'Columbia College'],
+  'asu': ['Arizona State University', 'ASU', 'A.S.U.', 'Arizona State'],
+  'usc': ['University of Southern California', 'USC', 'U.S.C.'],
+  'ucla': ['University of California Los Angeles', 'UCLA', 'U.C.L.A.', 'UC Los Angeles'],
+  'berkeley': ['University of California Berkeley', 'UC Berkeley', 'Berkeley', 'Cal'],
+  'princeton': ['Princeton University', 'Princeton'],
+  'yale': ['Yale University', 'Yale'],
+  'upenn': ['University of Pennsylvania', 'UPenn', 'Penn', 'U Penn'],
+  'caltech': ['California Institute of Technology', 'Caltech', 'Cal Tech'],
+  'cmu': ['Carnegie Mellon University', 'Carnegie Mellon', 'CMU', 'C.M.U.']
+};
+
+// Get university data from database
+async function getUniversityData(universityId) {
+  try {
+    const result = await pool.query('SELECT * FROM universities WHERE id = $1', [universityId]);
+    if (result.rows.length === 0) {
+      throw new Error(`University not found: ${universityId}`);
+    }
+    return result.rows[0];
+  } catch (error) {
+    console.error('Error fetching university data:', error);
+    throw error;
+  }
+}
+
+// Check if document belongs to the expected university
+function validateUniversityMatch(extractedText, universityData) {
+  const normalizedText = extractedText.toLowerCase();
+  const universityId = universityData.id;
+  
+  // Get all possible names/aliases for this university
+  const possibleNames = [
+    universityData.name,
+    universityData.short_name,
+    ...(universityAliases[universityId] || [])
+  ];
+  
+  // Check if any university name appears in the document
+  const foundMatches = possibleNames.filter(name => 
+    normalizedText.includes(name.toLowerCase())
+  );
+  
+  console.log(`University validation for ${universityId}:`);
+  console.log(`Expected names: ${possibleNames.join(', ')}`);
+  console.log(`Found matches: ${foundMatches.join(', ')}`);
+  
+  return {
+    isMatch: foundMatches.length > 0,
+    matchedNames: foundMatches,
+    expectedNames: possibleNames
+  };
+}
 
 // Preprocess image for better OCR accuracy
 async function preprocessImage(inputBuffer) {
@@ -270,25 +331,37 @@ function classifyDocument(text) {
   };
 }
 
-// Make approval/rejection decision
-function makeDecision(classification, universityId) {
+// Make approval/rejection decision with university validation
+function makeDecision(classification, universityValidation, universityData) {
   const { type, confidence } = classification;
+  const { isMatch, matchedNames, expectedNames } = universityValidation;
   
   console.log(`Document classified as: ${type} with ${confidence}% confidence`);
+  console.log(`University match: ${isMatch} (found: ${matchedNames.join(', ')})`);
   
-  // High confidence decisions
-  if (confidence > 80) {
+  // First check if document belongs to the correct university
+  if (!isMatch && (type === 'i20' || type === 'admitLetter')) {
+    return { 
+      decision: 'rejected', 
+      reason: `Document appears to be from a different university.`,
+      autoProcessed: true,
+      universityMismatch: true
+    };
+  }
+  
+  // High confidence decisions (only if university matches)
+  if (confidence > 80 && isMatch) {
     switch (type) {
       case 'i20':
         return { 
           decision: 'approved', 
-          reason: `Valid I-20 document detected (${confidence}% confidence)`,
+          reason: `Valid ${universityData.short_name} I-20 document detected (${confidence}% confidence)`,
           autoProcessed: true
         };
       case 'admitLetter':
         return { 
           decision: 'approved', 
-          reason: `Valid admission letter detected (${confidence}% confidence)`,
+          reason: `Valid ${universityData.short_name} admission letter detected (${confidence}% confidence)`,
           autoProcessed: true
         };
       case 'resume':
@@ -300,12 +373,12 @@ function makeDecision(classification, universityId) {
     }
   }
   
-  // Medium confidence - manual review for acceptable document types
-  if (confidence > 50) {
+  // Medium confidence - manual review for acceptable document types with university match
+  if (confidence > 50 && isMatch) {
     if (type === 'i20' || type === 'admitLetter') {
       return { 
         decision: 'manual_review', 
-        reason: `Possible ${type} detected but requires manual verification (${confidence}% confidence)`,
+        reason: `Possible ${universityData.short_name} ${type} detected but requires manual verification (${confidence}% confidence)`,
         autoProcessed: false
       };
     } else {
@@ -321,15 +394,25 @@ function makeDecision(classification, universityId) {
   if (type === 'resume' && confidence > 20) {
     return { 
       decision: 'rejected', 
-      reason: `Other documents are not accepted for verification, please upload a valid I-20 or admission letter.`,
+      reason: `Other documents are not accepted for verification, please upload a valid I-20 or admission letter from ${universityData.short_name}.`,
       autoProcessed: true
+    };
+  }
+  
+  // Medium confidence but no university match - require manual review
+  if (confidence > 50 && !isMatch && (type === 'i20' || type === 'admitLetter')) {
+    return { 
+      decision: 'manual_review', 
+      reason: `Document appears to be a valid ${type} but university information could not be verified. Manual review required.`,
+      autoProcessed: false,
+      universityMismatch: true
     };
   }
   
   // Low confidence - manual review
   return { 
     decision: 'manual_review', 
-    reason: `Unable to classify document reliably (${confidence}% confidence)`,
+    reason: `Unable to classify document reliably (${confidence}% confidence) or verify university information`,
     autoProcessed: false
   };
 }
@@ -337,7 +420,11 @@ function makeDecision(classification, universityId) {
 // Main document processing function
 async function processDocument(input, universityId) {
   try {
-    console.log('Processing document...');
+    console.log(`Processing document for university: ${universityId}`);
+    
+    // Get university data first
+    const universityData = await getUniversityData(universityId);
+    console.log(`Processing document for: ${universityData.name} (${universityData.short_name})`);
     
     // Extract text using OCR
     const extractedText = await extractTextFromDocument(input);
@@ -354,12 +441,16 @@ async function processDocument(input, universityId) {
     // Classify document
     const classification = classifyDocument(extractedText);
     
-    // Make decision
-    const decision = makeDecision(classification, universityId);
+    // Validate university match
+    const universityValidation = validateUniversityMatch(extractedText, universityData);
+    
+    // Make decision based on classification AND university validation
+    const decision = makeDecision(classification, universityValidation, universityData);
     
     return {
       ...decision,
       classification,
+      universityValidation,
       extractedText,
       processedAt: new Date().toISOString()
     };
@@ -380,5 +471,7 @@ module.exports = {
   extractTextFromDocument,
   classifyDocument,
   makeDecision,
-  preprocessImage
+  preprocessImage,
+  validateUniversityMatch,
+  getUniversityData
 }; 
