@@ -185,8 +185,8 @@ export default function HomePage() {
       suffix: "+",
       label: "Students Helped",
       description: "Students from 85+ countries have received mentorship and guidance through our platform",
-      color: "bg-gradient-to-br from-blue-500 to-blue-600",
-      bgPattern: "bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200"
+      color: "bg-gradient-to-br from-[#384633] to-[#2d3a2a]",
+      bgPattern: "bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20"
     },
     {
       icon: Globe,
@@ -194,8 +194,8 @@ export default function HomePage() {
       suffix: "+",
       label: "Countries",
       description: "Our global community spans across six continents, connecting students worldwide",
-      color: "bg-gradient-to-br from-purple-500 to-purple-600",
-      bgPattern: "bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200"
+      color: "bg-gradient-to-br from-[#384633] to-[#2d3a2a]",
+      bgPattern: "bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20"
     },
     {
       icon: CheckCircle,
@@ -203,8 +203,8 @@ export default function HomePage() {
       suffix: "%",
       label: "Success Rate",
       description: "Of our students successfully gain admission to their target universities",
-      color: "bg-gradient-to-br from-green-500 to-green-600",
-      bgPattern: "bg-gradient-to-br from-green-50 to-green-100 border border-green-200"
+      color: "bg-gradient-to-br from-[#384633] to-[#2d3a2a]",
+      bgPattern: "bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20"
     },
     {
       icon: UserCheck,
@@ -212,29 +212,29 @@ export default function HomePage() {
       suffix: "+",
       label: "Expert Mentors",
       description: "Certified professionals and alumni from top universities worldwide",
-      color: "bg-gradient-to-br from-orange-500 to-orange-600",
-      bgPattern: "bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200"
+      color: "bg-gradient-to-br from-[#384633] to-[#2d3a2a]",
+      bgPattern: "bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20"
     }
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+          <div className="min-h-screen bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-pink-600/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#384633]/15 via-[#2d3a2a]/10 to-[#384633]/15" />
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left side - Content */}
             <div className="text-center lg:text-left order-2 lg:order-1">
-              <Badge className="mb-4 sm:mb-6 bg-blue-100 text-blue-700 border-blue-200 text-xs sm:text-sm">
+              <Badge className="mb-4 sm:mb-6 bg-[#384633]/10 text-[#384633] border-[#384633]/20 text-xs sm:text-sm">
                 <GraduationCap className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                 Global Education Platform
               </Badge>
               
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">International Student Advocacy Committee</span>
+                <span className="text-[#384633]">International Student Advocacy Committee</span>
               </h1>
               
               <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
@@ -243,7 +243,7 @@ export default function HomePage() {
               
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
                 <Link href="/whatsapp-groups">
-                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-sm sm:text-base px-6 sm:px-8">
+                  <Button size="lg" className="bg-[#384633] hover:bg-[#2d3a2a] text-sm sm:text-base px-6 sm:px-8">
                     Join Community
                     <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
@@ -283,8 +283,8 @@ export default function HomePage() {
       <section className="py-12 sm:py-16 lg:py-20 xl:py-28 bg-white relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-16 -left-16 sm:-top-24 sm:-left-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full opacity-30 blur-3xl"></div>
-          <div className="absolute -bottom-16 -right-16 sm:-bottom-24 sm:-right-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-green-100 to-orange-100 rounded-full opacity-30 blur-3xl"></div>
+          <div className="absolute -top-16 -left-16 sm:-top-24 sm:-left-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-[#384633]/25 to-[#2d3a2a]/15 rounded-full opacity-30 blur-3xl"></div>
+          <div className="absolute -bottom-16 -right-16 sm:-bottom-24 sm:-right-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-[#2d3a2a]/20 to-[#384633]/10 rounded-full opacity-30 blur-3xl"></div>
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
@@ -322,13 +322,13 @@ export default function HomePage() {
       <section className="py-12 sm:py-16 lg:py-20 xl:py-28 bg-gray-50 relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 -left-16 sm:-left-32 w-48 h-48 sm:w-64 sm:h-64 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-2xl"></div>
-          <div className="absolute bottom-1/4 -right-16 sm:-right-32 w-48 h-48 sm:w-64 sm:h-64 bg-gradient-to-br from-green-200 to-orange-200 rounded-full opacity-20 blur-2xl"></div>
+          <div className="absolute top-1/4 -left-16 sm:-left-32 w-48 h-48 sm:w-64 sm:h-64 bg-gradient-to-br from-[#384633]/25 to-[#2d3a2a]/15 rounded-full opacity-20 blur-2xl"></div>
+          <div className="absolute bottom-1/4 -right-16 sm:-right-32 w-48 h-48 sm:w-64 sm:h-64 bg-gradient-to-br from-[#2d3a2a]/20 to-[#384633]/10 rounded-full opacity-20 blur-2xl"></div>
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <Badge className="mb-4 sm:mb-6 bg-purple-100 text-purple-700 border-purple-200 text-xs sm:text-sm">
+            <Badge className="mb-4 sm:mb-6 bg-[#384633]/10 text-[#384633] border-[#384633]/20 text-xs sm:text-sm">
               <Award className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               Comprehensive Platform
             </Badge>
@@ -351,7 +351,7 @@ export default function HomePage() {
               
               <div className="relative z-10">
                 {/* Icon */}
-                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 bg-gradient-to-br from-blue-500 to-blue-600 transition-transform duration-300 group-hover:scale-110">
+                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 bg-gradient-to-br from-[#384633] to-[#2d3a2a] transition-transform duration-300 group-hover:scale-110">
                   <Users className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
                 </div>
                 
@@ -364,26 +364,26 @@ export default function HomePage() {
                 {/* Features List */}
                 <ul className="space-y-2 lg:space-y-3 mb-6 lg:mb-8">
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     1-on-1 guidance sessions
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     University selection advice
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     Application strategy
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     Career planning support
                   </li>
                 </ul>
                 
                 {/* CTA Button */}
                 <Link href="/volunteers">
-                  <Button className="w-full group-hover:bg-blue-700 transition-colors duration-300 text-sm sm:text-base">
+                  <Button className="w-full bg-[#384633] hover:bg-[#2d3a2a] group-hover:bg-[#2d3a2a] transition-colors duration-300 text-sm sm:text-base">
                     Find Mentors
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
@@ -391,7 +391,7 @@ export default function HomePage() {
               </div>
               
               {/* Hover overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/5 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#384633]/0 via-[#384633]/5 to-[#384633]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
 
             {/* Live Webinars */}
@@ -404,7 +404,7 @@ export default function HomePage() {
               
               <div className="relative z-10">
                 {/* Icon */}
-                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 bg-gradient-to-br from-purple-500 to-purple-600 transition-transform duration-300 group-hover:scale-110">
+                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 bg-gradient-to-br from-[#384633] to-[#2d3a2a] transition-transform duration-300 group-hover:scale-110">
                   <Video className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
                 </div>
                 
@@ -417,26 +417,26 @@ export default function HomePage() {
                 {/* Features List */}
                 <ul className="space-y-2 lg:space-y-3 mb-6 lg:mb-8">
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     IELTS/TOEFL preparation
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     University application guides
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     Scholarship opportunities
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     Visa process walkthrough
                   </li>
                 </ul>
                 
                 {/* CTA Button */}
                 <Link href="/webinars">
-                  <Button className="w-full bg-purple-600 hover:bg-purple-700 group-hover:bg-purple-700 transition-colors duration-300 text-sm sm:text-base">
+                  <Button className="w-full bg-[#384633] hover:bg-[#2d3a2a] group-hover:bg-[#2d3a2a] transition-colors duration-300 text-sm sm:text-base">
                     View Webinars
                     <Video className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
@@ -444,7 +444,7 @@ export default function HomePage() {
               </div>
               
               {/* Hover overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-500/5 to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#384633]/0 via-[#384633]/5 to-[#384633]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
 
             {/* Success Stories */}
@@ -457,7 +457,7 @@ export default function HomePage() {
               
               <div className="relative z-10">
                 {/* Icon */}
-                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 bg-gradient-to-br from-green-500 to-green-600 transition-transform duration-300 group-hover:scale-110">
+                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 bg-gradient-to-br from-[#384633] to-[#2d3a2a] transition-transform duration-300 group-hover:scale-110">
                   <Award className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
                 </div>
                 
@@ -470,26 +470,26 @@ export default function HomePage() {
                 {/* Features List */}
                 <ul className="space-y-2 lg:space-y-3 mb-6 lg:mb-8">
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     Student testimonials
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     University admissions
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     Scholarship successes
                   </li>
                   <li className="flex items-center text-sm text-gray-600">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-[#384633] rounded-full mr-3 flex-shrink-0"></div>
                     Career achievements
                   </li>
                 </ul>
                 
                 {/* CTA Button */}
                 <Link href="/testimonials">
-                  <Button className="w-full bg-green-600 hover:bg-green-700 group-hover:bg-green-700 transition-colors duration-300 text-sm sm:text-base">
+                  <Button className="w-full bg-[#384633] hover:bg-[#2d3a2a] group-hover:bg-[#2d3a2a] transition-colors duration-300 text-sm sm:text-base">
                     Read Stories
                     <Heart className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
@@ -497,7 +497,7 @@ export default function HomePage() {
               </div>
               
               {/* Hover overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-500/5 to-green-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#384633]/0 via-[#384633]/5 to-[#384633]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
           </div>
           
@@ -515,17 +515,17 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-[#384633] via-[#2d3a2a] to-[#384633]">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6">
             Ready to Join Our Community?
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-blue-100 mb-6 sm:mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto">
             Connect with 25,000+ students and mentors in our WhatsApp groups. Get guidance, support, and achieve your international education dreams together.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
             <Link href="/whatsapp-groups">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-sm sm:text-base px-6 sm:px-8">
+              <Button size="lg" className="bg-white text-[#384633] hover:bg-gray-100 text-sm sm:text-base px-6 sm:px-8">
                 Join WhatsApp Groups
                 <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>

@@ -254,8 +254,8 @@ export default function WebinarsPage() {
       <CardHeader className="pb-4 relative">
         {/* Card background pattern */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300">
-          <div className="absolute top-0 right-0 w-20 h-20 bg-purple-500 rounded-full -translate-y-10 translate-x-10 opacity-30"></div>
-          <div className="absolute bottom-0 left-0 w-12 h-12 bg-blue-500 rounded-full translate-y-6 -translate-x-6 opacity-20"></div>
+          <div className="absolute top-0 right-0 w-20 h-20 bg-[#384633] rounded-full -translate-y-10 translate-x-10 opacity-30"></div>
+          <div className="absolute bottom-0 left-0 w-12 h-12 bg-[#384633] rounded-full translate-y-6 -translate-x-6 opacity-20"></div>
         </div>
         
         <div className="relative z-10">
@@ -268,7 +268,7 @@ export default function WebinarsPage() {
                   ? "bg-red-100 text-red-700 border-red-200 animate-pulse" 
                   : isPast 
                     ? "bg-gray-100 text-gray-700 border-gray-200"
-                    : "bg-blue-100 text-blue-700 border-blue-200"
+                    : "bg-[#384633]/10 text-[#384633] border-[#384633]/20"
                 }
               `}
             >
@@ -294,7 +294,7 @@ export default function WebinarsPage() {
             </Badge>
           </div>
           
-          <CardTitle className="text-lg font-bold text-gray-900 group-hover:text-purple-600 transition-colors duration-300 line-clamp-2 mb-3">
+          <CardTitle className="text-lg font-bold text-gray-900 group-hover:text-[#384633] transition-colors duration-300 line-clamp-2 mb-3">
             {webinar.title}
           </CardTitle>
           
@@ -307,9 +307,9 @@ export default function WebinarsPage() {
       <CardContent className="space-y-4 relative">
         {/* Presenter info */}
         <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-xl">
-          <Avatar className="h-12 w-12 ring-2 ring-purple-100">
+          <Avatar className="h-12 w-12 ring-2 ring-[#384633]/20">
             <AvatarImage src={webinar.presenter.image} alt={webinar.presenter.name} />
-            <AvatarFallback className="text-sm bg-gradient-to-br from-purple-500 to-blue-500 text-white">
+            <AvatarFallback className="text-sm bg-gradient-to-br from-[#384633] to-[#2d3a2a] text-white">
               {webinar.presenter.name.split(' ').map((n: string) => n[0]).join('')}
             </AvatarFallback>
           </Avatar>
@@ -323,16 +323,16 @@ export default function WebinarsPage() {
         <div className="space-y-3 text-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                {isLive ? <Video className="h-4 w-4 text-red-600" /> : <Calendar className="h-4 w-4 text-purple-600" />}
+              <div className="w-8 h-8 bg-[#384633]/10 rounded-lg flex items-center justify-center">
+                {isLive ? <Video className="h-4 w-4 text-red-600" /> : <Calendar className="h-4 w-4 text-[#384633]" />}
               </div>
               <span className="font-medium text-gray-700">
                 {isLive ? "Live Now" : isPast ? `Recorded ${webinar.date}` : webinar.date ? new Date(webinar.date).toLocaleDateString() : 'TBD'}
               </span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Clock className="h-4 w-4 text-blue-600" />
+              <div className="w-8 h-8 bg-[#384633]/10 rounded-lg flex items-center justify-center">
+                <Clock className="h-4 w-4 text-[#384633]" />
               </div>
               <span className="font-medium text-gray-700">
                 {isLive ? webinar.startTime : isPast ? webinar.duration : webinar.time}
@@ -344,8 +344,8 @@ export default function WebinarsPage() {
           {!isPast && (
             <div className="flex items-center justify-center">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <Target className="h-4 w-4 text-orange-600" />
+                <div className="w-8 h-8 bg-[#384633]/10 rounded-lg flex items-center justify-center">
+                  <Target className="h-4 w-4 text-[#384633]" />
                 </div>
                 <span className="font-medium text-gray-700">
                   {webinar.duration}
@@ -393,7 +393,7 @@ export default function WebinarsPage() {
               ? "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800" 
               : isPast 
                 ? "bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800"
-                : "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                : "bg-gradient-to-r from-[#384633] to-[#2d3a2a] hover:from-[#2d3a2a] hover:to-[#384633]"
           } text-white`}
           onClick={() => handleShowRegistrationForm(webinar, isPast)}
           disabled={false}
@@ -412,28 +412,28 @@ export default function WebinarsPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10">
       {/* Hero Section */}
               <section className="relative pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24 overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-blue-600/10 to-pink-600/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#384633]/15 via-[#2d3a2a]/10 to-[#384633]/15" />
         
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-16 -left-16 sm:-top-24 sm:-left-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full opacity-30 blur-3xl"></div>
-          <div className="absolute -bottom-16 -right-16 sm:-bottom-24 sm:-right-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-blue-100 to-green-100 rounded-full opacity-30 blur-3xl"></div>
+          <div className="absolute -top-16 -left-16 sm:-top-24 sm:-left-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-[#384633]/25 to-[#2d3a2a]/15 rounded-full opacity-30 blur-3xl"></div>
+          <div className="absolute -bottom-16 -right-16 sm:-bottom-24 sm:-right-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-[#2d3a2a]/20 to-[#384633]/10 rounded-full opacity-30 blur-3xl"></div>
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            <Badge className="mb-4 sm:mb-6 bg-purple-100 text-purple-700 border-purple-200 text-xs sm:text-sm">
+            <Badge className="mb-4 sm:mb-6 bg-[#384633]/10 text-[#384633] border-[#384633]/20 text-xs sm:text-sm">
               <Video className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               Live Learning
             </Badge>
             
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
               Educational 
-              <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent block sm:inline"> Webinars & Workshops</span>
+              <span className="text-[#384633] block sm:inline"> Webinars & Workshops</span>
             </h1>
             
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed mb-8 sm:mb-10 max-w-3xl mx-auto">
@@ -446,11 +446,11 @@ export default function WebinarsPage() {
       
 
       {/* Enhanced Webinars with Tabs */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
+      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10 relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/3 -left-16 w-64 h-64 bg-gradient-to-br from-purple-200 to-blue-200 rounded-full opacity-10 blur-3xl"></div>
-          <div className="absolute bottom-1/3 -right-16 w-64 h-64 bg-gradient-to-br from-blue-200 to-green-200 rounded-full opacity-10 blur-3xl"></div>
+          <div className="absolute top-1/3 -left-16 w-64 h-64 bg-gradient-to-br from-[#384633]/25 to-[#2d3a2a]/15 rounded-full opacity-10 blur-3xl"></div>
+          <div className="absolute bottom-1/3 -right-16 w-64 h-64 bg-gradient-to-br from-[#2d3a2a]/20 to-[#384633]/10 rounded-full opacity-10 blur-3xl"></div>
         </div>
         
         <div className="max-w-7xl mx-auto px-4 relative z-10">

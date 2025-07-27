@@ -139,19 +139,19 @@ export default function WhatsAppGroupsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10">
       {/* Hero Section */}
               <section className="pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-28 lg:pb-20">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12">
-            <Badge className="mb-4 sm:mb-6 bg-green-100 text-green-700 border-green-200 text-xs sm:text-sm">
+            <Badge className="mb-4 sm:mb-6 bg-[#384633]/10 text-[#384633] border-[#384633]/20 text-xs sm:text-sm">
               <MessageCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               University Communities
             </Badge>
             
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
               Join Your 
-              <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent"> University WhatsApp</span> Community
+              <span className="text-[#384633]"> University WhatsApp</span> Community
             </h1>
             
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">

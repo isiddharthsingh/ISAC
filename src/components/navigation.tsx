@@ -46,20 +46,20 @@ export function Navigation() {
       // During SSR/initial render, use consistent default styles
       return {
         logo: 'text-gray-900',
-        logoAccent: 'text-blue-600',
-        nav: 'text-gray-800 hover:text-blue-600',
-        button: 'bg-blue-600 hover:bg-blue-700 text-white',
-        mobile: 'text-gray-800 hover:text-blue-600'
+        logoAccent: 'text-[#384633]',
+        nav: 'text-gray-800 hover:text-[#384633]',
+        button: 'bg-[#384633] hover:bg-[#2d3a2a] text-white',
+        mobile: 'text-gray-800 hover:text-[#384633]'
       }
     }
     
     // Glass navbar requires darker text for better contrast
     return {
       logo: 'text-gray-900',
-      logoAccent: 'text-blue-600',
-      nav: 'text-gray-800 hover:text-blue-600 hover:bg-white/20',
-      button: 'bg-blue-600 hover:bg-blue-700 text-white',
-      mobile: 'text-gray-800 hover:text-blue-600'
+      logoAccent: 'text-[#384633]',
+      nav: 'text-gray-800 hover:text-[#384633] hover:bg-white/20',
+      button: 'bg-[#384633] hover:bg-[#2d3a2a] text-white',
+      mobile: 'text-gray-800 hover:text-[#384633]'
     }
   }
 
@@ -111,7 +111,7 @@ export function Navigation() {
                       rounded-xl
                       ${styles.nav}
                       ${pathname === item.href 
-                        ? 'font-semibold bg-white/25 text-blue-700' 
+                        ? 'font-semibold bg-white/25 text-[#384633]' 
                         : ''
                       }
                     `}
@@ -149,8 +149,8 @@ export function Navigation() {
                       block px-4 py-3 text-base font-medium transition-all duration-200
                       rounded-xl
                       ${pathname === item.href 
-                        ? 'font-semibold bg-white/25 text-blue-700' 
-                        : 'text-gray-800 hover:text-blue-600 hover:bg-white/20'
+                        ? 'font-semibold bg-white/25 text-[#384633]' 
+                        : 'text-gray-800 hover:text-[#384633] hover:bg-white/20'
                       }
                     `}
                     onClick={() => setIsOpen(false)}

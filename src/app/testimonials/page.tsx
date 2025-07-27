@@ -113,49 +113,49 @@ export default function TestimonialsPage() {
       icon: Users, 
       number: "25,000+", 
       label: "Students Helped",
-      color: "from-blue-500 to-blue-600",
-      bgColor: "from-blue-50 to-blue-100",
-      borderColor: "border-blue-200"
+      color: "from-[#384633] to-[#2d3a2a]",
+      bgColor: "from-[#384633]/10 to-[#384633]/5",
+      borderColor: "border-[#384633]/20"
     },
     { 
       icon: Award, 
       number: "92%", 
       label: "Success Rate",
-      color: "from-green-500 to-green-600",
-      bgColor: "from-green-50 to-green-100", 
-      borderColor: "border-green-200"
+      color: "from-[#384633] to-[#2d3a2a]",
+      bgColor: "from-[#384633]/10 to-[#384633]/5", 
+      borderColor: "border-[#384633]/20"
     },
     { 
       icon: GraduationCap, 
       number: "50+", 
       label: "Top Universities",
-      color: "from-purple-500 to-purple-600",
-      bgColor: "from-purple-50 to-purple-100",
-      borderColor: "border-purple-200"
+      color: "from-[#384633] to-[#2d3a2a]",
+      bgColor: "from-[#384633]/10 to-[#384633]/5",
+      borderColor: "border-[#384633]/20"
     }
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10">
       {/* Hero Section */}
       <section className="relative pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-green-600/10 via-blue-600/10 to-purple-600/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#384633]/15 via-[#2d3a2a]/10 to-[#384633]/15" />
         
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-16 -left-16 sm:-top-24 sm:-left-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-green-100 to-blue-100 rounded-full opacity-30 blur-3xl"></div>
-          <div className="absolute -bottom-16 -right-16 sm:-bottom-24 sm:-right-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full opacity-30 blur-3xl"></div>
+          <div className="absolute -top-16 -left-16 sm:-top-24 sm:-left-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-[#384633]/25 to-[#2d3a2a]/15 rounded-full opacity-30 blur-3xl"></div>
+          <div className="absolute -bottom-16 -right-16 sm:-bottom-24 sm:-right-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-[#2d3a2a]/20 to-[#384633]/10 rounded-full opacity-30 blur-3xl"></div>
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            <Badge className="mb-4 sm:mb-6 bg-green-100 text-green-700 border-green-200 text-xs sm:text-sm">
+            <Badge className="mb-4 sm:mb-6 bg-[#384633]/10 text-[#384633] border-[#384633]/20 text-xs sm:text-sm">
               <Heart className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               Success Stories
             </Badge>
             
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
               Student 
-              <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent block sm:inline"> Success Stories</span>
+              <span className="text-[#384633] block sm:inline"> Success Stories</span>
             </h1>
             
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed mb-8 sm:mb-10 max-w-3xl mx-auto">
@@ -168,8 +168,8 @@ export default function TestimonialsPage() {
       {/* Stats Section */}
       <section className="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 -left-32 w-64 h-64 bg-gradient-to-br from-green-200 to-blue-200 rounded-full opacity-20 blur-2xl"></div>
-          <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-2xl"></div>
+          <div className="absolute top-1/4 -left-32 w-64 h-64 bg-gradient-to-br from-[#384633]/25 to-[#2d3a2a]/15 rounded-full opacity-20 blur-2xl"></div>
+          <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-gradient-to-br from-[#2d3a2a]/20 to-[#384633]/10 rounded-full opacity-20 blur-2xl"></div>
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
@@ -199,7 +199,7 @@ export default function TestimonialsPage() {
       </section>
 
       {/* Testimonials Grid */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
@@ -231,7 +231,7 @@ export default function TestimonialsPage() {
                 <p className="text-gray-600 mb-4">{error}</p>
                 <Button 
                   onClick={fetchTestimonials}
-                  className="bg-gradient-to-r from-green-600 to-blue-600 text-white"
+                  className="bg-gradient-to-r from-[#384633] to-[#2d3a2a] text-white"
                 >
                   Try Again
                 </Button>
@@ -252,7 +252,7 @@ export default function TestimonialsPage() {
                 </p>
                 <Button 
                   onClick={() => setShowForm(true)}
-                  className="bg-gradient-to-r from-green-600 to-blue-600 text-white"
+                  className="bg-gradient-to-r from-[#384633] to-[#2d3a2a] text-white"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Share Your Story
@@ -268,9 +268,9 @@ export default function TestimonialsPage() {
                 <Card key={testimonial.id} className="hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-white border-gray-200 overflow-hidden">
                   <CardHeader className="pb-3">
                     <div className="flex items-center space-x-3">
-                      <Avatar className="h-14 w-14 ring-2 ring-green-100">
+                      <Avatar className="h-14 w-14 ring-2 ring-[#384633]/20">
                         <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                        <AvatarFallback className="text-base bg-gradient-to-br from-green-500 to-blue-500 text-white font-semibold">
+                        <AvatarFallback className="text-base bg-gradient-to-br from-[#384633] to-[#2d3a2a] text-white font-semibold">
                           {testimonial.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>
@@ -289,12 +289,12 @@ export default function TestimonialsPage() {
                   
                   <CardContent className="space-y-3 pt-0">
                     <div className="space-y-3">
-                      <div className="flex items-center space-x-2 p-2 bg-green-50 rounded-lg border border-green-100">
-                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <School className="h-4 w-4 text-green-600" />
+                      <div className="flex items-center space-x-2 p-2 bg-[#384633]/10 rounded-lg border border-[#384633]/20">
+                        <div className="w-8 h-8 bg-[#384633]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <School className="h-4 w-4 text-[#384633]" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-xs font-medium text-green-700 uppercase tracking-wide">University</p>
+                          <p className="text-xs font-medium text-[#384633] uppercase tracking-wide">University</p>
                           <p className="text-sm font-semibold text-gray-800 leading-tight">{testimonial.university}</p>
                         </div>
                       </div>

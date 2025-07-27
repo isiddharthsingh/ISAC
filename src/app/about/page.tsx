@@ -24,7 +24,7 @@ export default function AboutPage() {
   }, [])
 
   if (!mounted) {
-    return <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50" />
+    return <div className="min-h-screen bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10" />
   }
 
   const stats = [
@@ -33,52 +33,52 @@ export default function AboutPage() {
       count: "25K+",
       label: "Students Served",
       description: "From over 85 countries worldwide",
-      color: "bg-gradient-to-br from-blue-500 to-blue-600",
-      bgPattern: "bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200"
+      color: "bg-gradient-to-br from-[#384633] to-[#2d3a2a]",
+      bgPattern: "bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20"
     },
     {
       icon: Globe,
       count: "100+",
       label: "Countries",
       description: "Global reach across six continents",
-      color: "bg-gradient-to-br from-purple-500 to-purple-600",
-      bgPattern: "bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200"
+      color: "bg-gradient-to-br from-[#384633] to-[#2d3a2a]",
+      bgPattern: "bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20"
     },
     {
       icon: GraduationCap,
       count: "500+",
       label: "Expert Mentors",
       description: "Certified professionals and alumni",
-      color: "bg-gradient-to-br from-green-500 to-green-600",
-      bgPattern: "bg-gradient-to-br from-green-50 to-green-100 border border-green-200"
+      color: "bg-gradient-to-br from-[#384633] to-[#2d3a2a]",
+      bgPattern: "bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20"
     },
     {
       icon: Award,
       count: "94%",
       label: "Success Rate",
       description: "Students achieving their goals",
-      color: "bg-gradient-to-br from-orange-500 to-orange-600",
-      bgPattern: "bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200"
+      color: "bg-gradient-to-br from-[#384633] to-[#2d3a2a]",
+      bgPattern: "bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20"
     }
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10">
       {/* Hero Section */}
               <section className="relative pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24 overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-pink-600/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#384633]/15 via-[#2d3a2a]/10 to-[#384633]/15" />
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            <Badge className="mb-4 sm:mb-6 bg-blue-100 text-blue-700 border-blue-200 text-xs sm:text-sm">
+            <Badge className="mb-4 sm:mb-6 bg-[#384633]/10 text-[#384633] border-[#384633]/20 text-xs sm:text-sm">
               <Heart className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               Our Story
             </Badge>
             
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
               Empowering Dreams Through
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent block sm:inline"> Global Education</span>
+              <span className="text-[#384633] block sm:inline"> Global Education</span>
             </h1>
             
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed mb-8 sm:mb-10">
@@ -86,10 +86,10 @@ export default function AboutPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3">
+              <Button size="lg" className="bg-[#384633] hover:bg-[#2d3a2a] text-white px-8 py-3">
                 Join Our Community
               </Button>
-              <Button size="lg" variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3">
+              <Button size="lg" variant="outline" className="border-[#384633] text-[#384633] hover:bg-[#384633]/10 px-8 py-3">
                 Learn More
               </Button>
             </div>

@@ -257,7 +257,7 @@ export default function VolunteersPage() {
   // Show error state
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <X className="h-8 w-8 text-red-600" />
@@ -273,28 +273,28 @@ export default function VolunteersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10">
       {/* Hero Section */}
       <section className="relative pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24 overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-pink-600/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#384633]/15 via-[#2d3a2a]/10 to-[#384633]/15" />
         
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-16 -left-16 sm:-top-24 sm:-left-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full opacity-30 blur-3xl"></div>
-          <div className="absolute -bottom-16 -right-16 sm:-bottom-24 sm:-right-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-green-100 to-orange-100 rounded-full opacity-30 blur-3xl"></div>
+          <div className="absolute -top-16 -left-16 sm:-top-24 sm:-left-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-[#384633]/25 to-[#2d3a2a]/15 rounded-full opacity-30 blur-3xl"></div>
+          <div className="absolute -bottom-16 -right-16 sm:-bottom-24 sm:-right-24 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-[#2d3a2a]/20 to-[#384633]/10 rounded-full opacity-30 blur-3xl"></div>
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            <Badge className="mb-4 sm:mb-6 bg-blue-100 text-blue-700 border-blue-200 text-xs sm:text-sm">
+            <Badge className="mb-4 sm:mb-6 bg-[#384633]/10 text-[#384633] border-[#384633]/20 text-xs sm:text-sm">
               <GraduationCap className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               Expert Guidance
             </Badge>
             
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
               Connect with 
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent block sm:inline"> Educational Mentors</span>
+              <span className="text-[#384633] block sm:inline"> Educational Mentors</span>
             </h1>
             
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed mb-8 sm:mb-10 max-w-3xl mx-auto">
@@ -308,8 +308,8 @@ export default function VolunteersPage() {
       <section className="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 -left-32 w-64 h-64 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-2xl"></div>
-          <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-gradient-to-br from-green-200 to-orange-200 rounded-full opacity-20 blur-2xl"></div>
+          <div className="absolute top-1/4 -left-32 w-64 h-64 bg-gradient-to-br from-[#384633]/25 to-[#2d3a2a]/15 rounded-full opacity-20 blur-2xl"></div>
+          <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-gradient-to-br from-[#2d3a2a]/20 to-[#384633]/10 rounded-full opacity-20 blur-2xl"></div>
         </div>
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
@@ -324,12 +324,12 @@ export default function VolunteersPage() {
           
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-8">
             {/* Enhanced stat cards with dynamic mentor count */}
-            <div className="group relative p-6 lg:p-8 rounded-xl lg:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
+            <div className="group relative p-6 lg:p-8 rounded-xl lg:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20">
               <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-300">
-                <div className="absolute top-0 right-0 w-24 h-24 lg:w-32 lg:h-32 bg-blue-500 rounded-full -translate-y-12 translate-x-12 lg:-translate-y-16 lg:translate-x-16 opacity-30"></div>
+                <div className="absolute top-0 right-0 w-24 h-24 lg:w-32 lg:h-32 bg-[#384633] rounded-full -translate-y-12 translate-x-12 lg:-translate-y-16 lg:translate-x-16 opacity-30"></div>
               </div>
               <div className="relative z-10">
-                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-blue-500 to-blue-600">
+                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-[#384633] to-[#2d3a2a]">
                   <Users className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
                 </div>
                 <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">{mentors.length}+</div>
@@ -338,12 +338,12 @@ export default function VolunteersPage() {
               </div>
             </div>
 
-            <div className="group relative p-6 lg:p-8 rounded-xl lg:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden bg-gradient-to-br from-green-50 to-green-100 border border-green-200">
+            <div className="group relative p-6 lg:p-8 rounded-xl lg:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20">
               <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-300">
-                <div className="absolute top-0 right-0 w-24 h-24 lg:w-32 lg:h-32 bg-green-500 rounded-full -translate-y-12 translate-x-12 lg:-translate-y-16 lg:translate-x-16 opacity-30"></div>
+                <div className="absolute top-0 right-0 w-24 h-24 lg:w-32 lg:h-32 bg-[#384633] rounded-full -translate-y-12 translate-x-12 lg:-translate-y-16 lg:translate-x-16 opacity-30"></div>
               </div>
               <div className="relative z-10">
-                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-green-500 to-green-600">
+                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-[#384633] to-[#2d3a2a]">
                   <Heart className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
                 </div>
                 <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">100%</div>
@@ -352,12 +352,12 @@ export default function VolunteersPage() {
               </div>
             </div>
 
-            <div className="group relative p-6 lg:p-8 rounded-xl lg:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200">
+            <div className="group relative p-6 lg:p-8 rounded-xl lg:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden bg-gradient-to-br from-[#384633]/10 to-[#384633]/5 border border-[#384633]/20">
               <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-300">
-                <div className="absolute top-0 right-0 w-24 h-24 lg:w-32 lg:h-32 bg-orange-500 rounded-full -translate-y-12 translate-x-12 lg:-translate-y-16 lg:translate-x-16 opacity-30"></div>
+                <div className="absolute top-0 right-0 w-24 h-24 lg:w-32 lg:h-32 bg-[#384633] rounded-full -translate-y-12 translate-x-12 lg:-translate-y-16 lg:translate-x-16 opacity-30"></div>
               </div>
               <div className="relative z-10">
-                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-orange-500 to-orange-600">
+                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-[#384633] to-[#2d3a2a]">
                   <Globe className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
                 </div>
                 <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">{filterOptions?.universities?.length || 50}+</div>
@@ -381,11 +381,11 @@ export default function VolunteersPage() {
       </section>
 
       {/* Enhanced Search and Filters */}
-      <section className="py-8 bg-gradient-to-br from-gray-50 to-blue-50 border-y border-gray-200 relative overflow-hidden">
+      <section className="py-8 bg-gradient-to-br from-gray-50 to-[#384633]/10 border-y border-gray-200 relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 left-1/4 w-48 h-48 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-10 blur-2xl"></div>
-          <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-gradient-to-br from-green-200 to-orange-200 rounded-full opacity-10 blur-2xl"></div>
+          <div className="absolute top-0 left-1/4 w-48 h-48 bg-gradient-to-br from-[#384633]/25 to-[#2d3a2a]/15 rounded-full opacity-10 blur-2xl"></div>
+          <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-gradient-to-br from-[#2d3a2a]/20 to-[#384633]/10 rounded-full opacity-10 blur-2xl"></div>
         </div>
         
         <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -398,7 +398,7 @@ export default function VolunteersPage() {
                 placeholder="Search mentors by name, identity, university, or keywords..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 text-lg bg-white/90 backdrop-blur-sm border-gray-200 focus:border-blue-500 focus:ring-blue-500/20 rounded-xl"
+                className="pl-10 h-12 text-lg bg-white/90 backdrop-blur-sm border-gray-200 focus:border-[#384633] focus:ring-[#384633]/20 rounded-xl"
               />
             </div>
           </div>
@@ -568,11 +568,11 @@ export default function VolunteersPage() {
       </section>
 
       {/* Enhanced Mentors Grid */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
+      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-[#384633]/10 via-white to-[#2d3a2a]/10 relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/3 -left-16 w-64 h-64 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-10 blur-3xl"></div>
-          <div className="absolute bottom-1/3 -right-16 w-64 h-64 bg-gradient-to-br from-green-200 to-orange-200 rounded-full opacity-10 blur-3xl"></div>
+          <div className="absolute top-1/3 -left-16 w-64 h-64 bg-gradient-to-br from-[#384633]/25 to-[#2d3a2a]/15 rounded-full opacity-10 blur-3xl"></div>
+          <div className="absolute bottom-1/3 -right-16 w-64 h-64 bg-gradient-to-br from-[#2d3a2a]/20 to-[#384633]/10 rounded-full opacity-10 blur-3xl"></div>
         </div>
         
         <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -599,24 +599,18 @@ export default function VolunteersPage() {
                     </div>
                     
                     <div className="flex items-start space-x-4 relative z-10">
-                      <Avatar className="h-16 w-16 ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all duration-300">
+                      <Avatar className="h-16 w-16 ring-4 ring-[#384633]/20 group-hover:ring-[#384633]/30 transition-all duration-300">
                         <AvatarImage src={mentor.image} alt={mentor.name} />
-                        <AvatarFallback className="text-lg bg-gradient-to-br from-blue-500 to-purple-500 text-white">
+                        <AvatarFallback className="text-lg bg-gradient-to-br from-[#384633] to-[#2d3a2a] text-white">
                           {mentor.name.split(' ').map((n: string) => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <CardTitle className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">{mentor.name}</CardTitle>
+                        <CardTitle className="text-lg font-bold text-gray-900 group-hover:text-[#384633] transition-colors duration-300">{mentor.name}</CardTitle>
                         <CardDescription className="text-sm">
                           <Badge 
                             variant="secondary" 
-                            className={`mb-2 ${
-                              mentor.specialty === 'International Student' 
-                                ? 'bg-green-100 text-green-700 border-green-200' 
-                                : mentor.specialty === 'Alumni' 
-                                  ? 'bg-purple-100 text-purple-700 border-purple-200'
-                                  : 'bg-blue-100 text-blue-700 border-blue-200'
-                            }`}
+                            className={`mb-2 bg-[#384633]/10 text-[#384633] border-[#384633]/20`}
                           >
                             {mentor.specialty}
                           </Badge>
@@ -637,7 +631,7 @@ export default function VolunteersPage() {
                       {mentor.bio.length > 150 && (
                         <button
                           onClick={() => toggleBio(mentor.id)}
-                          className="text-blue-600 hover:text-blue-700 text-sm font-medium mt-1 transition-colors duration-200"
+                          className="text-[#384633] hover:text-[#2d3a2a] text-sm font-medium mt-1 transition-colors duration-200"
                         >
                           {expandedBios[mentor.id] ? 'Show less' : 'Learn more'}
                         </button>
@@ -646,14 +640,14 @@ export default function VolunteersPage() {
                     
                     <div className="space-y-3 text-sm">
                       <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <Globe className="h-4 w-4 text-blue-600" />
+                        <div className="w-8 h-8 bg-[#384633]/10 rounded-lg flex items-center justify-center">
+                          <Globe className="h-4 w-4 text-[#384633]" />
                         </div>
                         <span className="font-medium text-gray-700">Languages: {mentor.languages.join(", ")}</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                          <Award className="h-4 w-4 text-green-600" />
+                        <div className="w-8 h-8 bg-[#384633]/10 rounded-lg flex items-center justify-center">
+                          <Award className="h-4 w-4 text-[#384633]" />
                         </div>
                         <span className="font-medium text-gray-700">{mentor.location}</span>
                       </div>
@@ -699,7 +693,7 @@ export default function VolunteersPage() {
                     </div>
 
                     <Button 
-                      className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]" 
+                      className="w-full bg-gradient-to-r from-[#384633] to-[#2d3a2a] hover:from-[#2d3a2a] hover:to-[#384633] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]" 
                       onClick={() => window.open('/whatsapp-groups', '_self')}
                     >
                       💬 Find on WhatsApp Groups
@@ -712,10 +706,10 @@ export default function VolunteersPage() {
 
           {/* Become a Mentor Section */}
           <div className="mt-16 text-center">
-            <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-blue-50 rounded-3xl p-8 lg:p-12 border border-blue-100">
+            <div className="bg-gradient-to-br from-[#384633]/10 via-[#384633]/5 to-[#384633]/10 rounded-3xl p-8 lg:p-12 border border-[#384633]/20">
               <div className="max-w-3xl mx-auto">
                 <div className="mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#384633] to-[#2d3a2a] rounded-2xl mb-4">
                     <Users className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-3xl font-bold text-gray-900 mb-4">
@@ -729,22 +723,22 @@ export default function VolunteersPage() {
 
                 <div className="grid md:grid-cols-3 gap-6 mb-8">
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                      <GraduationCap className="h-6 w-6 text-blue-600" />
+                    <div className="w-12 h-12 bg-[#384633]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <GraduationCap className="h-6 w-6 text-[#384633]" />
                     </div>
                     <h4 className="font-semibold text-gray-900 mb-2">Share Your Knowledge</h4>
                     <p className="text-sm text-gray-600">Help students with university applications, test prep, and academic guidance</p>
                   </div>
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                      <Heart className="h-6 w-6 text-purple-600" />
+                    <div className="w-12 h-12 bg-[#384633]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <Heart className="h-6 w-6 text-[#384633]" />
                     </div>
                     <h4 className="font-semibold text-gray-900 mb-2">Make an Impact</h4>
                     <p className="text-sm text-gray-600">Be part of life-changing moments and help shape the next generation</p>
                   </div>
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                      <Globe className="h-6 w-6 text-green-600" />
+                    <div className="w-12 h-12 bg-[#384633]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <Globe className="h-6 w-6 text-[#384633]" />
                     </div>
                     <h4 className="font-semibold text-gray-900 mb-2">Global Community</h4>
                     <p className="text-sm text-gray-600">Connect with fellow educators and students from around the world</p>
@@ -754,7 +748,7 @@ export default function VolunteersPage() {
                 <Button 
                   onClick={() => setShowMentorApplicationForm(true)}
                   size="lg" 
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  className="bg-gradient-to-r from-[#384633] to-[#2d3a2a] hover:from-[#2d3a2a] hover:to-[#384633] text-white font-semibold px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 >
                   Apply to Become a Mentor
                   <Users className="ml-2 h-5 w-5" />
