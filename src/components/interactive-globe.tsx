@@ -45,8 +45,8 @@ export function InteractiveGlobe() {
 
       const myGlobe = new Globe(globeEl.current)
         .backgroundColor('rgba(0,0,0,0)')
-        .globeImageUrl('/assets/globe/earth-night.jpg')
-        .bumpImageUrl('/assets/globe/earth-topology.png')
+        .globeImageUrl('/assets/globe/earth-day-alt.jpg?v=' + Date.now())
+        .bumpImageUrl('/assets/globe/earth-day-bump-alt.png?v=' + Date.now())
         .pointsData(studentLocations)
         .onPointClick((point) => console.log('Clicked point:', point)) // Debug logging
         .pointAltitude(0.15)
@@ -113,6 +113,9 @@ export function InteractiveGlobe() {
           <h4 className="text-gray-900 font-semibold text-base">Global Student Community</h4>
           <p className="text-gray-600 text-xs">
             {studentLocations.reduce((sum, loc) => sum + loc.students, 0).toLocaleString()} students • {studentLocations.length} countries
+          </p>
+          <p className="text-gray-500 text-xs mt-1">
+            Active members across our country-specific WhatsApp groups and events.
           </p>
         </div>
         
