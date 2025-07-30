@@ -8,9 +8,6 @@ Allow: /
 # Allow all crawlers to access sitemap
 Sitemap: https://www.isac-usa.org/sitemap.xml
 
-# Optimize crawling
-Crawl-delay: 1
-
 # Disallow admin and private areas (if any in future)
 Disallow: /admin/
 Disallow: /api/
