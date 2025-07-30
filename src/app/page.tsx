@@ -131,6 +131,7 @@ const StatCard = ({
 export default function HomePage() {
   const [mounted, setMounted] = useState(false)
   const [showWhatsAppPopup, setShowWhatsAppPopup] = useState(false)
+  const [showTransitionModal, setShowTransitionModal] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -184,7 +185,7 @@ export default function HomePage() {
       count: 25000,
       suffix: "+",
       label: "Students Helped",
-      description: "Students from 85+ countries have received mentorship and guidance through our platform",
+      description: "Students from 100+ countries have joined our WhatsApp groups and attended webinars",
       color: "bg-gradient-to-br from-blue-500 to-blue-600",
       bgPattern: "bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200"
     },
@@ -202,7 +203,7 @@ export default function HomePage() {
       count: 92,
       suffix: "%",
       label: "Success Rate",
-      description: "Of our students successfully gain admission to their target universities",
+      description: "of students say ISAC made their transition easier",
       color: "bg-gradient-to-br from-green-500 to-green-600",
       bgPattern: "bg-gradient-to-br from-green-50 to-green-100 border border-green-200"
     },
@@ -210,8 +211,8 @@ export default function HomePage() {
       icon: UserCheck,
       count: 300,
       suffix: "+",
-      label: "Expert Mentors",
-      description: "Certified professionals and alumni from top universities worldwide",
+      label: "Peer Mentors",
+      description: "Students who have been through the same journey and can help you navigate easily",
       color: "bg-gradient-to-br from-orange-500 to-orange-600",
       bgPattern: "bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200"
     }
@@ -230,7 +231,7 @@ export default function HomePage() {
             <div className="text-center lg:text-left order-2 lg:order-1">
               <Badge className="mb-4 sm:mb-6 bg-blue-100 text-blue-700 border-blue-200 text-xs sm:text-sm">
                 <GraduationCap className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-                Global Education Platform
+                Connecting International Students Worldwide
               </Badge>
               
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
@@ -238,22 +239,31 @@ export default function HomePage() {
               </h1>
               
               <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Join our vibrant community of students and mentors, access exclusive WhatsApp groups, attend inspiring webinars, and connect with thousands of students pursuing their international education goals.
+                Global peer mentorship and resources for students studying abroad. Helping international students transition smoothly to life abroad through our vibrant community of students and mentors, exclusive WhatsApp groups, and inspiring webinars.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start flex-wrap">
                 <Link href="/whatsapp-groups">
-                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-sm sm:text-base px-6 sm:px-8">
-                    Join Community
+                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-sm sm:text-base px-4 sm:px-6 lg:px-4 xl:px-6 whitespace-nowrap">
+                  Find Your School's Community
                     <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
                 </Link>
                 <Link href="/volunteers">
-                  <Button size="lg" variant="outline" className="border-gray-300 text-sm sm:text-base px-6 sm:px-8">
-                    Explore Mentors
+                  <Button size="lg" variant="outline" className="border-gray-300 text-sm sm:text-base px-4 sm:px-6 lg:px-4 xl:px-6 whitespace-nowrap">
+                    Connect with Mentors
                     <Users className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
                 </Link>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-green-300 text-green-700 hover:bg-green-50 text-sm sm:text-base px-4 sm:px-6 lg:px-4 xl:px-6 whitespace-nowrap"
+                  onClick={() => setShowTransitionModal(true)}
+                >
+                  How We Help
+                  <CheckCircle className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                </Button>
               </div>
             </div>
             
@@ -291,10 +301,10 @@ export default function HomePage() {
           {/* Section Header */}
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-              Trusted by Students Worldwide
+            40,000+ Students Already Transitioning Smoothly with ISAC
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-              Join thousands of successful students who have achieved their international education dreams with our platform
+              Join thousands of students navigating their study abroad journey with ISAC's community support
             </p>
           </div>
           
@@ -308,9 +318,9 @@ export default function HomePage() {
           {/* Additional Context */}
           <div className="mt-8 sm:mt-12 lg:mt-16 text-center">
             <p className="text-gray-500 text-sm sm:text-base lg:text-lg px-4">
-              <span className="block sm:inline">✨ Updated in real-time</span>
+              <span className="block sm:inline">💬 Active WhatsApp communities</span>
               <span className="hidden sm:inline"> • </span>
-              <span className="block sm:inline">🌍 Growing daily</span>
+              <span className="block sm:inline">🎓 Peer-to-peer mentorship</span>
               <span className="hidden sm:inline"> • </span>
               <span className="block sm:inline">🎯 Success guaranteed</span>
             </p>
@@ -332,16 +342,16 @@ export default function HomePage() {
               <Award className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               Comprehensive Platform
             </Badge>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
-              Everything You Need for Your Journey
-            </h2>
+                          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
+                Your Pre-Departure Support System, All in One Place
+              </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
               Our comprehensive platform provides all the tools and support you need to achieve your international education goals.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {/* Expert Mentorship */}
+            {/* Peer Mentorship */}
             <div className="group relative bg-white rounded-xl lg:rounded-2xl p-6 lg:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl border border-gray-200 overflow-hidden">
               {/* Background Pattern */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300">
@@ -358,7 +368,7 @@ export default function HomePage() {
                 {/* Content */}
                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">WhatsApp Community</h3>
                 <p className="text-gray-600 mb-4 lg:mb-6 leading-relaxed text-sm sm:text-base">
-                  Join university-specific WhatsApp groups with mentors and fellow students
+                Find your future classmates on WhatsApp before you even arrive.
                 </p>
                 
                 {/* Features List */}
@@ -462,7 +472,7 @@ export default function HomePage() {
                 </div>
                 
                 {/* Content */}
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">Student Testimonials</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">Hear Their Stories</h3>
                 <p className="text-gray-600 mb-4 lg:mb-6 leading-relaxed text-sm sm:text-base">
                   Read inspiring stories from international students who achieved their dreams
                 </p>
@@ -506,7 +516,7 @@ export default function HomePage() {
             <p className="text-gray-500 text-sm sm:text-base lg:text-lg px-4">
               <span className="block sm:inline">🎓 Trusted by top universities</span>
               <span className="hidden sm:inline"> • </span>
-              <span className="block sm:inline">🌟 Rated 4.9/5</span>
+                              <span className="block sm:inline">🌟 30,000+ students helped</span>
               <span className="hidden sm:inline"> • </span>
               <span className="block sm:inline">🚀 Growing community</span>
             </p>
@@ -521,7 +531,7 @@ export default function HomePage() {
             Ready to Join Our Community?
           </h2>
           <p className="text-base sm:text-lg lg:text-xl text-blue-100 mb-6 sm:mb-8 max-w-2xl mx-auto">
-            Connect with 25,000+ students and mentors in our WhatsApp groups. Get guidance, support, and achieve your international education dreams together.
+            Connect with 30,000+ students and mentors in our WhatsApp groups. Get guidance, support, and achieve your international education dreams together.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
             <Link href="/whatsapp-groups">
@@ -564,7 +574,7 @@ export default function HomePage() {
               </div>
               <h2 className="text-xl font-bold mb-1">Join Our Community!</h2>
               <p className="text-green-100 text-xs leading-relaxed">
-                We&apos;ve helped 12,000+ students achieve their dreams.
+                We&apos;ve helped 30,000+ students achieve their dreams.
               </p>
             </div>
           </div>
@@ -580,13 +590,13 @@ export default function HomePage() {
                 <div className="bg-green-50 p-3 rounded-lg">
                   <div className="flex items-center justify-center space-x-10 text-xs">
                     <div className="text-center">
-                      <div className="font-bold text-green-700">12,000+</div>
-                      <div className="text-green-600">Students Helped</div>
+                      <div className="font-bold text-green-700">30,000+</div>
+                      <div className="text-green-600">Students Connected</div>
                     </div>
                     <div className="w-px h-8 bg-green-300"></div>
                     <div className="text-center">
-                      <div className="font-bold text-green-700">50+</div>
-                      <div className="text-green-600">Universities</div>
+                      <div className="font-bold text-green-700">100+</div>
+                      <div className="text-green-600">Countries</div>
                     </div>
                     
                   </div>
@@ -615,6 +625,101 @@ export default function HomePage() {
                 <span className="mr-1">🔒</span>
                 Free to join • No spam guaranteed
               </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Transition Help Modal */}
+      <Dialog open={showTransitionModal} onOpenChange={setShowTransitionModal}>
+        <DialogContent className="sm:max-w-2xl border-0 bg-white rounded-2xl shadow-2xl overflow-hidden p-0" showCloseButton={false}>
+          <DialogHeader className="sr-only">
+            <DialogTitle>How ISAC Helps You Transition</DialogTitle>
+            <DialogDescription>Learn how ISAC supports your journey after college acceptance</DialogDescription>
+          </DialogHeader>
+          
+          {/* Header with gradient background */}
+          <div className="relative bg-gradient-to-br from-blue-500 via-purple-600 to-green-600 px-6 pt-6 pb-4">
+            <button
+              onClick={() => setShowTransitionModal(false)}
+              className="absolute right-4 top-4 w-7 h-7 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 transition-all duration-200"
+            >
+              <X className="h-3.5 w-3.5" />
+              <span className="sr-only">Close</span>
+            </button>
+            
+            <div className="text-center text-white">
+              <div className="mx-auto w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center mb-3">
+                <CheckCircle className="h-6 w-6 text-white" />
+              </div>
+              <h2 className="text-xl font-bold mb-1">How We Help You Transition</h2>
+              <p className="text-blue-100 text-xs leading-relaxed">
+                After you receive your college acceptance, ISAC helps you transition smoothly
+              </p>
+            </div>
+          </div>
+          
+          {/* Content */}
+          <div className="px-6 py-6">
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <MessageCircle className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Connect with Your School's Community</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      We connect you with your school's WhatsApp groups so you meet classmates before you arrive.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Video className="h-4 w-4 text-purple-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Q&A Webinars and Panels</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      We host Q&A webinars and panels on housing, visas, academics, and campus life.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <Users className="h-4 w-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Mentor Pairing</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      We pair you with mentors and student volunteers who've been through the same journey.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                    <Award className="h-4 w-4 text-orange-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Guides and Resources</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      We share guides, tips, and resources to make your first semester abroad less overwhelming.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="pt-4 border-t border-gray-100">
+                <Button 
+                  onClick={() => setShowTransitionModal(false)}
+                  className="w-full h-10 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 text-sm"
+                >
+                  Got it, thanks!
+                </Button>
+              </div>
             </div>
           </div>
         </DialogContent>
