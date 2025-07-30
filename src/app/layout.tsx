@@ -7,10 +7,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "ISAC - International Student Advocacy Committee | Global Education Platform",
+    default: "International Student Advocacy Committee | ISAC",
     template: "%s | ISAC - International Student Advocacy Committee"
   },
-  description: "Join ISAC, the leading International Student Advocacy Committee helping 25,000+ students worldwide. Connect with mentors, join WhatsApp groups, attend webinars, and achieve your international education dreams.",
+  description: "Join ISAC, the leading International Student Advocacy Committee helping 30,000+ students worldwide. Connect with mentors, join WhatsApp groups, attend webinars, and achieve your international education dreams.",
   keywords: [
     "ISAC",
     "International Student Advocacy Committee", 
@@ -40,8 +40,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://www.isac-usa.org',
     siteName: 'ISAC - International Student Advocacy Committee',
-    title: 'ISAC - International Student Advocacy Committee | Global Education Platform',
-    description: 'Join ISAC, the leading International Student Advocacy Committee helping 25,000+ students worldwide. Connect with mentors, join WhatsApp groups, attend webinars, and achieve your international education dreams.',
+    title: 'ISAC - International Student Advocacy Committee | Connecting International Students Worldwide',
+    description: 'Join ISAC, the leading International Student Advocacy Committee helping 30,000+ students worldwide. Connect with mentors, join WhatsApp groups, attend webinars, and achieve your international education dreams.',
     images: [
       {
         url: '/Isac-logo.png',
@@ -53,8 +53,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ISAC - International Student Advocacy Committee | Global Education Platform',
-    description: 'Join ISAC, the leading International Student Advocacy Committee helping 25,000+ students worldwide. Connect with mentors and achieve your international education dreams.',
+    title: 'ISAC - International Student Advocacy Committee | Connecting International Students Worldwide',
+    description: 'Join ISAC, the leading International Student Advocacy Committee helping 30,000+ students worldwide. Connect with mentors and achieve your international education dreams.',
     images: ['/Isac-logo.png'],
     creator: '@ISAC_Global',
     site: '@ISAC_Global',
@@ -94,13 +94,13 @@ export default function RootLayout({
         {/* Preload local globe assets for faster loading */}
         <link 
           rel="preload" 
-          href="/assets/globe/earth-night.jpg" 
+          href="/assets/globe/earth-day-alt.jpg" 
           as="image" 
           type="image/jpeg"
         />
         <link 
           rel="preload" 
-          href="/assets/globe/earth-topology.png" 
+          href="/assets/globe/earth-day-bump-alt.png" 
           as="image" 
           type="image/png"
         />
@@ -129,11 +129,7 @@ export default function RootLayout({
               ],
               "areaServed": "Worldwide",
               "serviceType": "Educational Consulting",
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.9",
-                "reviewCount": "2500"
-              }
+              "memberCount": "30000"
             })
           }}
         />
