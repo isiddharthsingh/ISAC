@@ -47,8 +47,8 @@ export default function AboutPage() {
     {
       icon: GraduationCap,
       count: "500+",
-      label: "Expert Mentors",
-      description: "Certified professionals and alumni",
+      label: "Peer Mentors",
+      description: "Students who have been through the same journey",
       color: "bg-gradient-to-br from-green-500 to-green-600",
       bgPattern: "bg-gradient-to-br from-green-50 to-green-100 border border-green-200"
     },
@@ -82,7 +82,7 @@ export default function AboutPage() {
             </h1>
             
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed mb-8 sm:mb-10">
-              Some text here.
+              ISAC provides exclusive WhatsApp communities and educational webinars to help international students navigate their study abroad journey with confidence and support.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -105,7 +105,7 @@ export default function AboutPage() {
               Our Impact in Numbers
             </h2>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Our platform has transformed the lives of thousands of international students by providing community support and educational resources that make studying abroad more accessible and successful.
             </p>
           </div>
           
@@ -290,7 +290,7 @@ export default function AboutPage() {
             Ready to Start Your Journey?
           </h2>
           <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Join thousands of students who are already achieving their dreams.
+            Join our community of 25,000+ international students. Connect with peers, access educational resources, and achieve your study abroad dreams with ISAC's comprehensive support system.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-50 px-8 py-3">
