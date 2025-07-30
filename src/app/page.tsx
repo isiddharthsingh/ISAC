@@ -514,11 +514,7 @@ export default function HomePage() {
           {/* Additional trust indicators */}
           <div className="mt-8 sm:mt-12 lg:mt-16 text-center">
             <p className="text-gray-500 text-sm sm:text-base lg:text-lg px-4">
-              <span className="block sm:inline">🎓 Trusted by top universities</span>
-              <span className="hidden sm:inline"> • </span>
-                              <span className="block sm:inline">🌟 30,000+ students helped</span>
-              <span className="hidden sm:inline"> • </span>
-              <span className="block sm:inline">🚀 Growing community</span>
+              <span className="block sm:inline">🎓 Trusted by students from NYU, Columbia, Berkeley, ASU, and 200+ top universities.</span>
             </p>
           </div>
         </div>
