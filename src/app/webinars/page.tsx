@@ -636,9 +636,9 @@ export default function WebinarsPage() {
                 <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-green-500 to-green-600">
                   <Star className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
                 </div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">4.9/5</div>
-                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-700 mb-2">Average Rating</div>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Consistently high-rated sessions by our student community</p>
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">500+</div>
+                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-700 mb-2">Webinars Hosted</div>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Educational sessions covering all aspects of studying abroad</p>
               </div>
             </div>
           </div>
