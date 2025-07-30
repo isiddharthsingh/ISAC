@@ -1,0 +1,44 @@
+{
+  "name": "ISAC - International Student Advocacy Committee",
+  "short_name": "ISAC",
+  "description": "Global platform connecting international students with mentors, resources, and community support for studying abroad.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "social", "lifestyle"],
+  "icons": [
+    {
+      "src": "/Isac-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/Isac-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/assets/screenshots/desktop.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "ISAC Platform Desktop View"
+    },
+    {
+      "src": "/assets/screenshots/mobile.jpg",
+      "sizes": "390x844",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "ISAC Platform Mobile View"
+    }
+  ]
+}
