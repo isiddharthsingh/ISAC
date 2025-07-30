@@ -333,8 +333,8 @@ export default function VolunteersPage() {
                   <Users className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
                 </div>
                 <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">{mentors.length}+</div>
-                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-700 mb-2">Expert Mentors</div>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Certified professionals and alumni from top universities worldwide</p>
+                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-700 mb-2">Peer Mentors</div>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Students who have been through the same journey and can help you navigate easily</p>
               </div>
             </div>
 
@@ -777,7 +777,7 @@ export default function VolunteersPage() {
                           <div className="pr-12">
                             <h2 className="text-2xl font-bold text-gray-900">Mentor Application</h2>
                             <p className="text-gray-600 mt-1">
-                              Join our community of expert mentors and help students achieve their educational goals.
+                              Join our community of peer mentors and help students achieve their educational goals.
                             </p>
                           </div>
                         </div>
