@@ -26,7 +26,7 @@ const studentLocations: StudentLocation[] = [
   { country: "South Korea", students: 580, lat: 35.9078, lng: 127.7669, color: "#f7b731" }
 ]
 
-export function InteractiveGlobe() {
+export function InteractiveGlobe({ width = 600, height = 600 }: { width?: number; height?: number }) {
   const globeEl = useRef<HTMLDivElement>(null)
   const [isMounted, setIsMounted] = useState(false)
 
@@ -67,8 +67,8 @@ export function InteractiveGlobe() {
           </div>
         `)
         .enablePointerInteraction(true)
-        .width(600)
-        .height(600)
+        .width(width)
+        .height(height)
 
       // Auto-rotate
       myGlobe.controls().autoRotate = true
@@ -100,9 +100,10 @@ export function InteractiveGlobe() {
           ref={globeEl} 
           className="globe-element"
           style={{ 
-            width: '600px', 
-            height: '530px',
-            margin: '0 auto'
+            width: `${width}px`, 
+            height: `${height}px`,
+            margin: '0 auto',
+            cursor: 'grab'
           }}
         />
       </div>

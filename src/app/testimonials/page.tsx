@@ -111,7 +111,7 @@ export default function TestimonialsPage() {
   const stats = [
     { 
       icon: Users, 
-      number: "25,000+", 
+      number: "30,000+", 
       label: "Students Helped",
       color: "from-blue-500 to-blue-600",
       bgColor: "from-blue-50 to-blue-100",

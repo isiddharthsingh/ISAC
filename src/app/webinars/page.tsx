@@ -608,7 +608,7 @@ export default function WebinarsPage() {
                 <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-purple-500 to-purple-600">
                   <Users className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
                 </div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">25,000+</div>
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">30,000+</div>
                 <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-700 mb-2">Students Attended</div>
                 <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Students from over 50 countries have joined our webinars</p>
               </div>

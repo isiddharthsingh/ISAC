@@ -182,7 +182,7 @@ export default function HomePage() {
   const stats = [
     {
       icon: Users,
-      count: 25000,
+      count: 30000,
       suffix: "+",
       label: "Students Helped",
       description: "Students from 100+ countries have joined our WhatsApp groups and attended webinars",
@@ -245,7 +245,7 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start flex-wrap">
                 <Link href="/whatsapp-groups">
                   <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-sm sm:text-base px-4 sm:px-6 lg:px-4 xl:px-6 whitespace-nowrap">
-                  Find Your School's Community
+                  Find Your School&apos;s Community
                     <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
                 </Link>
@@ -272,16 +272,12 @@ export default function HomePage() {
               <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-none">
                 {/* Mobile: smaller, constrained globe */}
                 <div className="block lg:hidden">
-                  <div className="w-72 h-72 sm:w-80 sm:h-80 mx-auto relative overflow-hidden">
-                    <div className="scale-65 sm:scale-80 origin-center w-full h-full flex items-center justify-center">
-                      <InteractiveGlobe />
-                    </div>
-                  </div>
+                  <InteractiveGlobe width={320} height={320} />
                 </div>
                 
                 {/* Desktop: full-size globe */}
                 <div className="hidden lg:block">
-                  <InteractiveGlobe />
+                  <InteractiveGlobe width={600} height={600} />
                 </div>
               </div>
             </div>
@@ -304,7 +300,7 @@ export default function HomePage() {
             40,000+ Students Already Transitioning Smoothly with ISAC
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-              Join thousands of students navigating their study abroad journey with ISAC's community support
+              Join thousands of students navigating their study abroad journey with ISAC&apos;s community support
             </p>
           </div>
           
@@ -513,7 +509,7 @@ export default function HomePage() {
           
           {/* Additional trust indicators */}
           <div className="mt-8 sm:mt-12 lg:mt-16 text-center">
-            <p className="text-gray-500 text-sm sm:text-base lg:text-lg px-4">
+          <p className="text-gray-500 text-sm sm:text-base lg:text-lg px-4">
               <span className="block sm:inline">🎓 Trusted by students from NYU, Columbia, Berkeley, ASU, and 200+ top universities.</span>
             </p>
           </div>
@@ -664,9 +660,9 @@ export default function HomePage() {
                     <MessageCircle className="h-4 w-4 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Connect with Your School's Community</h3>
+                    <h3 className="font-semibold text-gray-900 mb-1">Connect with Your School&apos;s Community</h3>
                     <p className="text-gray-600 text-sm leading-relaxed">
-                      We connect you with your school's WhatsApp groups so you meet classmates before you arrive.
+                      We connect you with your school&apos;s WhatsApp groups so you meet classmates before you arrive.
                     </p>
                   </div>
                 </div>
@@ -690,7 +686,7 @@ export default function HomePage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Mentor Pairing</h3>
                     <p className="text-gray-600 text-sm leading-relaxed">
-                      We pair you with mentors and student volunteers who've been through the same journey.
+                      We pair you with mentors and student volunteers who&apos;ve been through the same journey.
                     </p>
                   </div>
                 </div>

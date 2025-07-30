@@ -286,10 +286,12 @@ export function UniversitySelection({ onUniversitySelect }: UniversitySelectionP
             <p className="text-sm text-gray-600 mb-3">
               Don&apos;t see your university? We&apos;re constantly adding new institutions.
             </p>
-            <Button variant="outline" size="sm">
-              <Mail className="w-4 h-4 mr-2" />
-              Request to add my university
-            </Button>
+            <a href="mailto:hello@isac-usa.org?subject=University%20Onboarding%20Request&body=Hello%20ISAC%20Team%2C%0A%0AI%20would%20like%20to%20request%20the%20addition%20of%20my%20university%20to%20your%20platform.%0A%0AUniversity%20Name%3A%20%5BPlease%20fill%20in%5D%0A%0AThank%20you%2C">
+              <Button variant="outline" size="sm">
+                <Mail className="w-4 h-4 mr-2" />
+                Request to add my university
+              </Button>
+            </a>
           </div>
         </div>
       </CardContent>
