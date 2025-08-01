@@ -57,29 +57,29 @@ export default function AboutPage() {
 
       
 
-      {/* Story Section */}
+      {/* Founders' Story Section */}
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="order-2 lg:order-1">
               <Badge className="mb-4 sm:mb-6 bg-purple-100 text-purple-700 border-purple-200 text-xs sm:text-sm">
-                <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-                Our Story
+                <Heart className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+                Founders' Story
               </Badge>
               
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-                Creating a Home Away from Home for International Students
+                From a WhatsApp Group to a Global Community
               </h2>
               
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  Starting fresh in a new country can be exciting—but also lonely and overwhelming. We’ve been there. That’s why we created a space where international students can find support, share experiences, and build community.
+                  <strong>ISAC started as a WhatsApp group at NYU.</strong> A few international students, overwhelmed by visa deadlines, housing searches, and the loneliness of starting over in a new country, decided to create a space where they could help each other navigate these challenges.
                 </p>
                 <p>
-                  We tackle these challenges head-on by providing tangible support, including school-specific WhatsApp groups, webinars on visas and housing, mentorship programs, and local guides. Our goal is to equip you with the resources you need to feel confident and connected.
+                  What began as 10 students sharing apartment listings and visa tips quickly grew into something much bigger. We realized that every international student faces the same struggles: finding community, understanding complex systems, and feeling confident in their new environment.
                 </p>
                 <p>
-                We believe no student should face these challenges in silence. Together, we’re building a stronger, more connected community - one student at a time.
+                  Today, that small WhatsApp group has become a movement of 40,000+ students across 100+ countries. But our mission remains the same: <em>no student should have to figure this out alone.</em>
                 </p>
               </div>
               
@@ -88,31 +88,31 @@ export default function AboutPage() {
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                     <Users className="w-4 h-4 text-blue-600" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">Peer Connections</span>
+                  <span className="text-sm font-medium text-gray-700">Started at NYU</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <Heart className="w-4 h-4 text-green-600" />
+                    <Globe className="w-4 h-4 text-green-600" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">Mental Health First</span>
+                  <span className="text-sm font-medium text-gray-700">40,000+ Students</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
                     <HandHeart className="w-4 h-4 text-purple-600" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700">Real-World Help</span>
+                  <span className="text-sm font-medium text-gray-700">100+ Countries</span>
                 </div>
               </div>
             </div>
             
             <div className="order-1 lg:order-2">
-              <Card className="p-8 bg-gradient-to-br from-blue-50 to-purple-50 border-0 shadow-xl">
+              <Card className="p-8 bg-gradient-to-br from-purple-50 to-blue-50 border-0 shadow-xl">
                 <CardContent className="p-0">
-                  <div className="aspect-square bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl flex items-center justify-center">
+                  <div className="aspect-square bg-gradient-to-br from-purple-400 to-blue-500 rounded-2xl flex items-center justify-center">
                     <div className="text-center text-white">
-                      <GraduationCap className="w-24 h-24 mx-auto mb-4 opacity-80" />
-                      <h3 className="text-xl font-bold">Built on Shared Experience</h3>
-                      <p className="text-blue-100 mt-2">Real help from people who’ve lived it</p>
+                      <Heart className="w-24 h-24 mx-auto mb-4 opacity-80" />
+                      <h3 className="text-xl font-bold">Born from Experience</h3>
+                      <p className="text-purple-100 mt-2">We've walked in your shoes</p>
                     </div>
                   </div>
                 </CardContent>
@@ -122,7 +122,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Purpose Section */}
+      {/* Our Story & Purpose Combined Section */}
       <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -131,9 +131,9 @@ export default function AboutPage() {
                 <CardContent className="p-0">
                   <div className="aspect-square bg-gradient-to-br from-orange-400 to-pink-500 rounded-2xl flex items-center justify-center">
                     <div className="text-center text-white">
-                      <Target className="w-24 h-24 mx-auto mb-4 opacity-80" />
+                      <GraduationCap className="w-24 h-24 mx-auto mb-4 opacity-80" />
                       <h3 className="text-xl font-bold">Our Mission</h3>
-                      <p className="text-orange-100 mt-2">Helping international students thrive in the U.S.</p>
+                      <p className="text-orange-100 mt-2">Creating a home away from home</p>
                     </div>
                   </div>
                 </CardContent>
@@ -143,7 +143,7 @@ export default function AboutPage() {
             <div>
               <Badge className="mb-4 sm:mb-6 bg-orange-100 text-orange-700 border-orange-200 text-xs sm:text-sm">
                 <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-                Our Purpose
+                Our Story & Purpose
               </Badge>
               
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
@@ -152,13 +152,13 @@ export default function AboutPage() {
               
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  We’ve been in your shoes. We know how tough it is to leave home and start over in a new country. That’s why we built ISAC—to be the support system we wish we had.
+                  Starting fresh in a new country can be exciting—but also lonely and overwhelming. We've been there. We know how tough it is to leave home, navigate complex visa processes, find housing, and build a new social circle from scratch.
                 </p>
                 <p>
-                  We offer practical resources like university-specific WhatsApp groups, webinars on visas and housing, mentorship programs, and local guides. But more than that, we offer a community that understands.
+                  That's why we created ISAC—to be the support system we wish we had. We tackle these challenges head-on by providing tangible support: school-specific WhatsApp groups, webinars on visas and housing, mentorship programs, and local guides.
                 </p>
                 <p>
-                  No student should have to navigate this journey alone.
+                  But more than resources, we offer a community that truly understands. We believe no student should face these challenges in silence. Together, we're building a stronger, more connected community—one student at a time.
                 </p>
               </div>
               
@@ -169,16 +169,16 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">Community First</h4>
-                    <p className="text-sm text-gray-600">Building supportive networks</p>
+                    <p className="text-sm text-gray-600">Building supportive networks that last</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                    <Globe className="w-4 h-4 text-blue-600" />
+                    <Target className="w-4 h-4 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">Global Reach</h4>
-                    <p className="text-sm text-gray-600">Students from over 100 countries. 30,000+ strong.</p>
+                    <h4 className="font-semibold text-gray-900">Real-World Impact</h4>
+                    <p className="text-sm text-gray-600">Tangible support when you need it most</p>
                   </div>
                 </div>
               </div>
