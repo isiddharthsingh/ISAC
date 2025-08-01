@@ -57,14 +57,14 @@ export default function AboutPage() {
 
       
 
-      {/* Founders' Story Section */}
+      {/* Founders&apos; Story Section */}
       <section className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="order-2 lg:order-1">
               <Badge className="mb-4 sm:mb-6 bg-purple-100 text-purple-700 border-purple-200 text-xs sm:text-sm">
                 <Heart className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-                Founders' Story
+                Founders&apos; Story
               </Badge>
               
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
@@ -112,7 +112,7 @@ export default function AboutPage() {
                     <div className="text-center text-white">
                       <Heart className="w-24 h-24 mx-auto mb-4 opacity-80" />
                       <h3 className="text-xl font-bold">Born from Experience</h3>
-                      <p className="text-purple-100 mt-2">We've walked in your shoes</p>
+                      <p className="text-purple-100 mt-2">We&apos;ve walked in your shoes</p>
                     </div>
                   </div>
                 </CardContent>
@@ -152,13 +152,13 @@ export default function AboutPage() {
               
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  Starting fresh in a new country can be exciting—but also lonely and overwhelming. We've been there. We know how tough it is to leave home, navigate complex visa processes, find housing, and build a new social circle from scratch.
+                  Starting fresh in a new country can be exciting—but also lonely and overwhelming. We&apos;ve been there. We know how tough it is to leave home, navigate complex visa processes, find housing, and build a new social circle from scratch.
                 </p>
                 <p>
-                  That's why we created ISAC—to be the support system we wish we had. We tackle these challenges head-on by providing tangible support: school-specific WhatsApp groups, webinars on visas and housing, mentorship programs, and local guides.
+                  That&apos;s why we created ISAC—to be the support system we wish we had. We tackle these challenges head-on by providing tangible support: school-specific WhatsApp groups, webinars on visas and housing, mentorship programs, and local guides.
                 </p>
                 <p>
-                  But more than resources, we offer a community that truly understands. We believe no student should face these challenges in silence. Together, we're building a stronger, more connected community—one student at a time.
+                  But more than resources, we offer a community that truly understands. We believe no student should face these challenges in silence. Together, we&apos;re building a stronger, more connected community—one student at a time.
                 </p>
               </div>
               
