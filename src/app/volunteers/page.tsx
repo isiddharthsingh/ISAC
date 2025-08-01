@@ -139,7 +139,7 @@ export default function VolunteersPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setScrollOffset((prev) => prev + 0.5) // Smooth continuous movement
-    }, 20) // Update every 20ms for smooth animation
+    }, 25) // Update every 20ms for smooth animation
     
     return () => clearInterval(interval)
   }, [])
