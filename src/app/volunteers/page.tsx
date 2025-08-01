@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PhoneInput } from "@/components/ui/phone-input"
-import { Heart, Users, Award, Search, SlidersHorizontal, X, GraduationCap, Globe, Loader2 } from "lucide-react"
+import { Heart, Users, Award, Search, SlidersHorizontal, X, Globe, Loader2, Home, Handshake, Building2, Briefcase } from "lucide-react"
 
 // Import API functions
 import { 
@@ -59,6 +59,90 @@ export default function VolunteersPage() {
   // UI state
   const [showMentorApplicationForm, setShowMentorApplicationForm] = useState(false)
   const [expandedBios, setExpandedBios] = useState<{[key: number]: boolean}>({})
+  
+  // Carousel state for continuous scrolling
+  const [scrollOffset, setScrollOffset] = useState(0)
+  
+  // Carousel items combining stats and value propositions
+  const carouselItems = [
+    // Stats Cards
+    {
+      id: 'peer-mentors',
+      icon: Users,
+      number: `50+`,
+      title: 'Peer Mentors',
+      description: 'Students who have been through the same journey and can help you navigate easily',
+      gradient: 'from-blue-500 to-blue-600',
+      bgGradient: 'from-blue-50 to-blue-100',
+      borderColor: 'border-blue-200'
+    },
+    {
+      id: 'free-community',
+      icon: Heart,
+      number: '100%',
+      title: 'Free Community',
+      description: 'All WhatsApp groups and mentorship are completely free for students',
+      gradient: 'from-green-500 to-green-600',
+      bgGradient: 'from-green-50 to-green-100',
+      borderColor: 'border-green-200'
+    },
+    {
+      id: 'universities',
+      icon: Globe,
+      number: `${filterOptions?.universities?.length || 50}+`,
+      title: 'Universities',
+      description: 'Top universities worldwide represented in our mentor network',
+      gradient: 'from-orange-500 to-orange-600',
+      bgGradient: 'from-orange-50 to-orange-100',
+      borderColor: 'border-orange-200'
+    },
+    // Value Proposition Cards
+    {
+      id: 'pre-arrival',
+      icon: Home,
+      title: 'Pre-Arrival Guidance',
+      description: 'Housing tips, what to pack, visa processes, and how to prepare for your new country before you even arrive.',
+      gradient: 'from-blue-500 to-blue-600',
+      bgGradient: 'from-blue-50 to-blue-100',
+      borderColor: 'border-blue-200'
+    },
+    {
+      id: 'social-integration',
+      icon: Handshake,
+      title: 'Social & Cultural Integration',
+      description: 'Making friends, understanding local culture, adjusting to a new city, and building your social network.',
+      gradient: 'from-green-500 to-green-600',
+      bgGradient: 'from-green-50 to-green-100',
+      borderColor: 'border-green-200'
+    },
+    {
+      id: 'campus-life',
+      icon: Building2,
+      title: 'Campus Life Advice',
+      description: 'Choosing classes, using campus resources, joining clubs, and navigating university systems like a pro.',
+      gradient: 'from-purple-500 to-purple-600',
+      bgGradient: 'from-purple-50 to-purple-100',
+      borderColor: 'border-purple-200'
+    },
+    {
+      id: 'career-planning',
+      icon: Briefcase,
+      title: 'Career & Academic Planning',
+      description: 'Early internship planning, networking tips, building your resume, and setting yourself up for success.',
+      gradient: 'from-orange-500 to-orange-600',
+      bgGradient: 'from-orange-50 to-orange-100',
+      borderColor: 'border-orange-200'
+    }
+  ]
+  
+  // Continuous auto-scroll carousel effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setScrollOffset((prev) => prev + 0.5) // Smooth continuous movement
+    }, 20) // Update every 20ms for smooth animation
+    
+    return () => clearInterval(interval)
+  }, [])
 
   // Application form state
   const [mentorApplicationForm, setMentorApplicationForm] = useState({
@@ -115,7 +199,7 @@ export default function VolunteersPage() {
   }
 
   // Get filter options from API data or fallback to hardcoded
-  const specialties = filterOptions?.specialties ? ["all", ...filterOptions.specialties] : ["all", "International Student", "Alumni", "Professor"]
+  const specialties = filterOptions?.specialties ? ["all", ...filterOptions.specialties] : ["all", "Current Student", "Recent Graduate", "Peer Mentor"]
   
   // Extract unique options from current mentors data
   const allLanguages = useMemo(() => {
@@ -288,23 +372,51 @@ export default function VolunteersPage() {
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
             <Badge className="mb-4 sm:mb-6 bg-blue-100 text-blue-700 border-blue-200 text-xs sm:text-sm">
-              <GraduationCap className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-              Expert Guidance
+              <Users className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              Peer Support
             </Badge>
             
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
-              Connect with 
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent block sm:inline"> Educational Mentors</span>
+              Meet Your 
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent block sm:inline"> Peer Mentors & Guides</span>
             </h1>
             
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed mb-8 sm:mb-10 max-w-3xl mx-auto">
-              Connect with experienced mentors in our WhatsApp community groups. Get guidance, support, and mentorship to help you succeed in your international education journey.
+              Current students and recent graduates who help you settle in socially, culturally, and academically before you even arrive. Get practical guidance on housing, visas, and building community in your new home.
             </p>
+            
+            {/* Call to Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button 
+                onClick={() => {
+                  const mentorsSection = document.querySelector('[data-section="mentors-grid"]')
+                  mentorsSection?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                size="lg" 
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
+                Find Your Mentor
+                <Users className="ml-2 h-5 w-5" />
+              </Button>
+              
+              <Button 
+                onClick={() => {
+                  const becomeSection = document.querySelector('[data-section="become-mentor"]')
+                  becomeSection?.scrollIntoView({ behavior: 'smooth' })
+                }}
+                variant="outline" 
+                size="lg" 
+                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold px-8 py-3 text-lg transition-all duration-300 transform hover:scale-105"
+              >
+                Become a Mentor
+                <Heart className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Enhanced Stats Section */}
+      {/* Combined Carousel - Stats & Value Proposition */}
       <section className="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -314,68 +426,78 @@ export default function VolunteersPage() {
         
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <Badge className="mb-4 sm:mb-6 bg-purple-100 text-purple-700 border-purple-200 text-xs sm:text-sm">
+              <Award className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+              Our Community & What Mentors Do
+            </Badge>
+            
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Our Global Community
+              Global Community
             </h2>
-            <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
-              Connect with mentors and students from top universities around the world in our active WhatsApp community groups
+            
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+              Connect with peer mentors from top universities worldwide who provide hands-on support for your international student journey.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-8">
-            {/* Enhanced stat cards with dynamic mentor count */}
-            <div className="group relative p-6 lg:p-8 rounded-xl lg:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
-              <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-300">
-                <div className="absolute top-0 right-0 w-24 h-24 lg:w-32 lg:h-32 bg-blue-500 rounded-full -translate-y-12 translate-x-12 lg:-translate-y-16 lg:translate-x-16 opacity-30"></div>
-              </div>
-              <div className="relative z-10">
-                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-blue-500 to-blue-600">
-                  <Users className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
-                </div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">{mentors.length}+</div>
-                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-700 mb-2">Peer Mentors</div>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Students who have been through the same journey and can help you navigate easily</p>
-              </div>
-            </div>
-
-            <div className="group relative p-6 lg:p-8 rounded-xl lg:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden bg-gradient-to-br from-green-50 to-green-100 border border-green-200">
-              <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-300">
-                <div className="absolute top-0 right-0 w-24 h-24 lg:w-32 lg:h-32 bg-green-500 rounded-full -translate-y-12 translate-x-12 lg:-translate-y-16 lg:translate-x-16 opacity-30"></div>
-              </div>
-              <div className="relative z-10">
-                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-green-500 to-green-600">
-                  <Heart className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
-                </div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">100%</div>
-                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-700 mb-2">Free Community</div>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">All WhatsApp groups and mentorship are completely free for students</p>
-              </div>
-            </div>
-
-            <div className="group relative p-6 lg:p-8 rounded-xl lg:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200">
-              <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-300">
-                <div className="absolute top-0 right-0 w-24 h-24 lg:w-32 lg:h-32 bg-orange-500 rounded-full -translate-y-12 translate-x-12 lg:-translate-y-16 lg:translate-x-16 opacity-30"></div>
-              </div>
-              <div className="relative z-10">
-                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl mb-4 lg:mb-6 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br from-orange-500 to-orange-600">
-                  <Globe className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
-                </div>
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">{filterOptions?.universities?.length || 50}+</div>
-                <div className="text-sm sm:text-base lg:text-lg font-semibold text-gray-700 mb-2">Universities</div>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Top universities worldwide represented in our mentor network</p>
-              </div>
+          {/* Continuous Scrolling Carousel */}
+          <div className="relative overflow-hidden">
+            <div 
+              className="flex"
+              style={{
+                transform: `translateX(-${(scrollOffset * 2) % (carouselItems.length * 280)}px)`,
+                width: `${carouselItems.length * 3 * 280}px` // Triple the items for seamless looping
+              }}
+            >
+              {/* Render items 3 times for seamless infinite scroll */}
+              {Array.from({ length: 3 }, (_, repeatIndex) => 
+                carouselItems.map((item, index) => {
+                  const IconComponent = item.icon
+                  return (
+                    <div 
+                      key={`${item.id}-${repeatIndex}-${index}`}
+                      className="flex-shrink-0 px-2"
+                      style={{ width: '280px' }} // Fixed smaller width
+                    >
+                      <div className={`group relative p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer overflow-hidden bg-gradient-to-br ${item.bgGradient} border ${item.borderColor} h-48`}>
+                        <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-300">
+                          <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-br ${item.gradient} rounded-full -translate-y-8 translate-x-8 opacity-30`}></div>
+                        </div>
+                        <div className="relative z-10 text-center h-full flex flex-col justify-center">
+                          <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg mb-3 mx-auto transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br ${item.gradient}`}>
+                            <IconComponent className="h-5 w-5 text-white" />
+                          </div>
+                          {item.number && (
+                            <div className="text-xl font-bold text-gray-900 mb-1">{item.number}</div>
+                          )}
+                          <div className={`${item.number ? 'text-sm' : 'text-base'} font-semibold text-gray-700 mb-2`}>{item.title}</div>
+                          <p className="text-xs text-gray-600 leading-relaxed px-1">{item.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })
+              ).flat()}
             </div>
           </div>
           
-          {/* Additional Context */}
-          <div className="text-center">
-            <p className="text-gray-500 text-sm sm:text-base lg:text-lg px-4">
-              <span className="block sm:inline">💬 Active WhatsApp groups</span>
-              <span className="hidden sm:inline"> • </span>
-              <span className="block sm:inline">🌍 Global community</span>
-              <span className="hidden sm:inline"> • </span>
-              <span className="block sm:inline">🤝 Peer support</span>
+          
+          
+          {/* Bottom CTA */}
+          <div className="text-center mt-12">
+            <p className="text-gray-600 mb-6">
+              <span className="font-semibold">Ready to get started?</span> Find mentors who&apos;ve navigated the exact same journey at your university.
             </p>
+            <Button 
+              onClick={() => {
+                const mentorsSection = document.querySelector('[data-section="mentors-grid"]')
+                mentorsSection?.scrollIntoView({ behavior: 'smooth' })
+              }}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              Browse Mentors
+              <Users className="ml-2 h-4 w-4" />
+            </Button>
           </div>
         </div>
       </section>
@@ -568,7 +690,7 @@ export default function VolunteersPage() {
       </section>
 
       {/* Enhanced Mentors Grid */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
+      <section data-section="mentors-grid" className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-1/3 -left-16 w-64 h-64 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-10 blur-3xl"></div>
@@ -711,7 +833,7 @@ export default function VolunteersPage() {
           )}
 
           {/* Become a Mentor Section */}
-          <div className="mt-16 text-center">
+          <div data-section="become-mentor" className="mt-16 text-center">
             <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-blue-50 rounded-3xl p-8 lg:p-12 border border-blue-100">
               <div className="max-w-3xl mx-auto">
                 <div className="mb-6">
@@ -722,32 +844,32 @@ export default function VolunteersPage() {
                     Become a Mentor
                   </h3>
                   <p className="text-lg text-gray-600 leading-relaxed">
-                    Share your expertise and help students achieve their international education dreams. 
-                    Join our community of dedicated mentors making a real difference in students&apos; lives.
+                    Share your experience as a current student or recent graduate to help incoming international students navigate their journey. 
+                    Join our community of peer mentors making a real difference through authentic, relatable guidance.
                   </p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-6 mb-8">
                   <div className="text-center">
                     <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-                      <GraduationCap className="h-6 w-6 text-blue-600" />
+                      <Users className="h-6 w-6 text-blue-600" />
                     </div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Share Your Knowledge</h4>
-                    <p className="text-sm text-gray-600">Help students with university applications, test prep, and academic guidance</p>
+                    <h4 className="font-semibold text-gray-900 mb-2">Share Your Experience</h4>
+                    <p className="text-sm text-gray-600">Help with housing, visas, cultural adaptation, and settling into university life</p>
                   </div>
                   <div className="text-center">
                     <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
                       <Heart className="h-6 w-6 text-purple-600" />
                     </div>
                     <h4 className="font-semibold text-gray-900 mb-2">Make an Impact</h4>
-                    <p className="text-sm text-gray-600">Be part of life-changing moments and help shape the next generation</p>
+                    <p className="text-sm text-gray-600">Be part of life-changing moments by helping fellow students feel at home</p>
                   </div>
                   <div className="text-center">
                     <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-3">
                       <Globe className="h-6 w-6 text-green-600" />
                     </div>
                     <h4 className="font-semibold text-gray-900 mb-2">Global Community</h4>
-                    <p className="text-sm text-gray-600">Connect with fellow educators and students from around the world</p>
+                    <p className="text-sm text-gray-600">Connect with fellow students and graduates from around the world</p>
                   </div>
                 </div>
 
@@ -775,9 +897,9 @@ export default function VolunteersPage() {
                           </button>
                           
                           <div className="pr-12">
-                            <h2 className="text-2xl font-bold text-gray-900">Mentor Application</h2>
+                            <h2 className="text-2xl font-bold text-gray-900">Peer Mentor Application</h2>
                             <p className="text-gray-600 mt-1">
-                              Join our community of peer mentors and help students achieve their educational goals.
+                              Join our community of student guides and help incoming international students navigate their journey with confidence.
                             </p>
                           </div>
                         </div>
