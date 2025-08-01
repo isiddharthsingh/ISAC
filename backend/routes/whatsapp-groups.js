@@ -16,7 +16,7 @@ router.post('/verify/start', strictLimiter, whatsappGroupsController.startVerifi
 router.post('/verify/upload', strictLimiter, whatsappGroupsController.uploadDocumentVerification);
 
 // Confirm email verification
-router.get('/verify/confirm/:token', generalLimiter, whatsappGroupsController.confirmVerification);
+router.post('/verify/confirm/:token', generalLimiter, whatsappGroupsController.confirmVerification);
 
 // Get user verification status
 router.post('/verify/status', generalLimiter, whatsappGroupsController.getVerificationStatus);

@@ -262,12 +262,8 @@ const sendVerificationEmail = async ({ email, university, verificationToken, uni
             </div>
 
             <p style="color: #64748b; line-height: 1.6; margin-top: 32px;">
-                If the button above doesn't work, you can copy and paste this link into your browser:
+                If the button above doesn't work, please right-click it, copy the link, and paste it into a new browser window.
             </p>
-            
-            <div class="backup-link">
-                ${verificationUrl}
-            </div>
 
             <p style="color: #64748b; line-height: 1.6; margin-top: 32px;">
                 Having trouble? Reply to this email and our support team will help you out.

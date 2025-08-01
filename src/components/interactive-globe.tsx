@@ -85,7 +85,7 @@ export function InteractiveGlobe({ width = 600, height = 600 }: { width?: number
         currentElement.innerHTML = ''
       }
     }
-  }, [isMounted])
+  }, [isMounted, width, height])
 
   // Don't render anything on server-side
   if (!isMounted) {

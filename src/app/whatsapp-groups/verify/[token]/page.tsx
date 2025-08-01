@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -28,27 +28,23 @@ export default function VerifyEmailPage() {
   const router = useRouter()
   const token = params.token as string
   
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<VerificationResult | null>(null)
+  const [isVerified, setIsVerified] = useState(false);
 
-  useEffect(() => {
+  const verifyEmail = async () => {
     if (!token) {
       setResult({
         success: false,
         message: "Invalid verification token"
       })
-      setLoading(false)
       return
     }
 
-    verifyEmail()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token])
-
-  const verifyEmail = async () => {
+    setLoading(true)
     try {
-      const response = await fetch(`/api/whatsapp-groups/verify/confirm/${token}`, {
-        method: 'GET',
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-groups/verify/confirm/${token}`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -76,6 +72,24 @@ export default function VerifyEmailPage() {
 
   const handleGoBack = () => {
     router.push('/whatsapp-groups')
+  }
+
+  if (!isVerified && !loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle>Verify Your Email</CardTitle>
+            <CardDescription>Click the button below to complete your verification.</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <Button onClick={() => { setIsVerified(true); verifyEmail(); }} className="w-full">
+              Complete Verification
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   if (loading) {
