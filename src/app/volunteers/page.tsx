@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PhoneInput } from "@/components/ui/phone-input"
-import { Heart, Users, Award, Search, SlidersHorizontal, X, Globe, Loader2, Home, Handshake, Building2, Briefcase } from "lucide-react"
+import { Heart, Users, Award, Search, SlidersHorizontal, X, Globe, Loader2, Home, Handshake, Building2, Briefcase, Plus, Minus } from "lucide-react"
 
 // Import API functions
 import { 
@@ -62,6 +62,7 @@ export default function VolunteersPage() {
   
   // Carousel state for continuous scrolling
   const [scrollOffset, setScrollOffset] = useState(0)
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   
   // Carousel items combining stats and value propositions
   const carouselItems = [
@@ -841,7 +842,7 @@ export default function VolunteersPage() {
                     <Users className="h-8 w-8 text-white" />
                   </div>
                   <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                    Become a Mentor
+                  Want to give back?
                   </h3>
                   <p className="text-lg text-gray-600 leading-relaxed">
                     Share your experience as a current student or recent graduate to help incoming international students navigate their journey. 
@@ -1127,6 +1128,54 @@ export default function VolunteersPage() {
                 </div>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-left mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              Frequently asked questions
+            </h2>
+          </div>
+          
+          <div className="max-w-4xl">
+            <div className="space-y-4">
+              {[{
+                question: "Are mentors academic tutors?",
+                answer: "No, they’re peer guides. They help you socially, culturally, and logistically. Our mentors are current students and recent graduates who share practical advice about settling into university life, not formal academic instruction."
+              },{
+                question: "Does it cost anything?",
+                answer: "No. All mentoring is free and volunteer-based. Our community is built on students helping students, and we believe support should be accessible to everyone regardless of financial circumstances."
+              },{
+                question: "How do I connect?",
+                answer: "Join your school’s WhatsApp group. Once verified, you’ll be introduced to mentors. You can also browse mentors on this page and reach out directly if you find someone from your university or program."
+              },{
+                question: "What do I get out of being a mentor?",
+                answer: "Beyond the satisfaction of giving back, you'll develop leadership and communication skills, expand your professional network, and become a valued member of a supportive global community. It's a rewarding experience that enriches your own journey as much as it helps others."
+              }].map((faq, index) => (
+                <div key={index} className="border-b border-gray-200 last:border-b-0">
+                  <button 
+                    className="w-full flex justify-between items-center text-left py-4 focus:outline-none"
+                    onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                  >
+                    <span className="text-lg font-medium text-gray-800">{faq.question}</span>
+                    {openFaqIndex === index ? (
+                      <Minus className="h-6 w-6 text-gray-500" />
+                    ) : (
+                      <Plus className="h-6 w-6 text-gray-500" />
+                    )}
+                  </button>
+                  {openFaqIndex === index && (
+                    <div className="pb-4 pr-8 text-gray-600 leading-relaxed">
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
